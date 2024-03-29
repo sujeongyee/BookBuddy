@@ -18,6 +18,7 @@ public class MainController {
     public ResponseEntity<Map<String,Object>> getMain(@RequestParam("userId") String leaderId){
         Map<String,Object> map = new HashMap<>();
         return new ResponseEntity<>(map, HttpStatus.OK);
+        /////
     }
 
 }
