@@ -1,4 +1,5 @@
-import Sidebar from "./Sidebar";
+import Sidebar from './Sidebar';
+import Header from './Header';
 import './sidebar.css';
 
 function Main(){
@@ -6,9 +7,9 @@ function Main(){
         <div className="mainContainer">
             <div className="side">
                 <Sidebar/>
-            </div>
-
+            </div>               
             <div className="mainContent">
+                <Header/>
                 <h3>내용을 추가추가</h3>
             </div>
         </div>

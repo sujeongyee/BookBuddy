@@ -90,3 +90,16 @@ body, html {
 .menu ul li a:hover {
     background-color: #e5ecfc;
 }
+
+.headerIcon {
+    width: 100%;
+    height: 20px;
+}
+
+.bellIcon {
+    margin: 5px;
+}
+
+.chatIcon {
+    margin: 5px;
+}
