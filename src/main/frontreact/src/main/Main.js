@@ -10,6 +10,8 @@ function Main({ loginPage, registPage }){
     const [loginMessage, setLoginMessage] = useState('');
 
     const handleLogin = async () => {
+        console.log(userid);
+        console.log(password);
         try {
             const response = await axios.post('/book/login', { userid, password });
             if (response.data.success) {
@@ -41,7 +43,7 @@ function Main({ loginPage, registPage }){
                             <input className= "login-input" type="text" placeholder="아이디를 입력해주세요" onChange={(e) => setUserid(e.target.value)}/>
                             <p className= "login-p">비밀번호</p>
                             <input className= "login-input" type="password" placeholder="비밀번호를 입력해주세요" onChange={(e) => setPassword(e.target.value)}/>
-                            <button className="login-btn">로그인</button>
+                            <button className="login-btn" onClick={handleLogin}>로그인</button>
                         </div>
                     </div>}
                 {registPage && <h3>회원가입 페이지입니다.</h3>}
