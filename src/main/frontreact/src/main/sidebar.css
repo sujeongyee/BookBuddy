@@ -4,10 +4,11 @@
     font-weight: normal;
     font-style: normal;
 }
-* {
-    font-family: SUIT-Regular,cursive;
-}
+* { font-family: SUIT-Regular,cursive;}
+input:focus {outline:none;}
+
 body, html {
+    position: relative;
     margin: 0;
     padding: 0;
     height: 100%;
@@ -23,17 +24,12 @@ body, html {
     border-right: 1px solid #d6d6d6;
 }
 
-
 .mainContainer {
     display: flex;
     height: 100vh;
 }
 
-
-.mainContent {
-    flex: 1;
-    padding: 20px;
-}
+.mainContent { flex: 1;}
 
 .Logo {
     height: 25%;
@@ -47,17 +43,21 @@ body, html {
     margin: 0 auto;
 }
 
-.myLogin {
-    height: 5%;
-}
+.myLogin { display: flex; }
 
-.loginBtn {
-    width: 100%;
+.loginBtn, .registBtn {
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    color: black;
+    width: calc(50% - 5px); /* 버튼 너비를 50%로 설정하고 간격을 조절합니다 */
     padding: 10px;
     border: none;
     font-size: 15px;
-    background-color:#e5ecfc;
+    margin: 5px; /* 버튼 간의 마진을 조정합니다 */
+    background-color: #e5ecfc;
 }
+.loginBtn:hover, .registBtn:hover{ background-color: #dbe4f6;}
 
 .myInfo{
 
@@ -67,39 +67,114 @@ body, html {
     border-left: 1px solid #d8d8d8;
     margin-top: 5px;
 }
-.menu a:hover .menuCategory {
-}
 
 .menu ul {
     list-style: none;
     padding: 0;
 }
 
-.menu ul li {
-    padding: 10px;
-}
+.menu ul li { padding: 10px; }
 
 .menu ul li a {
     margin-top: 3px;
     color: #323232;
     padding: 7px;
 }
-.menu .cateoryLi:hover .cateoryA {
-    background-color: #e5ecfc;
-}
-.menu ul li a:hover {
-    background-color: #e5ecfc;
+.menuCategory2 a { font-size: 13px;}
+
+.menu .cateoryLi:hover .cateoryA { background-color: #e5ecfc;}
+
+.menu .cateoryLi2:hover .cateoryA2 {background-color: #e5ecfc;}
+
+.menu ul li a:hover {background-color: #e5ecfc;}
+
+.header-bar{
+    width: 100%;
+    height: 60px;
+    /*border-bottom: 1px solid #e7e7e7;*/
 }
 
 .headerIcon {
-    width: 100%;
-    height: 20px;
+    float: right;
+    margin-right: 40px;
+    margin-top: 9px;
 }
 
-.bellIcon {
-    margin: 5px;
+.bell-icon {
+    position: relative;
+    display: inline-block;
+}
+.chat-icon {
+    position: relative;
+    display: inline-block;
 }
 
-.chatIcon {
-    margin: 5px;
+.bi-bell {
+    margin: 12px;
+}
+
+.bi-chat {
+    margin: 12px;
+}
+
+.new-bell, .new-chat {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #e5ecfc;
+    font-size: 14px;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    border: 2px solid #383838;
+}
+
+.loginContent {
+    padding: 30px;
+    margin: 0 auto;
+    /*width: 30%;*/
+    width: 500px;
+    height: 500px;
+    /*border: 1px solid black;*/
+}
+.logo-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-login img {
+    width: 50%;
+    height: 50%;
+    margin: 0 auto;
+}
+.login-p {
+    display: inline-block;
+    padding: 10px;
+    margin-right: 10px;
+}
+
+.login-id {margin-right: 24px !important;}
+
+.login-input {
+    width: 70%;
+    height: 25px;
+    font-size: 15px;
+    padding: 5px;
+}
+.login-btn {
+    width: 90%;
+    padding: 10px;
+    margin: 20px auto;
+    background-color: #e5ecfc;
+    border: 1px solid #dadada;
+    border-radius: 9px;
+    cursor: pointer;
+}
+.login-btn:hover {
+    background-color: #dbe4f6;
 }
