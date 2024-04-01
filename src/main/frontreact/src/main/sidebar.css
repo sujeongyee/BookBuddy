@@ -181,3 +181,18 @@ body, html {
 .login-btn:hover {
     background-color: #dbe4f6;
 }
+.logout-btn {
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    color: black;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    font-size: 15px;
+    margin: 5px; /* 버튼 간의 마진을 조정합니다 */
+    background-color: #e5ecfc;
+}
+.logout-btn:hover {
+    background-color: #dbe4f6;
+}
