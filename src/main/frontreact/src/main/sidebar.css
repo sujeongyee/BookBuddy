@@ -60,7 +60,10 @@ body, html {
 .loginBtn:hover, .registBtn:hover{ background-color: #dbe4f6;}
 
 .myInfo{
-
+    padding: 10px;
+}
+.hellop {
+    display: inline-block;
 }
 
 .menuCategory {
