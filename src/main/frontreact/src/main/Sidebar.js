@@ -5,11 +5,7 @@ function Sidebar(){
     const [showMenuCategory, setShowMenuCategory] = useState(false); // 카테고리 메뉴 전시 여부
     const [showMenuCategory2, setShowMenuCategory2] = useState(false); // 키워드 메뉴 전시 여부
     const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 저장
-    const [userId, setUserId] = useState(""); // 아이디 저장
 
-    const login = () => {
-
-    }
 
     return(
         <div className="sidebar">
@@ -18,7 +14,7 @@ function Sidebar(){
             </Link>
             {isLoggedIn ? ( // 로그인 상태에 따라
                 <div className="myInfo">
-
+                    <p className="hellop"> </p><p className="hellop"> 님 반갑습니다!</p>
                 </div>
             ):(
                 <div className="myLogin">

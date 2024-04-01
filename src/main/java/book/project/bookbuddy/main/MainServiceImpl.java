@@ -10,9 +10,9 @@ public class MainServiceImpl implements MainService{
     @Autowired
     private MainMapper mainMapper;
 
-    public int checkUser(UserVO vo){
-        return mainMapper.checkUser(vo);
+
+    @Override
+    public int checkUser(String user_id, String user_pwd) {
+        return mainMapper.checkUser(user_id, user_pwd);
     }
-
-
 }

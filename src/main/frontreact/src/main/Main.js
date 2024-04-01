@@ -3,23 +3,18 @@ import Header from './Header';
 import './sidebar.css';
 import {useState} from "react";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 function Main({ loginPage, registPage }){
     const [userid, setUserid] = useState('');
     const [password, setPassword] = useState('');
-    const [loginMessage, setLoginMessage] = useState('');
-
+    const navigate = useNavigate();
     const handleLogin = async () => {
-        console.log(userid);
-        console.log(password);
         try {
-            const response = await axios.post('/book/login', { userid, password });
-            if (response.data.success) {
-                console.log(response.data)
-                setLoginMessage('로그인 성공');
-                // 로그인 성공 후에는 리다이렉트 또는 다른 작업 수행
-            } else {
-                setLoginMessage('로그인 실패');
+            const response = await axios.post('/book/login', { "USER_ID": userid, "USER_PWD": password });
+            if (response.data === 'success') {
+                alert("로그인 성공");
+                navigate('/');
             }
         } catch (error) {
             console.error('로그인 요청 에러:', error);
