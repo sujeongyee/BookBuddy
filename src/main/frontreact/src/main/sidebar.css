@@ -144,6 +144,12 @@ body, html {
     height: 500px;
     /*border: 1px solid black;*/
 }
+.registContent {
+    padding: 30px;
+    margin: 0 auto;
+    width: 600px;
+    height: 600px;
+}
 .logo-login {
     display: flex;
     justify-content: center;
@@ -195,4 +201,36 @@ body, html {
 }
 .logout-btn:hover {
     background-color: #dbe4f6;
+}
+
+.regist-input-id {
+    width: 50%;
+    height: 25px;
+    font-size: 15px;
+    padding: 5px;
+}
+.regist-input {
+    width: 70%;
+    height: 25px;
+    font-size: 15px;
+    padding: 5px;
+}
+
+.id-check {
+    width: 20%;
+    height: 30px;
+    padding: 5px;
+    margin: 5px;
+    margin-left: 10px;
+    background-color: #dbe4f6;
+    cursor: pointer;
+    border: none;
+    border-radius: 0.2em;
+}
+
+.regist-p {
+    display: inline-block;
+    padding: 10px;
+    margin-right: 10px;
+    width: 60px;
 }
