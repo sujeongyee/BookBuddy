@@ -31,6 +31,10 @@ function Main({ loginPage, registPage }){
         }
     };
 
+    const handleRegist = async(e) => {
+        e.preventDefault();
+    }
+
     return(
         <div className="mainContainer">
             <div className="side">
@@ -53,7 +57,30 @@ function Main({ loginPage, registPage }){
                             <button className="login-btn" type="submit">로그인</button>
                         </form>
                     </div>}
-                {registPage && <h3>회원가입 페이지입니다.</h3>}
+                {registPage && 
+                    <div className="registContent">
+                        <div className="logo-login">
+                            <img src={process.env.PUBLIC_URL + '/imgs/logo-notext.png'} alt="Logo"/>
+                        </div>
+                        <form onSubmit={handleRegist}>
+                            <p className="regist-p">아이디 </p>
+                            <input className="regist-input-id" type="text" placeholder="아이디를 입력해주세요" autoComplete="username"/>
+                            <button className='id-check'>중복확인</button>
+                            <p className="regist-p">비밀번호</p>
+                            <input className="regist-input" type="password" placeholder="비밀번호를 입력해주세요" autoComplete="current-password"/>
+                            <p className="regist-p">확인</p>
+                            <input className="regist-input" type="password" placeholder="비밀번호를 한번 더 입력해주세요" autoComplete="current-password"/>
+                            <p className="regist-p">닉네임 </p>
+                            <input className="regist-input-id" type="text" placeholder="닉네임을 입력해주세요" autoComplete="username"/>
+                            <button className='id-check'>중복확인</button>
+                            <p className="regist-input">전화번호</p>
+                            <p className="regist-p">이메일 </p>
+                            <input className="regist-input" type="text" placeholder="이메일을 입력해주세요" autoComplete="username"/>
+                            <button className="login-btn" type="submit">가입하기</button>
+                        </form>
+                    </div>
+                }
+                
             </div>
         </div>
     );
