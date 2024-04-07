@@ -13,7 +13,6 @@ function SelectKeyword(){
           throw new Error("서버에서 카테고리 리스트를 가져오지 못했습니다.");
         }
         const data = await response.json();
-        console.log(data);
         setKeywords(data); // 카테고리 리스트 설정
       } catch (error) {
         console.error(error);
@@ -34,12 +33,12 @@ function SelectKeyword(){
   };
 
   return(
-    <div>
-        <div className=''>
-          <p className="">선호하는 키워드</p>
-          <p className="">{`${selectedKeywords.length}개 선택됨`}</p>
+    <div className="reigst-k">
+        <div className='regist-kwd'>
+          <p className='regist-kwd-p'>선호하는 키워드</p>
+          <p className='regist-kwd-p2'>{`${selectedKeywords.length}개 선택됨`}</p>
         </div>
-        <div className="">
+        <div className='regist-select-kwd'>
           <ul>
             {keywords.map((keywords) => (
               <li

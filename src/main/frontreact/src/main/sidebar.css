@@ -21,7 +21,7 @@ body, html {
     color:#323232;
     padding-left: 10px;
     padding-right: 10px;
-    border-right: 1px solid #d6d6d6;
+    /* border-right: 1px solid #d6d6d6; */
 }
 
 .mainContainer {
@@ -80,13 +80,16 @@ body, html {
 }
 
 .menu ul li { padding: 10px; }
-
+.menu li {cursor: pointer;}
 .menu ul li a {
     margin-top: 3px;
     color: #323232;
     padding: 7px;
 }
-.menuCategory2 a { font-size: 13px;}
+.menuCategory2 a { 
+    font-size: 13px;
+    cursor: pointer;
+}
 
 .menu .cateoryLi:hover .cateoryA { background-color: #e5ecfc;}
 
@@ -148,9 +151,9 @@ body, html {
     padding: 30px;
     margin: 0 auto;
     width: 600px;
-    height: 600px;
+    height: 100%;
 }
-.logo-login {
+.logo-login, .logo-regist {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -159,6 +162,11 @@ body, html {
 .logo-login img {
     width: 50%;
     height: 50%;
+    margin: 0 auto;
+}
+.logo-regist img {
+    width: 35%;
+    height: 40%;
     margin: 0 auto;
 }
 .login-p {
@@ -175,7 +183,7 @@ body, html {
     font-size: 15px;
     padding: 5px;
 }
-.login-btn {
+.login-btn, .regist-btn {
     width: 90%;
     padding: 10px;
     margin: 20px auto;
@@ -183,6 +191,7 @@ body, html {
     border: 1px solid #dadada;
     border-radius: 9px;
     cursor: pointer;
+    margin-bottom: 100px;
 }
 .login-btn:hover {
     background-color: #dbe4f6;
@@ -321,4 +330,35 @@ body, html {
   .regist-category-select li.active {
     color: #98a7c7;
   }
-  
+  .reigst-k {
+    margin: 10px 0;
+  }
+  .regist-kwd {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+  }
+  .regist-kwd-p {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .regist-kwd-p2 {
+    display: inline-block;
+    font-size: 11px;
+  }
+  .regist-select-kwd ul {
+    margin: 0;
+  }
+  .regist-select-kwd li{
+    list-style: none;
+    display: inline-block;
+    background-color: #f5f8fe;
+    padding: 6px;
+    margin: 3px;
+    cursor: pointer;
+    border-radius: 1em;
+  }
+  .regist-select-kwd li.active {
+    background-color: #dae7ff;
+    /* border: 1px solid #9f9f9f; */
+  }
