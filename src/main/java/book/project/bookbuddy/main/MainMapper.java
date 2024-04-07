@@ -14,4 +14,5 @@ public interface MainMapper {
     public int checkUser(@Param("user_id") String user_id, @Param("user_pwd") String user_pwd);
     public List<CategoryVO> getAllCategories();
     public List<KeywordVO> getAllKeywords();
+    public int checkDuplicateId(String id);
 }

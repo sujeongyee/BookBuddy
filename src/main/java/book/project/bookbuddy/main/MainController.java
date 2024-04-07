@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import book.project.bookbuddy.command.CategoryVO;
 import book.project.bookbuddy.command.KeywordVO;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
@@ -51,5 +54,13 @@ public class MainController {
     public List<KeywordVO> getAllKeywords(){
         return mainService.getAllKeywords();
     }
+
+    @PostMapping("/checkDuplicateId")
+    public boolean checkDuplicateId(@RequestBody String id) {    
+        int n = mainService.checkDuplicateId(id);
+        if(n>0) return false;
+        else return true;
+    }
+    
     
 }

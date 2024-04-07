@@ -16,4 +16,9 @@
     <select id="getAllKeywords">
         SELECT * FROM KEYWORD;
     </select>
+
+    <select id="checkDuplicateId">
+        SELECT COUNT(USER_NO) FROM USER WHERE USER_ID = #{id}
+    </select>
+
 </mapper>
