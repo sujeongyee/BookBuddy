@@ -5,14 +5,15 @@ import axios from "axios";
 
 function UserRegist() {
 
-  const[idCheck,SetIdCheck] = useState(false);
-  const [idMsg, SetIdMsg] = useState('');
-  const [pwd,SetPwd] = useState('');
-  const [pwd2,SetPwd2] = useState('');
+  const[idCheck,setIdCheck] = useState(false);
+  const [idMsg, setIdMsg] = useState('');
+  const [pwd,setPwd] = useState('');
+  const [pwd2,setPwd2] = useState('');
+  const [pwMsg,setPwMsg] = useState('');
 
   const changeId = () => {
-    SetIdCheck(false);
-    SetIdMsg('');
+    setIdCheck(false);
+    setIdMsg('');
   }
 
   const checkId = async (e) => {
@@ -20,10 +21,20 @@ function UserRegist() {
     const response = await axios.post('/book/checkDuplicateId', { id });
     const idMsg = document.querySelector("idMsg");
     if(response.data){
-      SetIdCheck(true);    
-      SetIdMsg('사용 가능한 아이디입니다.') ;
+      setIdCheck(true);    
+      setIdMsg('사용 가능한 아이디입니다.') ;
     }else{
-      SetIdMsg('중복된 아이디입니다.') ;
+      setIdMsg('중복된 아이디입니다.') ;
+    }
+  }
+
+  const pwCheck = (e) => {
+    setPwd2(e.target.value);
+    const pw = e.target.value;
+    if (pwd === pw) {
+      setPwMsg('비밀번호가 동일합니다. 확인 완료');
+    } else {
+      setPwMsg('비밀번호가 다릅니다.');
     }
   }
 
@@ -42,11 +53,11 @@ function UserRegist() {
         <button className="id-check" onClick={checkId}>중복확인</button>
         <p className='msg idMsg'>{idMsg}</p>
         <p className="regist-p">비밀번호</p>
-        <input  className="regist-input" type="password" placeholder="비밀번호를 입력해주세요" autoComplete="current-password" />
+        <input  className="regist-input" type="password" placeholder="비밀번호를 입력해주세요" autoComplete="current-password" onChange={(e) => setPwd(e.target.value)} />
         <p className='msg pwMsg'></p>
         <p className="regist-p">확인</p>
-        <input className="regist-input" type="password" placeholder="비밀번호를 한번 더 입력해주세요" autoComplete="current-password"/>
-        <p className='msg pwCheckMsg'></p>
+        <input className="regist-input" type="password" placeholder="비밀번호를 한번 더 입력해주세요" autoComplete="current-password" onChange={pwCheck}/>
+        <p className='msg pwCheckMsg'>{pwMsg}</p>
         <p className="regist-p">닉네임 </p>
         <input className="regist-input-id" type="text" placeholder="닉네임을 입력해주세요" autoComplete="username"/>       
         <button className="id-check">중복확인</button>
