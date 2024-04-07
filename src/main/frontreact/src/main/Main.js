@@ -57,7 +57,7 @@ function Main({ loginPage, registPage }) {
                     </div>}
                 {registPage &&
                     <div className="registContent">
-                        <div className="logo-login">
+                        <div className="logo-regist">
                             <img src={process.env.PUBLIC_URL + '/imgs/logo-notext.png'} alt="Logo" />
                         </div>
                         <form onSubmit={handleRegist}>
@@ -82,7 +82,7 @@ function Main({ loginPage, registPage }) {
                             <BirthDateSelect />                           
                             <SelectCategory/>
                             <SelectKeyword/>
-                            <button className="login-btn" type="submit">가입하기</button>
+                            <button className="regist-btn" type="submit">가입하기</button>
                             
                         </form>
                     </div>
