@@ -28,4 +28,8 @@ public class MainServiceImpl implements MainService{
     public List<KeywordVO> getAllKeywords(){
         return mainMapper.getAllKeywords();
     }
+
+    public int checkDuplicateId(String id){
+        return mainMapper.checkDuplicateId(id);
+    }
 }
