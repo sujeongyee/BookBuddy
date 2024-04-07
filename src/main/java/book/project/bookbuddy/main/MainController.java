@@ -56,8 +56,8 @@ public class MainController {
     }
 
     @PostMapping("/checkDuplicateId")
-    public boolean checkDuplicateId(@RequestBody String id) {    
-        int n = mainService.checkDuplicateId(id);
+    public boolean checkDuplicateId(@RequestBody Map<String,String> map) {
+        int n = mainService.checkDuplicateId(map.get("id"));
         if(n>0) return false;
         else return true;
     }

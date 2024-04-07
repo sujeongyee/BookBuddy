@@ -6,11 +6,13 @@ import axios from "axios";
 function UserRegist() {
 
   const[idCheck,SetIdCheck] = useState(false);
-  const [idMsg, setIdMsg] = useState('');
+  const [idMsg, SetIdMsg] = useState('');
+  const [pwd,SetPwd] = useState('');
+  const [pwd2,SetPwd2] = useState('');
 
   const changeId = () => {
     SetIdCheck(false);
-    setIdMsg('');
+    SetIdMsg('');
   }
 
   const checkId = async (e) => {
@@ -19,9 +21,9 @@ function UserRegist() {
     const idMsg = document.querySelector("idMsg");
     if(response.data){
       SetIdCheck(true);    
-      setIdMsg('사용 가능한 아이디입니다.') ;
+      SetIdMsg('사용 가능한 아이디입니다.') ;
     }else{
-      setIdMsg('중복된 아이디입니다.') ;
+      SetIdMsg('중복된 아이디입니다.') ;
     }
   }
 
