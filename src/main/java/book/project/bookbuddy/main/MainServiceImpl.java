@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import book.project.bookbuddy.command.CategoryVO;
+import book.project.bookbuddy.command.KeywordVO;
 
 @Service("mainService")
 public class MainServiceImpl implements MainService{
@@ -22,5 +23,9 @@ public class MainServiceImpl implements MainService{
 
     public List<CategoryVO> getAllCategories(){
         return mainMapper.getAllCategories();
+    }
+
+    public List<KeywordVO> getAllKeywords(){
+        return mainMapper.getAllKeywords();
     }
 }

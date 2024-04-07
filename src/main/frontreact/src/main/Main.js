@@ -5,6 +5,7 @@ import './sidebar.css';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SelectCategory from '../component/SelectCategory';
+import SelectKeyword from '../component/SelectKeyword';
 
 function Main({ loginPage, registPage }) {
     const [password, setPassword] = useState('');
@@ -80,7 +81,7 @@ function Main({ loginPage, registPage }) {
                             <input className="regist-input" type="text" placeholder="이메일을 입력해주세요" autoComplete="username" />
                             <BirthDateSelect />                           
                             <SelectCategory/>
-                            
+                            <SelectKeyword/>
                             <button className="login-btn" type="submit">가입하기</button>
                             
                         </form>

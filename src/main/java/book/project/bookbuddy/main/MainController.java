@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import book.project.bookbuddy.command.CategoryVO;
+import book.project.bookbuddy.command.KeywordVO;
 
 
 
@@ -41,11 +42,14 @@ public class MainController {
             return "fail";
         }
     }
-
     
     @GetMapping("/getAllCategories")
     public List<CategoryVO> getAllCategories(){
         return mainService.getAllCategories();
+    }
+    @GetMapping("/getAllKeywords")
+    public List<KeywordVO> getAllKeywords(){
+        return mainService.getAllKeywords();
     }
     
 }
