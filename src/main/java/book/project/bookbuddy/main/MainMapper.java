@@ -7,9 +7,11 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import book.project.bookbuddy.command.CategoryVO;
+import book.project.bookbuddy.command.KeywordVO;
 
 @Mapper
 public interface MainMapper {
     public int checkUser(@Param("user_id") String user_id, @Param("user_pwd") String user_pwd);
     public List<CategoryVO> getAllCategories();
+    public List<KeywordVO> getAllKeywords();
 }

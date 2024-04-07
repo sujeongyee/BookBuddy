@@ -12,4 +12,8 @@
     <select id="getAllCategories">
         SELECT * FROM CATEGORY;
     </select>
+
+    <select id="getAllKeywords">
+        SELECT * FROM KEYWORD;
+    </select>
 </mapper>
