@@ -8,4 +8,8 @@
     <select id="checkUser" resultType="int">
         SELECT COUNT(USER_NO) FROM USER WHERE USER_ID = #{user_id} AND USER_PWD = #{user_pwd}
     </select>
+    
+    <select id="getAllCategories">
+        SELECT * FROM CATEGORY;
+    </select>
 </mapper>

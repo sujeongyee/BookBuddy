@@ -264,12 +264,22 @@ body, html {
     margin-left: 0;
 }
 .regist-cate {
-    width: 89%;
+    width: 100%;
     text-align: center;
     font-weight: bold;
     margin-top: 4px;
     margin-bottom: 10px;
 }
+.regist-cate-p {
+    display: inline-block;
+    margin-right: 10px;
+    
+  }
+  .regist-cate-p2 {
+    display: inline-block;
+    font-size: 11px;
+  }
+  
 .cate-select {
     width: 88%;
     height: 35px;
@@ -278,3 +288,38 @@ body, html {
     text-align: center;
     outline: none;
 }
+
+.regist-category-select{
+    width: 88%;
+    height: 150px;
+    overflow-y: scroll;
+}
+
+.regist-category-select::-webkit-scrollbar {
+    width: 10px;
+  }
+  .regist-category-select::-webkit-scrollbar-thumb {
+    background-color: #dbe4f6;
+    border-radius: 10px;
+  }
+  .regist-category-select::-webkit-scrollbar-track {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
+  }
+  .regist-category-select ul {
+    margin: 0;
+  }
+  .regist-category-select li {
+    list-style: none;
+    text-align: center;
+    padding: 5px;
+  }
+  .regist-category-select li:hover {
+    background-color: #eff4ff;
+    cursor: pointer;
+  }
+  .regist-category-select li.active {
+    color: #98a7c7;
+  }
+  

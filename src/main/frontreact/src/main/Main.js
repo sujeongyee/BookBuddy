@@ -78,9 +78,8 @@ function Main({ loginPage, registPage }) {
                             </div>
                             <p className="regist-p">이메일 </p>
                             <input className="regist-input" type="text" placeholder="이메일을 입력해주세요" autoComplete="username" />
-                            <BirthDateSelect />
-                            <div className='regist-cate'>선호하는 카테고리</div>
-                            {/* <SelectCategory/> */}
+                            <BirthDateSelect />                           
+                            <SelectCategory/>
                             
                             <button className="login-btn" type="submit">가입하기</button>
                             
