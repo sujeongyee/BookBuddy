@@ -7,11 +7,21 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import book.project.bookbuddy.command.CategoryVO;
+
+
+
 
 @RestController
 @RequestMapping("/book")
 public class MainController {
+// 로그인과 회원가입 등의 기능
+
 
 //    @Autowired
 //    private PasswordEncoder passwordEncoder;
@@ -32,4 +42,10 @@ public class MainController {
         }
     }
 
+    
+    @GetMapping("/getAllCategories")
+    public List<CategoryVO> getAllCategories(){
+        return mainService.getAllCategories();
+    }
+    
 }

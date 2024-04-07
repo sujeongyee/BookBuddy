@@ -1,18 +1,57 @@
+import {useState, useEffect } from "react";
 
 function SelectCategory(){
+
+  const [categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
+  useEffect(()=>{
+    async function fetchCategories() {
+      try {
+        const response = await fetch("/book/getAllCategories");
+        if (!response.ok) {
+          throw new Error("서버에서 카테고리 리스트를 가져오지 못했습니다.");
+        }
+        const data = await response.json();
+        console.log(data);
+        setCategories(data); // 카테고리 리스트 설정
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchCategories();
+  },[]);
+
+  const handleClick = (category) => {
+    // 이미 선택된 카테고리를 클릭한 경우 제거
+    if (selectedCategories.includes(category)) {
+      setSelectedCategories(selectedCategories.filter((c) => c !== category));
+    } else {
+      // 선택되지 않은 카테고리를 클릭한 경우 추가
+      setSelectedCategories([...selectedCategories, category]);
+    }
+  };
+
+
   return(
-    <select className="cate-select">
-      <option key='' value=''>소설</option>
-      <option key='' value=''>시/에세이</option>
-      <option key='' value=''>인문</option>
-      <option key='' value=''>가정/육아</option>
-      <option key='' value=''>요리</option>
-      <option key='' value=''>건강</option>
-      <option key='' value=''>종교</option>
-      <option key='' value=''>기술/공학</option>
-      <option key='' value=''>외국어</option>
-      <option key='' value=''>과학</option>
-    </select>                            
+    <>
+    <div className='regist-cate'>
+      <p className="regist-cate-p">선호하는 카테고리</p>
+      <p className="regist-cate-p2">{`${selectedCategories.length}개 선택됨`}</p>
+    </div>
+    <div className="regist-category-select">
+      <ul>
+        {categories.map((category) => (
+          <li
+          key={category.category_NO}
+          className={selectedCategories.includes(category) ? "active" : ""}
+          onClick={() => handleClick(category)}
+        >{category.category_NAME}</li>
+        ))}
+      </ul>
+    </div>
+    </>                    
   );
 }
 export default SelectCategory
