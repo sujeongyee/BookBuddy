@@ -61,6 +61,12 @@ public class MainController {
         if(n>0) return false;
         else return true;
     }
+    @PostMapping("/checkDuplicateNick")
+    public boolean checkDuplicateNick(@RequestBody Map<String,String> map) {
+        int n = mainService.checkDuplicateNick(map.get("nick"));
+        if(n>0) return false;
+        else return true;
+    }
     
     
 }
