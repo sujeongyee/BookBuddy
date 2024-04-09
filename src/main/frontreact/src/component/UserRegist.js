@@ -5,12 +5,14 @@ import axios from "axios";
 
 function UserRegist() {
 
-  const[idCheck,setIdCheck] = useState(false);
+  const [idCheck,setIdCheck] = useState(false);
   const [idMsg, setIdMsg] = useState('');
   const [pwd,setPwd] = useState('');
   const [pwd2,setPwd2] = useState('');
   const [pwMsg,setPwMsg] = useState('');
   const [pwCheckMsg, setPwCheckMsg] = useState('');
+  const [nickMsg,setNickMsg] = useState('');
+
 
   const changeId = () => {
     setIdCheck(false);
@@ -18,9 +20,8 @@ function UserRegist() {
   }
 
   const checkId = async (e) => {
-    const id = document.querySelector(".regist-input-id").value;
+    const id = document.querySelector(".regist-id").value;
     const response = await axios.post('/book/checkDuplicateId', { id });
-    const idMsg = document.querySelector("idMsg");
     if(response.data){
       setIdCheck(true);    
       setIdMsg('사용 가능한 아이디입니다.') ;
@@ -50,6 +51,20 @@ function UserRegist() {
     }
   }
 
+  const checkNick = async() => {
+      const nick = document.querySelector(".regist-nick").value;
+      const response = await axios.post('/book/checkDuplicateNick', { nick });
+      if(response.data){
+          setNickMsg('사용 가능한 닉네임입니다.') ;
+      }else{
+          setNickMsg('중복된 닉네임입니다.') ;
+      }
+  }
+
+  const changeNick = () => {
+      setNickMsg('');
+  }
+
   const handleRegist = async (e) => {
     e.preventDefault();
   }
@@ -61,7 +76,7 @@ function UserRegist() {
       </div>
       <form onSubmit={handleRegist}>
         <p className="regist-p">아이디 </p>
-        <input className="regist-input-id" type="text" placeholder="아이디를 입력해주세요" autoComplete="username" onChange={changeId}/>
+        <input className="regist-input-id regist-id" type="text" placeholder="아이디를 입력해주세요" autoComplete="username" onChange={changeId}/>
         <button className="id-check" onClick={checkId}>중복확인</button>
         <p className='msg idMsg'>{idMsg}</p>
         <p className="regist-p">비밀번호</p>
@@ -71,9 +86,9 @@ function UserRegist() {
         <input className="regist-input" type="password" placeholder="비밀번호를 한번 더 입력해주세요" autoComplete="current-password" onChange={pwCheck}/>
         <p className='msg pwCheckMsg'>{pwCheckMsg}</p>
         <p className="regist-p">닉네임 </p>
-        <input className="regist-input-id" type="text" placeholder="닉네임을 입력해주세요" autoComplete="username"/>       
-        <button className="id-check">중복확인</button>
-        <p className='msg nickNameMsg'></p>
+        <input className="regist-input-id regist-nick" type="text" placeholder="닉네임을 입력해주세요" autoComplete="username" onChange={changeNick}/>
+        <button className="id-check" onClick={checkNick}>중복확인</button>
+        <p className='msg nickNameMsg'>{nickMsg}</p>
         <div>
           <p className="regist-p">전화번호</p>
           <input className="phone-input phone-input-first" value="010" disabled ></input>{" "}-

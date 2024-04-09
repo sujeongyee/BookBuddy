@@ -32,4 +32,8 @@ public class MainServiceImpl implements MainService{
     public int checkDuplicateId(String id){
         return mainMapper.checkDuplicateId(id);
     }
+
+    public int checkDuplicateNick(String id){
+        return mainMapper.checkDuplicateNick(id);
+    }
 }

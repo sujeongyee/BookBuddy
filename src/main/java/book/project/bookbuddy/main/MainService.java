@@ -10,4 +10,5 @@ public interface MainService {
     public List<CategoryVO> getAllCategories();
     public List<KeywordVO> getAllKeywords();
     public int checkDuplicateId(String id);
+    public int checkDuplicateNick(String id);
 }

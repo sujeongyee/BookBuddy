@@ -21,4 +21,8 @@
         SELECT COUNT(USER_NO) FROM USER WHERE USER_ID = #{id}
     </select>
 
+    <select id="checkDuplicateNick">
+        SELECT COUNT(USER_NO) FROM USER WHERE USER_NICK = #{id}
+    </select>
+
 </mapper>
