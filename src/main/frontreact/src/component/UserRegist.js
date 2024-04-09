@@ -10,6 +10,7 @@ function UserRegist() {
   const [pwd,setPwd] = useState('');
   const [pwd2,setPwd2] = useState('');
   const [pwMsg,setPwMsg] = useState('');
+  const [pwCheckMsg, setPwCheckMsg] = useState('');
 
   const changeId = () => {
     setIdCheck(false);
@@ -28,13 +29,24 @@ function UserRegist() {
     }
   }
 
+  const checkPw = (e) => {
+      setPwd(e.target.value);
+      const pw = e.target.value;
+      const isValid = pw.length >= 10 && /[0-9]/.test(pw) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pw);
+      if(isValid) {
+          setPwMsg('사용 가능한 비밀번호입니다.');
+      }else {
+          setPwMsg('비밀번호는 10자 이상이어야 하고, 숫자와 특수문자를 반드시 포함해야 합니다.')
+      }
+  }
+
   const pwCheck = (e) => {
     setPwd2(e.target.value);
     const pw = e.target.value;
     if (pwd === pw) {
-      setPwMsg('비밀번호가 동일합니다. 확인 완료');
+      setPwCheckMsg('비밀번호가 동일합니다. 확인 완료');
     } else {
-      setPwMsg('비밀번호가 다릅니다.');
+      setPwCheckMsg('비밀번호가 다릅니다.');
     }
   }
 
@@ -53,11 +65,11 @@ function UserRegist() {
         <button className="id-check" onClick={checkId}>중복확인</button>
         <p className='msg idMsg'>{idMsg}</p>
         <p className="regist-p">비밀번호</p>
-        <input  className="regist-input" type="password" placeholder="비밀번호를 입력해주세요" autoComplete="current-password" onChange={(e) => setPwd(e.target.value)} />
-        <p className='msg pwMsg'></p>
+        <input  className="regist-input" type="password" placeholder="비밀번호를 입력해주세요" autoComplete="current-password" onChange={checkPw} />
+        <p className='msg pwMsg'>{pwMsg}</p>
         <p className="regist-p">확인</p>
         <input className="regist-input" type="password" placeholder="비밀번호를 한번 더 입력해주세요" autoComplete="current-password" onChange={pwCheck}/>
-        <p className='msg pwCheckMsg'>{pwMsg}</p>
+        <p className='msg pwCheckMsg'>{pwCheckMsg}</p>
         <p className="regist-p">닉네임 </p>
         <input className="regist-input-id" type="text" placeholder="닉네임을 입력해주세요" autoComplete="username"/>       
         <button className="id-check">중복확인</button>
