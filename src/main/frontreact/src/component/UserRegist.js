@@ -12,7 +12,7 @@ function UserRegist() {
   const [pwMsg,setPwMsg] = useState('');
   const [pwCheckMsg, setPwCheckMsg] = useState('');
   const [nickMsg,setNickMsg] = useState('');
-
+  const [selectedDomain, setSelectedDomain] = useState('naver.com');
 
   const changeId = () => {
     setIdCheck(false);
@@ -65,6 +65,18 @@ function UserRegist() {
       setNickMsg('');
   }
 
+  const handleSelectChange = (event) => {
+      setSelectedDomain(event.target.value);
+  }
+  const emailAuth = async () => {
+      const area = document.querySelector(".authen");
+      area.style.display = "block";
+      const id = document.querySelector(".regist-mail").value;
+      const email = id+'@'+selectedDomain;
+      const response = await axios.post('/book/regist/sendMail', { email });
+      console.log(response);
+  }
+
   const handleRegist = async (e) => {
     e.preventDefault();
   }
@@ -74,53 +86,65 @@ function UserRegist() {
       <div className="logo-regist">
         <img src={process.env.PUBLIC_URL + "/imgs/logo-notext.png"} alt="Logo"/>
       </div>
-      <form onSubmit={handleRegist}>
-        <p className="regist-p">아이디 </p>
-        <input className="regist-input-id regist-id" type="text" placeholder="아이디를 입력해주세요" autoComplete="username" onChange={changeId}/>
-        <button className="id-check" onClick={checkId}>중복확인</button>
-        <p className='msg idMsg'>{idMsg}</p>
-        <p className="regist-p">비밀번호</p>
-        <input  className="regist-input" type="password" placeholder="비밀번호를 입력해주세요" autoComplete="current-password" onChange={checkPw} />
-        <p className='msg pwMsg'>{pwMsg}</p>
-        <p className="regist-p">확인</p>
-        <input className="regist-input" type="password" placeholder="비밀번호를 한번 더 입력해주세요" autoComplete="current-password" onChange={pwCheck}/>
-        <p className='msg pwCheckMsg'>{pwCheckMsg}</p>
-        <p className="regist-p">닉네임 </p>
-        <input className="regist-input-id regist-nick" type="text" placeholder="닉네임을 입력해주세요" autoComplete="username" onChange={changeNick}/>
-        <button className="id-check" onClick={checkNick}>중복확인</button>
-        <p className='msg nickNameMsg'>{nickMsg}</p>
-        <div>
-          <p className="regist-p">전화번호</p>
-          <input className="phone-input phone-input-first" value="010" disabled ></input>{" "}-
-          <input className="phone-input"></input> -
-          <input className="phone-input"></input>
-        </div>
-        <p className='msg'></p>
-        <p className="regist-p">이메일 </p>
-        <input className="regist-input regist-mail" type="text" placeholder="이메일을 입력해주세요" autoComplete="username"/>@
-          <select className='mail-select'>
-              <option selected>naver.com</option>
-              <option>gmail.com</option>
-              <option>daum.net</option>
-              <option>nate.com</option>
-              <option>hanmail.net</option>
-              <option>yahoo.com</option>
-              <option>hotmail.com</option>
-              <option>outlook.com</option>
-              <option>icloud.com</option>
-              <option>hanmir.com</option>
-          </select>
-          <p className='msg'></p>
-          <BirthDateSelect/>
-          <p className='msg'></p>
-          <SelectCategory />
-        <p className='msg'></p>
-        <SelectKeyword />
-        <p className='msg'></p>
-        <button className="regist-btn" type="submit">
-          가입하기
-        </button>
-      </form>
+        <form onSubmit={handleRegist}>
+            <p className="regist-p">아이디 </p>
+            <input className="regist-input-id regist-id" type="text" placeholder="아이디를 입력해주세요" autoComplete="username"
+                   onChange={changeId}/>
+            <button className="id-check" onClick={checkId}>중복확인</button>
+            <p className='msg idMsg'>{idMsg}</p>
+            <p className="regist-p">비밀번호</p>
+            <input className="regist-input" type="password" placeholder="비밀번호를 입력해주세요" autoComplete="current-password"
+                   onChange={checkPw}/>
+            <p className='msg pwMsg'>{pwMsg}</p>
+            <p className="regist-p">확인</p>
+            <input className="regist-input" type="password" placeholder="비밀번호를 한번 더 입력해주세요"
+                   autoComplete="current-password" onChange={pwCheck}/>
+            <p className='msg pwCheckMsg'>{pwCheckMsg}</p>
+            <p className="regist-p">닉네임 </p>
+            <input className="regist-input-id regist-nick" type="text" placeholder="닉네임을 입력해주세요" autoComplete="username"
+                   onChange={changeNick}/>
+            <button className="id-check" onClick={checkNick}>중복확인</button>
+            <p className='msg nickNameMsg'>{nickMsg}</p>
+            <div>
+                <p className="regist-p">전화번호</p>
+                <input className="phone-input phone-input-first" value="010" disabled></input>{" "}-
+                <input className="phone-input"></input> -
+                <input className="phone-input"></input>
+            </div>
+            <p className='msg'></p>
+            <p className="regist-p">이메일 </p>
+            <input className="regist-input regist-mail" type="text" placeholder="이메일을 입력해주세요" autoComplete="username"/>@
+            <select className='mail-select' value={selectedDomain} onChange={handleSelectChange}>
+                <option selected>naver.com</option>
+                <option>gmail.com</option>
+                <option>daum.net</option>
+                <option>nate.com</option>
+                <option>hanmail.net</option>
+                <option>yahoo.com</option>
+                <option>hotmail.com</option>
+                <option>outlook.com</option>
+                <option>icloud.com</option>
+                <option>hanmir.com</option>
+            </select>
+            <button className='email-auth' onClick={emailAuth}>인증번호발송</button>
+
+            <div className='authen' style={{display: 'none'}}>
+                <p className='msg'></p>
+                <p className="regist-p">인증번호</p>
+                <input className="regist-input regist-email" placeholder='이메일로 발송된 인증번호를 입력해주세요.'/>
+                <button className="id-check code-check">인증하기</button>
+            </div>
+            <p className='msg'></p>
+            <BirthDateSelect/>
+            <p className='msg'></p>
+            <SelectCategory/>
+            <p className='msg'></p>
+            <SelectKeyword/>
+            <p className='msg'></p>
+            <button className="regist-btn" type="submit">
+                가입하기
+            </button>
+        </form>
     </div>
   );
 }
