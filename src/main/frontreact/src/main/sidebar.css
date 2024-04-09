@@ -373,7 +373,7 @@ body, html {
     color: rgb(255, 107, 107);
   }
   .regist-mail {
-      width: 40%;
+      width: 28%;
       margin-right: 5px;
   }
   .mail-select {
@@ -381,4 +381,21 @@ body, html {
       padding : 5px;
       margin-left: 5px;
       outline: none;
+  }
+  .email-auth {
+      width: 18%;
+      height: 35px;
+      padding: 5px;
+      margin-left: 10px;
+      background-color: #dbe4f6;
+      cursor: pointer;
+      border: none;
+      border-radius: 0.2em;
+  }
+
+  .regist-email {
+      width: 51%;
+  }
+  .code-check {
+      margin-left: 10px;
   }
