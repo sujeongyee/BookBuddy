@@ -372,3 +372,13 @@ body, html {
     height: 12px;
     color: rgb(255, 107, 107);
   }
+  .regist-mail {
+      width: 40%;
+      margin-right: 5px;
+  }
+  .mail-select {
+      height: 35px;
+      padding : 5px;
+      margin-left: 5px;
+      outline: none;
+  }

@@ -97,11 +97,23 @@ function UserRegist() {
         </div>
         <p className='msg'></p>
         <p className="regist-p">이메일 </p>
-        <input className="regist-input" type="text" placeholder="이메일을 입력해주세요" autoComplete="username"/>
-        <p className='msg'></p>
-        <BirthDateSelect />
-        <p className='msg'></p>
-        <SelectCategory />
+        <input className="regist-input regist-mail" type="text" placeholder="이메일을 입력해주세요" autoComplete="username"/>@
+          <select className='mail-select'>
+              <option selected>naver.com</option>
+              <option>gmail.com</option>
+              <option>daum.net</option>
+              <option>nate.com</option>
+              <option>hanmail.net</option>
+              <option>yahoo.com</option>
+              <option>hotmail.com</option>
+              <option>outlook.com</option>
+              <option>icloud.com</option>
+              <option>hanmir.com</option>
+          </select>
+          <p className='msg'></p>
+          <BirthDateSelect/>
+          <p className='msg'></p>
+          <SelectCategory />
         <p className='msg'></p>
         <SelectKeyword />
         <p className='msg'></p>
