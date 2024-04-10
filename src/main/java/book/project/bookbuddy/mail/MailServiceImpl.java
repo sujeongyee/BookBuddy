@@ -38,7 +38,6 @@ public class MailServiceImpl implements MailService{
                     "p { line-height: 1.5; }" +
                     "</style></head>" +
                     "<body>" +
-                    "<h2>BookBuddy 이메일 인증하기</h2>" +
                     "<p>안녕하세요!</p>" +
                     "<p>BookBuddy를 시작하려면 다음 인증 코드를 입력하세요:</p>" +
                     "<h3>"+ verificationCode +"</h3>" +
