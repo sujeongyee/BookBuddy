@@ -6,6 +6,7 @@ import book.project.bookbuddy.command.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -24,12 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/book")
-public class MainController {
-// 로그인과 회원가입 등의 기능
-
-
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+public class MainController { // 로그인과 회원가입 등의 기능
 
     @Autowired
     @Qualifier("mainService")
@@ -70,55 +66,22 @@ public class MainController {
     }
 
     @PostMapping("/join")
-    public boolean joinMember(@RequestBody Map<String,Object> map){
-        System.out.println("---------");
-        System.out.println(map.toString());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        long timestamp = 0;
-        try {
-            Date parsedDate = dateFormat.parse(String.valueOf(map.get("USER_BIRTH")));
-            timestamp = parsedDate.getTime();
-            System.out.println("Timestamp: " + timestamp);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Timestamp timestamp2 = new Timestamp(timestamp);
-        System.out.println(map.get("CATEGORY_NO"));
-        System.out.println(map.get("KEYWORD_NO"));
-        List<Map<String, String>> categories = (List<Map<String, String>>) map.get("CATEGORY_NO");
-        StringBuilder categoryNoBuilder = new StringBuilder();
+    public boolean joinMember(@RequestBody Map<String,String> map){
+        Timestamp birth =  mainService.getTimeStamp(String.valueOf(map.get("USER_BIRTH")));
 
-        for (Map<String, String> category : categories) {
-            categoryNoBuilder.append(category.get("category_NO")).append(",");
-        }
-
-        String CATEGORY_NO = categoryNoBuilder.toString();
-        // 마지막 쉼표 제거
-        if (CATEGORY_NO.endsWith(",")) {
-            CATEGORY_NO = CATEGORY_NO.substring(0, CATEGORY_NO.length() - 1);
-        }
-        List<Map<String, String>> keywords = (List<Map<String, String>>) map.get("KEYWORD_NO");
-        StringBuilder keywordNoBuilder = new StringBuilder();
-
-        for (Map<String, String> keyword : keywords) {
-            keywordNoBuilder.append(keyword.get("keyword_NO")).append(",");
-        }
-
-        String KEYWORD_NO = keywordNoBuilder.toString();
-        // 마지막 쉼표 제거
-        if (KEYWORD_NO.endsWith(",")) {
-            KEYWORD_NO = KEYWORD_NO.substring(0, KEYWORD_NO.length() - 1);
-        }
-        System.out.println(CATEGORY_NO);
-        System.out.println(KEYWORD_NO);
         UserVO vo = new UserVO().builder().USER_ID(String.valueOf(map.get("USER_ID")))
-                .USER_PWD(String.valueOf(map.get("USER_ID")))
-                .USER_NICK(String.valueOf(map.get("USER_NICK")))
-                .USER_PHONE(String.valueOf(map.get("USER_PHONE")))
-                .USER_BIRTH(timestamp2)
-                .USER_EMAIL(String.valueOf(map.get("USER_EMAIL"))).build();
-
-        return true;
+                .USER_PWD(map.get("USER_PWD"))
+                .USER_NICK(map.get("USER_NICK"))
+                .USER_PHONE(map.get("USER_PHONE"))
+                .USER_BIRTH(birth)
+                .USER_EMAIL(map.get("USER_EMAIL"))
+                .CATEGORY_NO(map.get("CATEGORY_NO"))
+                .KEYWORD_NO(map.get("KEYWORD_NO"))
+                .build();
+        System.out.println(vo.toString());
+        int n = mainService.joinBuddy(vo);
+        if(n==1) return true;
+        else return false;
     }
     
     

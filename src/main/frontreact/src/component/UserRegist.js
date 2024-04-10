@@ -4,6 +4,8 @@ import SelectKeyword from '../component/SelectKeyword';
 import axios from "axios";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faEyeSlash} from '@fortawesome/free-regular-svg-icons';
+import { useNavigate } from 'react-router-dom';
+
 
 function UserRegist() {
 
@@ -18,7 +20,6 @@ function UserRegist() {
     const [selectedDomain, setSelectedDomain] = useState('naver.com');
     const [code, setCode] = useState('');
     const [email,setEmail] = useState('');
-    const [phoneNo,setPhoneNo] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);
     const [emailCheck, setEmailCheck] = useState(false);
@@ -27,6 +28,7 @@ function UserRegist() {
     const [selectDay,setSelectDay] = useState('');
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [selectedKeywords, setSelectedKeywords] = useState([]);
+    const navigate = useNavigate();
 
     const [form, setForm] = useState({
         USER_ID: '',
@@ -118,8 +120,8 @@ function UserRegist() {
         setEmail(email);
         const copy = { ...form, ['USER_EMAIL']: email};
         setForm(copy);
-        //const response = await axios.post('/book/regist/sendMail', {email});
-        //setCode(response.data);
+        const response = await axios.post('/book/regist/sendMail', {email});
+        setCode(response.data);
     }
 
     const codeCheck = (e) => {
@@ -135,50 +137,63 @@ function UserRegist() {
         }
     }
 
+    const handleRedirect = () => {
+        // 회원가입 성공 시 '/' 경로로 이동
+        navigate("/login");
+    };
+
     const handleRegist = async (e) => {
         e.preventDefault();
         const isValid = pwd.length >= 10 && /[0-9]/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
         const phoneNo = "010-" + document.querySelector(".phone-two").value + "-" + document.querySelector(".phone-three").value;
+
         const birth = selectYear+"-"+selectMonth+"-"+selectDay;
         const copy = {
             ...form,
             'USER_PHONE': phoneNo,
             'USER_BIRTH': birth,
-            'CATEGORY_NO': selectedCategories,
-            'KEYWORD_NO': selectedKeywords
+            'CATEGORY_NO': selectedCategories.join(','),
+            'KEYWORD_NO': selectedKeywords.join(',')
         };
-        const response = await axios.post('/book/join', JSON.stringify(copy), {
-            headers: {
-                'Content-Type': 'application/json'
+
+        const nick = document.querySelector(".regist-nick").value;
+
+        if (!idCheck) {
+            alert('아이디 중복체크를 해주세요.');
+        }else if (!isValid){
+            alert('사용 불가능한 비밀번호입니다.\n비밀번호는 10자 이상이어야 하고,\n숫자와 특수문자를 반드시 포함해야 합니다.');
+        }else if(pwd !== pwd2){
+            alert('비밀번호 확인이 일치하지 않습니다.');
+        }else if(!nickCheck){
+            alert('닉네임 중복체크를 해주세요.');
+         }
+        else if(!emailCheck){
+             alert('이메일 인증은 필수입니다!');
+         }
+        else if(selectYear===''){
+            alert('생년월일을 선택해주세요 : 년도 미선택');
+        }else if(selectMonth===''){
+            alert('생년월일을 선택해주세요 : 월 미선택');
+        }else if(selectDay===''){
+            alert('생년월일을 선택해주세요 : 일 미선택');
+        }else if (selectedCategories.length === 0) {
+            alert('선호하는 카테고리를 1개 이상 선택해주세요.');
+        }else if (selectedKeywords.length === 0) {
+            alert('선호하는 키워드를 1개 이상 선택해주세요.');
+        }else {
+            const response = await axios.post('/book/join', JSON.stringify(copy), {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            if(response.data){
+                alert('회원가입 성공! 반갑습니다'+nick+'님\n로그인 후 서비스 이용 부탁드립니다!');
+                handleRedirect();
+            }else{
+                alert('회원가입 실패');
             }
-        });
-        console.log(response);
-        // if (!idCheck) {
-        //     alert('아이디 중복체크를 해주세요.');
-        // }else if (!isValid){
-        //     alert('사용 불가능한 비밀번호입니다.\n비밀번호는 10자 이상이어야 하고,\n숫자와 특수문자를 반드시 포함해야 합니다.');
-        // }else if(pwd !== pwd2){
-        //     alert('비밀번호 확인이 일치하지 않습니다.');
-        // }else if(!nickCheck){
-        //     alert('닉네임 중복체크를 해주세요.');
-        //  }
-        // else if(!emailCheck){
-        //      alert('이메일 인증은 필수입니다!');
-        //  }
-        // else if(selectYear===''){
-        //     alert('생년월일을 선택해주세요 : 년도 미선택');
-        // }else if(selectMonth===''){
-        //     alert('생년월일을 선택해주세요 : 월 미선택');
-        // }else if(selectDay===''){
-        //     alert('생년월일을 선택해주세요 : 일 미선택');
-        // }else if (selectedCategories.length === 0) {
-        //     alert('선호하는 카테고리를 1개 이상 선택해주세요.');
-        // }else if (selectedKeywords.length === 0) {
-        //     alert('선호하는 키워드를 1개 이상 선택해주세요.');
-        // }else {
-        //     const joinForm = document.getElementById("joinForm");
-        //     joinForm.submit();
-        // }
+        }
+
 
 
     }
@@ -189,10 +204,6 @@ function UserRegist() {
                 <img src={process.env.PUBLIC_URL + "/imgs/logo-notext.png"} alt="Logo"/>
             </div>
             <form id="joinForm" onSubmit={handleRegist} action='/book/join' method="post">
-                <input type='hidden' className='USER_PHONE' value={phoneNo}/>
-                <input type='hidden' className='USER_EMAIL' value={email}/>
-                <input type='hidden' className='CATEGORY_NO' value={selectedCategories}/>
-                <input type='hidden' className='KEYWORD_NO' value={selectedKeywords}/>
                 <p className="regist-p">아이디 </p>
                 <input className="regist-input-id regist-id" type="text" placeholder="아이디를 입력해주세요"
                        autoComplete="username"

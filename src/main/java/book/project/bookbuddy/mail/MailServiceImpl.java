@@ -18,7 +18,7 @@ public class MailServiceImpl implements MailService{
     @Autowired
     private JavaMailSender mailSender;
     private String verificationCode;
-    final String fromEmail = "sujeongyee0529@gmail.com";
+    final String fromEmail = "sujeongyee0805@gmail.com";
     final String fromUsername = "BookBuddy";
 
     public String sendVerificationEmail(String email) {

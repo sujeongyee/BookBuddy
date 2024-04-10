@@ -25,4 +25,10 @@
         SELECT COUNT(USER_NO) FROM USER WHERE USER_NICK = #{id}
     </select>
 
+    <insert id="joinBuddy" parameterType="UserVO">
+        INSERT INTO USER (USER_ID, USER_PWD, USER_NICK, USER_PHONE, USER_BIRTH, CATEGORY_NO, KEYWORD_NO, USER_EMAIL)
+        VALUES
+            (#{USER_ID}, #{USER_PWD}, #{USER_NICK}, #{USER_PHONE}, #{USER_BIRTH}, #{CATEGORY_NO}, #{KEYWORD_NO}, #{USER_EMAIL});
+    </insert>
+
 </mapper>
