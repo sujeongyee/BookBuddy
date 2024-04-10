@@ -18,7 +18,6 @@ public class MailController {
     @PostMapping("/sendMail")
     public String sendMail(@RequestBody Map<String,String> map) {
         // 이메일 발송
-        System.out.println("email 전송 컨ㅌ롤러 탐");
         String code = mailService.sendVerificationEmail(map.get("email"));
         System.out.println("controller CODE : "+ code);
         return code;
