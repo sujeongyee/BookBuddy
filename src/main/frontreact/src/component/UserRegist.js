@@ -7,24 +7,30 @@ import {faEye, faEyeSlash} from '@fortawesome/free-regular-svg-icons';
 
 function UserRegist() {
 
-
     const [idCheck, setIdCheck] = useState(false);
     const [idMsg, setIdMsg] = useState('');
     const [pwd, setPwd] = useState('');
     const [pwd2, setPwd2] = useState('');
     const [pwMsg, setPwMsg] = useState('');
     const [pwCheckMsg, setPwCheckMsg] = useState('');
+    const [nickCheck, setNickCheck] = useState(false);
     const [nickMsg, setNickMsg] = useState('');
     const [selectedDomain, setSelectedDomain] = useState('naver.com');
     const [code, setCode] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);
+    const [emailCheck, setEmailCheck] = useState(false);
+    const [selectYear,setSelectYear] = useState('');
+    const [selectMonth,setSelectMonth] = useState('');
+    const [selectDay,setSelectDay] = useState('');
+
     const changeId = () => {
         setIdCheck(false);
         setIdMsg('');
     }
 
     const checkId = async (e) => {
+        e.preventDefault();
         const id = document.querySelector(".regist-id").value;
         const response = await axios.post('/book/checkDuplicateId', {id});
         if (response.data) {
@@ -62,24 +68,29 @@ function UserRegist() {
         }
     }
 
-    const checkNick = async () => {
+    const checkNick = async (e) => {
+        e.preventDefault();
         const nick = document.querySelector(".regist-nick").value;
         const response = await axios.post('/book/checkDuplicateNick', {nick});
         if (response.data) {
             setNickMsg('사용 가능한 닉네임입니다.');
+            setNickCheck(true);
         } else {
             setNickMsg('중복된 닉네임입니다.');
         }
     }
 
     const changeNick = () => {
+        setNickCheck(false);
         setNickMsg('');
     }
 
     const handleSelectChange = (event) => {
+        setEmailCheck(false);
         setSelectedDomain(event.target.value);
     }
-    const emailAuth = async () => {
+    const emailAuth = async (e) => {
+        e.preventDefault();
         const area = document.querySelector(".authen");
         area.style.display = "block";
         const id = document.querySelector(".regist-mail").value;
@@ -94,6 +105,7 @@ function UserRegist() {
             alert('인증이 완료됐습니다.');
             const area = document.querySelector(".authen");
             area.style.display = "none";
+            setEmailCheck(true);
         } else {
             alert('인증에 실패했습니다.');
         }
@@ -101,8 +113,20 @@ function UserRegist() {
 
     const handleRegist = async (e) => {
         e.preventDefault();
-        if (!idCheck) {
-        }
+
+
+        // const isValid = pwd.length >= 10 && /[0-9]/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
+        // if (!idCheck) {
+        //     alert('아이디 중복체크를 해주세요.');
+        // }else if (!isValid){
+        //     alert('사용 불가능한 비밀번호입니다.\n비밀번호는 10자 이상이어야 하고,\n숫자와 특수문자를 반드시 포함해야 합니다.');
+        // }else if(pwd !== pwd2){
+        //     alert('비밀번호 확인이 일치하지 않습니다.');
+        // }else if(!nickCheck){
+        //     alert('닉네임 중복체크를 해주세요.');
+        // }else if(!emailCheck){
+        //     alert('이메일 인증은 필수입니다!');
+        // }
 
     }
 
@@ -154,7 +178,7 @@ function UserRegist() {
                 <p className='msg'></p>
                 <p className="regist-p">이메일 </p>
                 <input className="regist-input regist-mail" type="text" placeholder="이메일을 입력해주세요"
-                       autoComplete="username"/>@
+                       autoComplete="username" onChange={(e)=>setEmailCheck(false)}/>@
                 <select className='mail-select' value={selectedDomain} onChange={handleSelectChange}>
                     <option selected>naver.com</option>
                     <option>gmail.com</option>
@@ -210,7 +234,7 @@ function BirthYearSelect() {
     }, []);
 
     return (
-        <select className="birth-box birth-year-box" id="birth-year">
+        <select className="birth-box birth-year-box" id="birth-year" onChange={(e)=>setSelectYear(e.value)}>
             <option disabled selected>출생 연도</option>
             {birthYears.map(year => (
                 <option className='birth-option' key={year} value={year}>{year}</option>
@@ -223,7 +247,7 @@ function BirthMonthSelect() {
     const months = Array.from({length: 12}, (_, i) => i + 1); // 1부터 12까지 월 생성
 
     return (
-        <select className="birth-box" id="birth-month">
+        <select className="birth-box" id="birth-month" onChange={(e)=>setSelectMonth(e.value)}>
             <option disabled selected>월</option>
             {months.map(month => (
                 <option className='birth-option' key={month} value={month}>{month}</option>
@@ -236,7 +260,7 @@ function BirthDaySelect() {
     const days = Array.from({length: 31}, (_, i) => i + 1); // 1부터 31까지 일 생성
 
     return (
-        <select className="birth-box" id="birth-day">
+        <select className="birth-box" id="birth-day" onChange={(e)=>setSelectDay(e.value)}>
             <option disabled selected>일</option>
             {days.map(day => (
                 <option className='birth-option' key={day} value={day}>{day}</option>
