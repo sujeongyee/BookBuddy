@@ -13,6 +13,7 @@ function UserRegist() {
   const [pwCheckMsg, setPwCheckMsg] = useState('');
   const [nickMsg,setNickMsg] = useState('');
   const [selectedDomain, setSelectedDomain] = useState('naver.com');
+  const [code,setCode] = useState('');
 
   const changeId = () => {
     setIdCheck(false);
@@ -74,7 +75,18 @@ function UserRegist() {
       const id = document.querySelector(".regist-mail").value;
       const email = id+'@'+selectedDomain;
       const response = await axios.post('/book/regist/sendMail', { email });
-      console.log(response);
+      setCode(response.data);
+  }
+
+  const codeCheck = () => {
+      const codeInput = document.querySelector(".code-input").value;
+      if(codeInput===code){
+          alert('인증이 완료됐습니다.');
+          const area = document.querySelector(".authen");
+          area.style.display = "none";
+      }else{
+          alert('인증에 실패했습니다.');
+      }
   }
 
   const handleRegist = async (e) => {
@@ -127,12 +139,11 @@ function UserRegist() {
                 <option>hanmir.com</option>
             </select>
             <button className='email-auth' onClick={emailAuth}>인증번호발송</button>
-
             <div className='authen' style={{display: 'none'}}>
                 <p className='msg'></p>
                 <p className="regist-p">인증번호</p>
-                <input className="regist-input regist-email" placeholder='이메일로 발송된 인증번호를 입력해주세요.'/>
-                <button className="id-check code-check">인증하기</button>
+                <input className="regist-input regist-email code-input" placeholder='이메일로 발송된 인증번호를 입력해주세요.'/>
+                <button className="id-check code-check" onClick={codeCheck}>인증하기</button>
             </div>
             <p className='msg'></p>
             <BirthDateSelect/>

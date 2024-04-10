@@ -17,10 +17,6 @@ import book.project.bookbuddy.command.KeywordVO;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
-
-
-
 @RestController
 @RequestMapping("/book")
 public class MainController {

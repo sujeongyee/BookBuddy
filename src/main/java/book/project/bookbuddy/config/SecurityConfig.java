@@ -18,7 +18,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/book/*"); // /book으로 들어오는 요청 허용
+        return (web) -> web.ignoring().requestMatchers("/book/**"); // /book으로 들어오는 요청 허용
     }
 
 
