@@ -49,8 +49,8 @@ function SelectCategory({ setSelectedCategories }){
           {categories.map((category) => (
             <li
             key={category.category_NO}
-            className={selectedCategories.includes(category) ? "active" : ""}
-            onClick={() => handleClick(category)}
+            className={selectedCategories.includes(category.category_NO) ? "active" : ""}
+            onClick={() => handleClick(category.category_NO)}
           >{category.category_NAME}</li>
           ))}
         </ul>

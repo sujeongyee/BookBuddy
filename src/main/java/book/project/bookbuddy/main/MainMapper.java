@@ -3,6 +3,7 @@ package book.project.bookbuddy.main;
 
 import java.util.List;
 
+import book.project.bookbuddy.command.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,4 +17,5 @@ public interface MainMapper {
     public List<KeywordVO> getAllKeywords();
     public int checkDuplicateId(String id);
     public int checkDuplicateNick(String id);
+    public int joinBuddy(UserVO vo);
 }

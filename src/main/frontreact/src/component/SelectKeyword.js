@@ -48,8 +48,8 @@ function SelectKeyword({ setSelectedKeywords }){
             {keywords.map((keywords) => (
               <li
                 key={keywords.keyword_NO}
-                className={selectedKeywords.includes(keywords) ? "active" : ""}
-                onClick={() => handleClick(keywords)}
+                className={selectedKeywords.includes(keywords.keyword_NO) ? "active" : ""}
+                onClick={() => handleClick(keywords.keyword_NO)}
               >{keywords.keyword_NAME}</li>
             ))}
           </ul>
