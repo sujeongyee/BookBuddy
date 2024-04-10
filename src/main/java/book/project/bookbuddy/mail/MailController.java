@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/book/regist/")
+@RequestMapping("/book/regist")
 public class MailController {
 
     @Autowired
@@ -17,11 +17,11 @@ public class MailController {
 
     @PostMapping("/sendMail")
     public String sendMail(@RequestBody Map<String,String> map) {
-        System.out.println("-------------");
-        System.out.println(map.get("email"));
         // 이메일 발송
-        //String code = mailService.sendVerificationEmail(email);
-        return "code";
+        System.out.println("email 전송 컨ㅌ롤러 탐");
+        String code = mailService.sendVerificationEmail(map.get("email"));
+        System.out.println("controller CODE : "+ code);
+        return code;
     }
 
 
