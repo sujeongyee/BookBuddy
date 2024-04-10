@@ -4,8 +4,14 @@
     font-weight: normal;
     font-style: normal;
 }
-* { font-family: SUIT-Regular,cursive;}
-input:focus {outline:none;}
+
+* {
+    font-family: SUIT-Regular, cursive;
+}
+
+input:focus {
+    outline: none;
+}
 
 body, html {
     position: relative;
@@ -18,7 +24,7 @@ body, html {
     height: 100%;
     width: 250px;
     background-color: white;
-    color:#323232;
+    color: #323232;
     padding-left: 10px;
     padding-right: 10px;
     /* border-right: 1px solid #d6d6d6; */
@@ -30,7 +36,7 @@ body, html {
     margin-bottom: 50px;
 }
 
-.mainContent { 
+.mainContent {
     flex: 1;
 }
 
@@ -40,31 +46,38 @@ body, html {
     justify-content: center;
     align-items: center;
 }
+
 .Logo img {
     max-width: 100%;
     max-height: 100%;
     margin: 0 auto;
 }
 
-.myLogin { display: flex; }
+.myLogin {
+    display: flex;
+}
 
 .loginBtn, .registBtn {
     cursor: pointer;
     text-decoration: none;
     text-align: center;
     color: black;
-    width: calc(50% - 5px); 
+    width: calc(50% - 5px);
     padding: 10px;
     border: none;
     font-size: 15px;
     margin: 5px;
     background-color: #e5ecfc;
 }
-.loginBtn:hover, .registBtn:hover{ background-color: #dbe4f6;}
 
-.myInfo{
+.loginBtn:hover, .registBtn:hover {
+    background-color: #dbe4f6;
+}
+
+.myInfo {
     padding: 10px;
 }
+
 .hellop {
     display: inline-block;
 }
@@ -79,25 +92,38 @@ body, html {
     padding: 0;
 }
 
-.menu ul li { padding: 10px; }
-.menu li {cursor: pointer;}
+.menu ul li {
+    padding: 10px;
+}
+
+.menu li {
+    cursor: pointer;
+}
+
 .menu ul li a {
     margin-top: 3px;
     color: #323232;
     padding: 7px;
 }
-.menuCategory2 a { 
+
+.menuCategory2 a {
     font-size: 13px;
     cursor: pointer;
 }
 
-.menu .cateoryLi:hover .cateoryA { background-color: #e5ecfc;}
+.menu .cateoryLi:hover .cateoryA {
+    background-color: #e5ecfc;
+}
 
-.menu .cateoryLi2:hover .cateoryA2 {background-color: #e5ecfc;}
+.menu .cateoryLi2:hover .cateoryA2 {
+    background-color: #e5ecfc;
+}
 
-.menu ul li a:hover {background-color: #e5ecfc;}
+.menu ul li a:hover {
+    background-color: #e5ecfc;
+}
 
-.header-bar{
+.header-bar {
     width: 100%;
     height: 60px;
 }
@@ -112,6 +138,7 @@ body, html {
     position: relative;
     display: inline-block;
 }
+
 .chat-icon {
     position: relative;
     display: inline-block;
@@ -147,12 +174,14 @@ body, html {
     width: 500px;
     height: 500px;
 }
+
 .registContent {
     padding: 30px;
     margin: 0 auto;
     width: 600px;
     height: 100%;
 }
+
 .logo-login, .logo-regist {
     display: flex;
     justify-content: center;
@@ -164,18 +193,22 @@ body, html {
     height: 50%;
     margin: 0 auto;
 }
+
 .logo-regist img {
     width: 35%;
     height: 40%;
     margin: 0 auto;
 }
+
 .login-p {
     display: inline-block;
     padding: 10px;
     margin-right: 10px;
 }
 
-.login-id {margin-right: 24px !important;}
+.login-id {
+    margin-right: 24px !important;
+}
 
 .login-input {
     width: 70%;
@@ -183,6 +216,7 @@ body, html {
     font-size: 15px;
     padding: 5px;
 }
+
 .login-btn, .regist-btn {
     width: 90%;
     padding: 10px;
@@ -193,9 +227,11 @@ body, html {
     cursor: pointer;
     margin-bottom: 100px;
 }
+
 .login-btn:hover {
     background-color: #dbe4f6;
 }
+
 .logout-btn {
     cursor: pointer;
     text-decoration: none;
@@ -205,9 +241,10 @@ body, html {
     padding: 10px;
     border: none;
     font-size: 15px;
-    margin: 5px; 
+    margin: 5px;
     background-color: #e5ecfc;
 }
+
 .logout-btn:hover {
     background-color: #dbe4f6;
 }
@@ -218,6 +255,7 @@ body, html {
     font-size: 15px;
     padding: 5px;
 }
+
 .regist-input {
     width: 70%;
     height: 20px;
@@ -270,25 +308,29 @@ body, html {
 .phone-input-first {
     margin-left: 0;
 }
+
 .birth-year-box {
     margin-left: 0;
 }
+
 .regist-cate {
     width: 100%;
     text-align: center;
     font-weight: bold;
     margin-top: 4px;
 }
+
 .regist-cate-p {
     display: inline-block;
     margin-right: 10px;
-    
-  }
-  .regist-cate-p2 {
+
+}
+
+.regist-cate-p2 {
     display: inline-block;
     font-size: 11px;
-  }
-  
+}
+
 .cate-select {
     width: 88%;
     height: 35px;
@@ -298,7 +340,7 @@ body, html {
     outline: none;
 }
 
-.regist-category-select{
+.regist-category-select {
     width: 88%;
     height: 150px;
     overflow-y: scroll;
@@ -306,51 +348,63 @@ body, html {
 
 .regist-category-select::-webkit-scrollbar {
     width: 10px;
-  }
-  .regist-category-select::-webkit-scrollbar-thumb {
+}
+
+.regist-category-select::-webkit-scrollbar-thumb {
     background-color: #dbe4f6;
     border-radius: 10px;
-  }
-  .regist-category-select::-webkit-scrollbar-track {
+}
+
+.regist-category-select::-webkit-scrollbar-track {
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: inset 0px 0px 5px white;
-  }
-  .regist-category-select ul {
+}
+
+.regist-category-select ul {
     margin: 0;
-  }
-  .regist-category-select li {
+}
+
+.regist-category-select li {
     list-style: none;
     text-align: center;
     padding: 5px;
-  }
-  .regist-category-select li:hover {
+}
+
+.regist-category-select li:hover {
     background-color: #eff4ff;
     cursor: pointer;
-  }
-  .regist-category-select li.active {
+}
+
+.regist-category-select li.active {
     color: #98a7c7;
-  }
-  .reigst-k {
+}
+
+.reigst-k {
     margin: 10px 0;
-  }
-  .regist-kwd {
+}
+
+.regist-kwd {
     width: 100%;
     text-align: center;
     font-weight: bold;
-  }
-  .regist-kwd-p {
+}
+
+.regist-kwd-p {
     display: inline-block;
     margin-right: 10px;
-  }
-  .regist-kwd-p2 {
+}
+
+.regist-kwd-p2 {
     display: inline-block;
     font-size: 11px;
-  }
-  .regist-select-kwd ul {
+}
+
+.regist-select-kwd ul {
     margin: 0;
-  }
-  .regist-select-kwd li{
+}
+
+.regist-select-kwd li {
     list-style: none;
     display: inline-block;
     background-color: #f5f8fe;
@@ -358,44 +412,77 @@ body, html {
     margin: 3px;
     cursor: pointer;
     border-radius: 1em;
-  }
-  .regist-select-kwd li.active {
+}
+
+.regist-select-kwd li.active {
     background-color: #dae7ff;
     /* border: 1px solid #9f9f9f; */
-  }
+}
 
-  .msg {
+.msg {
     font-size: 11px;
     margin: 0;
     padding: 0;
     margin-left: 90px;
     height: 12px;
     color: rgb(255, 107, 107);
-  }
-  .regist-mail {
-      width: 28%;
-      margin-right: 5px;
-  }
-  .mail-select {
-      height: 35px;
-      padding : 5px;
-      margin-left: 5px;
-      outline: none;
-  }
-  .email-auth {
-      width: 18%;
-      height: 35px;
-      padding: 5px;
-      margin-left: 10px;
-      background-color: #dbe4f6;
-      cursor: pointer;
-      border: none;
-      border-radius: 0.2em;
-  }
+}
 
-  .regist-email {
-      width: 51%;
-  }
-  .code-check {
-      margin-left: 10px;
-  }
+.regist-mail {
+    width: 28%;
+    margin-right: 5px;
+}
+
+.mail-select {
+    height: 35px;
+    padding: 5px;
+    margin-left: 5px;
+    outline: none;
+}
+
+.email-auth {
+    width: 18%;
+    height: 35px;
+    padding: 5px;
+    margin-left: 10px;
+    background-color: #dbe4f6;
+    cursor: pointer;
+    border: none;
+    border-radius: 0.2em;
+}
+
+.regist-email {
+    width: 51%;
+}
+
+.code-check {
+    margin-left: 10px;
+}
+
+.password-input-container {
+    position: relative;
+}
+
+.password-toggle-icon {
+    width: 19px;
+    color: #555555;
+    position: absolute;
+    top: 50%;
+    right: 85px; /* 원하는 우측 여백 조정 */
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.password-input-container2 {
+    position: relative;
+}
+
+.password-toggle-icon2 {
+    width: 19px;
+    color: #555555;
+    position: absolute;
+    top: 50%;
+    right: 85px; /* 원하는 우측 여백 조정 */
+    transform: translateY(-50%);
+    cursor: pointer;
+}
