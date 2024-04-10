@@ -187,7 +187,7 @@ function UserRegist() {
                 }
             });
             if(response.data){
-                alert('회원가입 성공! 반갑습니다'+nick+'님\n로그인 후 서비스 이용 부탁드립니다!');
+                alert('회원가입 성공! 반갑습니다'+nick+'님! \n로그인 후 서비스 이용 부탁드립니다!');
                 handleRedirect();
             }else{
                 alert('회원가입 실패');

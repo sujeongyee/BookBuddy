@@ -34,9 +34,10 @@ public class MainController { // 로그인과 회원가입 등의 기능
     @PostMapping("/login")
     public String login(@RequestBody Map<String,String> map){
         String user_id = map.get("USER_ID");
+        UserVO vo = mainService.getVO(user_id);
         String user_pwd = map.get("USER_PWD");
-        int n = mainService.checkUser(user_id,user_pwd);
-        if(n>0){
+        boolean n = mainService.checkUser(vo,user_pwd);
+        if(n){
             return "success";
         }else{
             return "fail";

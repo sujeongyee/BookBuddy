@@ -5,10 +5,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="book.project.bookbuddy.main.MainMapper">
-    <select id="checkUser" resultType="int">
-        SELECT COUNT(USER_NO) FROM USER WHERE USER_ID = #{user_id} AND USER_PWD = #{user_pwd}
+    <select id="getVO">
+        SELECT * FROM USER WHERE USER_ID = #{id}
     </select>
-    
     <select id="getAllCategories">
         SELECT * FROM CATEGORY;
     </select>
