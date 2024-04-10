@@ -85,6 +85,32 @@ public class MainController {
         Timestamp timestamp2 = new Timestamp(timestamp);
         System.out.println(map.get("CATEGORY_NO"));
         System.out.println(map.get("KEYWORD_NO"));
+        List<Map<String, String>> categories = (List<Map<String, String>>) map.get("CATEGORY_NO");
+        StringBuilder categoryNoBuilder = new StringBuilder();
+
+        for (Map<String, String> category : categories) {
+            categoryNoBuilder.append(category.get("category_NO")).append(",");
+        }
+
+        String CATEGORY_NO = categoryNoBuilder.toString();
+        // 마지막 쉼표 제거
+        if (CATEGORY_NO.endsWith(",")) {
+            CATEGORY_NO = CATEGORY_NO.substring(0, CATEGORY_NO.length() - 1);
+        }
+        List<Map<String, String>> keywords = (List<Map<String, String>>) map.get("KEYWORD_NO");
+        StringBuilder keywordNoBuilder = new StringBuilder();
+
+        for (Map<String, String> keyword : keywords) {
+            keywordNoBuilder.append(keyword.get("keyword_NO")).append(",");
+        }
+
+        String KEYWORD_NO = keywordNoBuilder.toString();
+        // 마지막 쉼표 제거
+        if (KEYWORD_NO.endsWith(",")) {
+            KEYWORD_NO = KEYWORD_NO.substring(0, KEYWORD_NO.length() - 1);
+        }
+        System.out.println(CATEGORY_NO);
+        System.out.println(KEYWORD_NO);
         UserVO vo = new UserVO().builder().USER_ID(String.valueOf(map.get("USER_ID")))
                 .USER_PWD(String.valueOf(map.get("USER_ID")))
                 .USER_NICK(String.valueOf(map.get("USER_NICK")))
