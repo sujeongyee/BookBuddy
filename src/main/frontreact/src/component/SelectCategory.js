@@ -1,9 +1,9 @@
 import {useState, useEffect } from "react";
 
-function SelectCategory(){
+function SelectCategory({ setSelectedCategories }){
 
   const [categories, setCategories] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedCategories, setSelectedCategoriesLocal] = useState([]);
 
   useEffect(()=>{
     async function fetchCategories() {
@@ -25,12 +25,17 @@ function SelectCategory(){
   const handleClick = (category) => {
      // 이미 선택된 카테고리를 클릭한 경우 제거
     if (selectedCategories.includes(category)) {
-      setSelectedCategories(selectedCategories.filter((c) => c !== category));
+      setSelectedCategoriesLocal(selectedCategories.filter((c) => c !== category));
     } else {
       // 선택되지 않은 카테고리를 클릭한 경우 추가
-      setSelectedCategories([...selectedCategories, category]);
+      setSelectedCategoriesLocal([...selectedCategories, category]);
     }
   };
+
+  useEffect(() => {
+    // 부모 컴포넌트로 선택된 카테고리 리스트 업데이트
+    setSelectedCategories(selectedCategories);
+  }, [selectedCategories, setSelectedCategories]);
 
 
   return(

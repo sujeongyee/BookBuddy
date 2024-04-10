@@ -19,8 +19,9 @@ public class UserVO {
     private String USER_NICK;
     private String USER_PHONE;
     private Timestamp USER_BIRTH;
-    private String CATEGORY_NO;
-    private String KEYWORD_NO;
+    private String[] CATEGORY_NO;
+    private String[] KEYWORD_NO;
     private String USER_EMAIL;
+
 
 }

@@ -38,8 +38,8 @@ public class MailServiceImpl implements MailService{
                     "p { line-height: 1.5; }" +
                     "</style></head>" +
                     "<body>" +
-                    "<p>안녕하세요!</p>" +
-                    "<p>BookBuddy를 시작하려면 다음 인증 코드를 입력하세요:</p>" +
+                    "<p>안녕하세요! 책 추천 & 리뷰 플랫폼 BookBuddy입니다!</p>" +
+                    "<p>BookBuddy를 시작하려면 다음 인증 코드를 회원가입 화면에 입력해주세요 :</p>" +
                     "<h3>"+ verificationCode +"</h3>" +
                     "<p>감사합니다.</p>" +
                     "</body></html>";
