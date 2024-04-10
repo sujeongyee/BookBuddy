@@ -27,8 +27,11 @@ public class MainServiceImpl implements MainService{
 
 
     @Override
-    public int checkUser(String user_id, String user_pwd) {
-        return mainMapper.checkUser(user_id, user_pwd);
+    public boolean checkUser(UserVO vo, String user_pwd) {
+        if(vo != null){
+            return passwordEncoder.matches(user_pwd, vo.getUSER_PWD());
+        }
+        return false;
     }
 
     public List<CategoryVO> getAllCategories(){
@@ -64,5 +67,8 @@ public class MainServiceImpl implements MainService{
         vo.setUSER_PWD(encodedPassword);
         int n = mainMapper.joinBuddy(vo);
         return n;
+    }
+    public UserVO getVO(String id){
+        return mainMapper.getVO(id);
     }
 }

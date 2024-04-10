@@ -8,11 +8,12 @@ import book.project.bookbuddy.command.KeywordVO;
 import book.project.bookbuddy.command.UserVO;
 
 public interface MainService {
-    public int checkUser(String user_id, String user_pwd);
+    public boolean checkUser(UserVO vo, String user_pwd);
     public List<CategoryVO> getAllCategories();
     public List<KeywordVO> getAllKeywords();
     public int checkDuplicateId(String id);
     public int checkDuplicateNick(String id);
     public Timestamp getTimeStamp(String time);
     public int joinBuddy(UserVO vo);
+    public UserVO getVO(String id);
 }
