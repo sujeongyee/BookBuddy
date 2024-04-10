@@ -17,14 +17,30 @@ function UserRegist() {
     const [nickMsg, setNickMsg] = useState('');
     const [selectedDomain, setSelectedDomain] = useState('naver.com');
     const [code, setCode] = useState('');
+    const [email,setEmail] = useState('');
+    const [phoneNo,setPhoneNo] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);
     const [emailCheck, setEmailCheck] = useState(false);
     const [selectYear,setSelectYear] = useState('');
     const [selectMonth,setSelectMonth] = useState('');
     const [selectDay,setSelectDay] = useState('');
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [selectedKeywords, setSelectedKeywords] = useState([]);
 
-    const changeId = () => {
+    const [form, setForm] = useState({
+        USER_ID: '',
+        USER_PWD: '',
+        USER_NICK: '',
+        USER_PHONE: '',
+        USER_BIRTH:'',
+        CATEGORY_NO:[],
+        KEYWORD_NO: [],
+        USER_EMAIL:''
+    })
+    const changeId = (e) => {
+        const copy = { ...form, ['USER_ID']: e.target.value };
+        setForm(copy);
         setIdCheck(false);
         setIdMsg('');
     }
@@ -63,6 +79,8 @@ function UserRegist() {
         const pw = e.target.value;
         if (pwd === pw) {
             setPwCheckMsg('비밀번호가 동일합니다. 확인 완료');
+            const copy = { ...form, ['USER_PWD']: e.target.value };
+            setForm(copy);
         } else {
             setPwCheckMsg('비밀번호가 다릅니다.');
         }
@@ -75,6 +93,8 @@ function UserRegist() {
         if (response.data) {
             setNickMsg('사용 가능한 닉네임입니다.');
             setNickCheck(true);
+            const copy = { ...form, ['USER_NICK']: nick};
+            setForm(copy);
         } else {
             setNickMsg('중복된 닉네임입니다.');
         }
@@ -95,11 +115,15 @@ function UserRegist() {
         area.style.display = "block";
         const id = document.querySelector(".regist-mail").value;
         const email = id + '@' + selectedDomain;
-        const response = await axios.post('/book/regist/sendMail', {email});
-        setCode(response.data);
+        setEmail(email);
+        const copy = { ...form, ['USER_EMAIL']: email};
+        setForm(copy);
+        //const response = await axios.post('/book/regist/sendMail', {email});
+        //setCode(response.data);
     }
 
-    const codeCheck = () => {
+    const codeCheck = (e) => {
+        e.preventDefault();
         const codeInput = document.querySelector(".code-input").value;
         if (codeInput === code) {
             alert('인증이 완료됐습니다.');
@@ -113,9 +137,22 @@ function UserRegist() {
 
     const handleRegist = async (e) => {
         e.preventDefault();
-
-
-        // const isValid = pwd.length >= 10 && /[0-9]/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
+        const isValid = pwd.length >= 10 && /[0-9]/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
+        const phoneNo = "010-" + document.querySelector(".phone-two").value + "-" + document.querySelector(".phone-three").value;
+        const birth = selectYear+"-"+selectMonth+"-"+selectDay;
+        const copy = {
+            ...form,
+            'USER_PHONE': phoneNo,
+            'USER_BIRTH': birth,
+            'CATEGORY_NO': selectedCategories,
+            'KEYWORD_NO': selectedKeywords
+        };
+        const response = await axios.post('/book/join', JSON.stringify(copy), {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        console.log(response);
         // if (!idCheck) {
         //     alert('아이디 중복체크를 해주세요.');
         // }else if (!isValid){
@@ -124,9 +161,25 @@ function UserRegist() {
         //     alert('비밀번호 확인이 일치하지 않습니다.');
         // }else if(!nickCheck){
         //     alert('닉네임 중복체크를 해주세요.');
-        // }else if(!emailCheck){
-        //     alert('이메일 인증은 필수입니다!');
+        //  }
+        // else if(!emailCheck){
+        //      alert('이메일 인증은 필수입니다!');
+        //  }
+        // else if(selectYear===''){
+        //     alert('생년월일을 선택해주세요 : 년도 미선택');
+        // }else if(selectMonth===''){
+        //     alert('생년월일을 선택해주세요 : 월 미선택');
+        // }else if(selectDay===''){
+        //     alert('생년월일을 선택해주세요 : 일 미선택');
+        // }else if (selectedCategories.length === 0) {
+        //     alert('선호하는 카테고리를 1개 이상 선택해주세요.');
+        // }else if (selectedKeywords.length === 0) {
+        //     alert('선호하는 키워드를 1개 이상 선택해주세요.');
+        // }else {
+        //     const joinForm = document.getElementById("joinForm");
+        //     joinForm.submit();
         // }
+
 
     }
 
@@ -135,7 +188,11 @@ function UserRegist() {
             <div className="logo-regist">
                 <img src={process.env.PUBLIC_URL + "/imgs/logo-notext.png"} alt="Logo"/>
             </div>
-            <form onSubmit={handleRegist}>
+            <form id="joinForm" onSubmit={handleRegist} action='/book/join' method="post">
+                <input type='hidden' className='USER_PHONE' value={phoneNo}/>
+                <input type='hidden' className='USER_EMAIL' value={email}/>
+                <input type='hidden' className='CATEGORY_NO' value={selectedCategories}/>
+                <input type='hidden' className='KEYWORD_NO' value={selectedKeywords}/>
                 <p className="regist-p">아이디 </p>
                 <input className="regist-input-id regist-id" type="text" placeholder="아이디를 입력해주세요"
                        autoComplete="username"
@@ -156,7 +213,8 @@ function UserRegist() {
                 <p className='msg pwMsg'>{pwMsg}</p>
                 <div className="password-input-container2">
                     <p className="regist-p">확인</p>
-                    <input className="regist-input regist-pw2" type={showPassword2 ? 'text' : 'password'} placeholder="비밀번호를 한번 더 입력해주세요"
+                    <input className="regist-input regist-pw2" type={showPassword2 ? 'text' : 'password'}
+                           placeholder="비밀번호를 한번 더 입력해주세요"
                            autoComplete="current-password" onChange={pwCheck}/>
                     <FontAwesomeIcon icon={showPassword2 ? faEyeSlash : faEye}
                                      className="password-toggle-icon2"
@@ -166,19 +224,19 @@ function UserRegist() {
                 <p className="regist-p">닉네임 </p>
                 <input className="regist-input-id regist-nick" type="text" placeholder="닉네임을 입력해주세요"
                        autoComplete="username"
-                       onChange={changeNick}/>
+                       onChange={changeNick} />
                 <button className="id-check" onClick={checkNick}>중복확인</button>
                 <p className='msg nickNameMsg'>{nickMsg}</p>
                 <div>
                     <p className="regist-p">전화번호</p>
-                    <input className="phone-input phone-input-first" value="010" disabled></input>{" "}-
-                    <input className="phone-input"></input> -
-                    <input className="phone-input"></input>
+                    <input type="text" className="phone-input phone-input-first phone-one" value="010" disabled></input>{" "}-
+                    <input type="text" className="phone-input phone-two"></input> -
+                    <input type="text" className="phone-input phone-three"></input>
                 </div>
                 <p className='msg'></p>
                 <p className="regist-p">이메일 </p>
                 <input className="regist-input regist-mail" type="text" placeholder="이메일을 입력해주세요"
-                       autoComplete="username" onChange={(e)=>setEmailCheck(false)}/>@
+                       autoComplete="username" onChange={(e) => setEmailCheck(false)}/>@
                 <select className='mail-select' value={selectedDomain} onChange={handleSelectChange}>
                     <option selected>naver.com</option>
                     <option>gmail.com</option>
@@ -199,11 +257,12 @@ function UserRegist() {
                     <button className="id-check code-check" onClick={codeCheck}>인증하기</button>
                 </div>
                 <p className='msg'></p>
-                <BirthDateSelect/>
+                <BirthDateSelect setSelectYear={setSelectYear} setSelectMonth={setSelectMonth}
+                                 setSelectDay={setSelectDay}/>
                 <p className='msg'></p>
-                <SelectCategory/>
+                <SelectCategory setSelectedCategories={setSelectedCategories}/>
                 <p className='msg'></p>
-                <SelectKeyword/>
+                <SelectKeyword setSelectedKeywords={setSelectedKeywords}/>
                 <p className='msg'></p>
                 <button className="regist-btn" type="submit">
                     가입하기
@@ -213,7 +272,7 @@ function UserRegist() {
     );
 }
 
-function BirthYearSelect() {
+function BirthYearSelect({ setSelectYear }) {
     const [birthYears, setBirthYears] = useState([]);
 
     const startYear = 1950;
@@ -233,8 +292,12 @@ function BirthYearSelect() {
         setBirthYears(years);
     }, []);
 
+    const handleYearChange = (event) => {
+        setSelectYear(event.target.value);
+    };
+
     return (
-        <select className="birth-box birth-year-box" id="birth-year" onChange={(e)=>setSelectYear(e.value)}>
+        <select className="birth-box birth-year-box" id="birth-year" onChange={handleYearChange}>
             <option disabled selected>출생 연도</option>
             {birthYears.map(year => (
                 <option className='birth-option' key={year} value={year}>{year}</option>
@@ -243,39 +306,51 @@ function BirthYearSelect() {
     );
 }
 
-function BirthMonthSelect() {
+function BirthMonthSelect({ setSelectMonth }) {
     const months = Array.from({length: 12}, (_, i) => i + 1); // 1부터 12까지 월 생성
 
+    const handleMonthChange = (event) => {
+        const selectedMonth = String(event.target.value).padStart(2, '0');
+        setSelectMonth(selectedMonth);
+    };
+
     return (
-        <select className="birth-box" id="birth-month" onChange={(e)=>setSelectMonth(e.value)}>
+        <select className="birth-box" id="birth-month" onChange={handleMonthChange}>
             <option disabled selected>월</option>
             {months.map(month => (
-                <option className='birth-option' key={month} value={month}>{month}</option>
+                <option className='birth-option' key={month} value={month}>
+                    {String(month).padStart(2, '0')}
+                </option>
             ))}
         </select>
     );
 }
 
-function BirthDaySelect() {
+function BirthDaySelect({setSelectDay}) {
     const days = Array.from({length: 31}, (_, i) => i + 1); // 1부터 31까지 일 생성
 
+    const handleDayChange = (event) => {
+        const selectedDay = String(event.target.value).padStart(2, '0');
+        setSelectDay(selectedDay);
+    };
+
     return (
-        <select className="birth-box" id="birth-day" onChange={(e)=>setSelectDay(e.value)}>
+        <select className="birth-box" id="birth-day" onChange={handleDayChange}>
             <option disabled selected>일</option>
             {days.map(day => (
-                <option className='birth-option' key={day} value={day}>{day}</option>
+                <option className='birth-option' key={day} value={day}>{String(day).padStart(2, '0')}</option>
             ))}
         </select>
     );
 }
 
-function BirthDateSelect() {
+function BirthDateSelect({ setSelectYear, setSelectMonth, setSelectDay }) {
     return (
         <div>
             <p className="regist-p">생년월일</p>
-            <BirthYearSelect/>
-            <BirthMonthSelect/>
-            <BirthDaySelect/>
+            <BirthYearSelect setSelectYear={setSelectYear}/>
+            <BirthMonthSelect setSelectMonth={setSelectMonth}/>
+            <BirthDaySelect setSelectDay={setSelectDay}/>
         </div>
     );
 }
