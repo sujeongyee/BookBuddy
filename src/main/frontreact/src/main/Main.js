@@ -5,20 +5,34 @@ import './sidebar.css';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import UserRegist from '../component/UserRegist';
+import { useUser } from '../context/UserContext';
 
 function Main({ loginPage, registPage }) {
+
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const {userData ,setUserData} = useUser();
+    const {userId,userNick} = userData;
+    const [rememberId,setRemeberId] = useState(localStorage.getItem("remeberId"));
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
             const user_id = document.querySelector(".login-input").value;
-
+            const checkedId = document.getElementById("rememberId").checked;
+            const checkedAuto = document.getElementById("autoLogin").checked;
             const response = await axios.post('/book/login', { "USER_ID": user_id, "USER_PWD": password });
             if (response.data !== 'fail') {
-                sessionStorage.setItem("userId", user_id);
-                sessionStorage.setItem("userNick",response.data);
+                setUserData({ userId: user_id, userNick: response.data });
+                sessionStorage.setItem("user_Id",user_id);    
+                sessionStorage.setItem("user_Nick",response.data);
+                localStorage.removeItem("remeberId");
+                if(checkedAuto){
+                    localStorage.setItem("remeberId",user_id);
+                    localStorage.setItem("rememberNick",response.data);
+                }else if(checkedId){
+                    localStorage.setItem("remeberId",user_id);
+                }
                 alert("로그인 성공");
                 navigate('/');
             } else {
@@ -29,6 +43,18 @@ function Main({ loginPage, registPage }) {
         }
     };
 
+    useEffect(()=>{
+        if (userId==='') { // 로그인 X
+
+        } else { // 로그인 O
+
+        }
+    },[userId])
+
+    useEffect(()=>{
+        const rememberId = localStorage.getItem("remeberId");     
+        setRemeberId(rememberId);
+    },[localStorage.getItem("remeberId")])
     
 
     return (
@@ -38,7 +64,6 @@ function Main({ loginPage, registPage }) {
             </div>
             <div className="mainContent">
                 <Header />
-                <h3></h3>
                 {loginPage &&
                     <div className="loginContent">
                         <div className="logo-login">
@@ -46,10 +71,17 @@ function Main({ loginPage, registPage }) {
                         </div>
                         <form onSubmit={handleLogin}>
                             <p className="login-p login-id">아이디 </p>
-                            <input className="login-input" type="text" placeholder="아이디를 입력해주세요" autoComplete="username" />
+                            <input className="login-input" type="text" defaultValue={rememberId} placeholder="아이디를 입력해주세요" autoComplete="username" />
                             <p className="login-p">비밀번호</p>
                             <input className="login-input" type="password" placeholder="비밀번호를 입력해주세요"
                                 onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" />
+                            <div className='login-checkbox'>
+                                <input type = "checkbox" id='rememberId'/>
+                                <label htmlFor="rememberId">아이디 기억하기</label>
+                                <input type = "checkbox" id='autoLogin'/>
+                                <label htmlFor='autoLogin'>자동 로그인</label>
+                            </div>
+                            
                             <button className="login-btn" type="submit">로그인</button>
                         </form>
                     </div>}

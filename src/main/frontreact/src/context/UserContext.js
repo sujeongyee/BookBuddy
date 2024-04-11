@@ -1,23 +1,27 @@
-// import React, { createContext, useContext, useState } from 'react';
-//
-// const UserContext = createContext();
-//
-// export const UserProvider = ({ children }) => {
-//     const [userId, setUserId] = useState(null);
-//
-//     const loginUser = (userId) => {
-//         setUserId(userId);
-//     };
-//
-//     const logoutUser = () => {
-//         setUserId(null);
-//     };
-//
-//     return (
-//         <UserContext.Provider value={{ userId, loginUser, logoutUser }}>
-//             {children}
-//         </UserContext.Provider>
-//     );
-// };
-//
-// export const useUser = () => useContext(UserContext);
+import React, { createContext, useContext, useState } from 'react';
+
+const UserContext = createContext();
+
+export const UserProvider = ({ children }) => {
+  const [userData, setUserData] = useState(() => {
+
+    const userId = sessionStorage.getItem('user_Id') || localStorage.getItem('rememberId');
+    const userNick = sessionStorage.getItem('user_Nick') || localStorage.getItem('remeberNick');
+    
+    if (userId && userNick) {
+      return { userId, userNick };
+    } else if (userNick) {
+      return { userNick };
+    } else {
+      return {};
+    }
+  });
+
+  return (
+    <UserContext.Provider value={{ userData, setUserData }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+export const useUser = () => useContext(UserContext);

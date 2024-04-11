@@ -1,28 +1,28 @@
 import './sidebar.css';
 import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
+import { useUser } from '../context/UserContext';
+
 function Sidebar(){
 
     const [showMenuCategory, setShowMenuCategory] = useState(false); // 카테고리 메뉴 전시 여부
     const [showMenuCategory2, setShowMenuCategory2] = useState(false); // 키워드 메뉴 전시 여부
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 저장
     const navigate = useNavigate();
-    const [userId,setUserId] = useState(sessionStorage.getItem("userId"));
-    const [userNick,setUserNick] = useState(sessionStorage.getItem("userNick"));
+    const { userData ,setUserData} = useUser();
+    const {userId, userNick} = userData;
+    const {id,setId} = useState('');
+    const {nick,setNick} = useState('');
 
-    useEffect(() => {
-        setUserId(sessionStorage.getItem("userId"));
-        setUserNick(sessionStorage.getItem("userNick"));
-    }, [sessionStorage.getItem("userId"),sessionStorage.getItem("userNick")]);
 
     const logout = () => {
-        sessionStorage.removeItem("userId");
-        sessionStorage.removeItem("userNick");
-        setIsLoggedIn(false);
-        setUserId('');
-        setUserNick('');
+        localStorage.removeItem("remeberId");
+        localStorage.removeItem("remeberNick");
+        sessionStorage.removeItem("user_Id");
+        sessionStorage.removeItem("user_Nick");
+        setUserData({});
         navigate('/');
     }
+
 
     return(
         <div className="sidebar">
@@ -32,8 +32,8 @@ function Sidebar(){
             {userId ? ( // 로그인 상태에 따라
                 <div className="myInfo">
                     <div className="myinfoP"><p className="hellop"> {userNick} </p><p className="hellop2"> 님 반갑습니다!</p></div>
-
-                    <button className="logout-btn" onClick={logout}>로그아웃하기</button>
+                    <button className='my-feed'>My Book</button>
+                    <button className="logout-btn" onClick={logout}>로그아웃</button>
                 </div>
             ):(
                 <div className="myLogin">
