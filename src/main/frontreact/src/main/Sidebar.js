@@ -8,15 +8,19 @@ function Sidebar(){
     const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 저장
     const navigate = useNavigate();
     const [userId,setUserId] = useState(sessionStorage.getItem("userId"));
+    const [userNick,setUserNick] = useState(sessionStorage.getItem("userNick"));
 
     useEffect(() => {
         setUserId(sessionStorage.getItem("userId"));
-    }, [sessionStorage.getItem("userId")]);
+        setUserNick(sessionStorage.getItem("userNick"));
+    }, [sessionStorage.getItem("userId"),sessionStorage.getItem("userNick")]);
 
     const logout = () => {
         sessionStorage.removeItem("userId");
+        sessionStorage.removeItem("userNick");
         setIsLoggedIn(false);
         setUserId('');
+        setUserNick('');
         navigate('/');
     }
 
@@ -27,7 +31,8 @@ function Sidebar(){
             </Link>
             {userId ? ( // 로그인 상태에 따라
                 <div className="myInfo">
-                    <p className="hellop"> {userId} </p><p className="hellop"> 님 반갑습니다!</p>
+                    <div className="myinfoP"><p className="hellop"> {userNick} </p><p className="hellop2"> 님 반갑습니다!</p></div>
+
                     <button className="logout-btn" onClick={logout}>로그아웃하기</button>
                 </div>
             ):(

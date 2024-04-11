@@ -80,6 +80,12 @@ body, html {
 
 .hellop {
     display: inline-block;
+    color: #6d70c4;
+    margin: 0;
+}
+.hellop2 {
+    display: inline-block;
+    margin: 0;
 }
 
 .menuCategory {
@@ -90,6 +96,7 @@ body, html {
 .menu ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .menu ul li {
@@ -485,4 +492,7 @@ body, html {
     right: 85px; /* 원하는 우측 여백 조정 */
     transform: translateY(-50%);
     cursor: pointer;
+}
+.myinfoP {
+    text-align: center;
 }
