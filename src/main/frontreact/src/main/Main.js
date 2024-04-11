@@ -16,8 +16,9 @@ function Main({ loginPage, registPage }) {
             const user_id = document.querySelector(".login-input").value;
 
             const response = await axios.post('/book/login', { "USER_ID": user_id, "USER_PWD": password });
-            if (response.data === 'success') {
+            if (response.data !== 'fail') {
                 sessionStorage.setItem("userId", user_id);
+                sessionStorage.setItem("userNick",response.data);
                 alert("로그인 성공");
                 navigate('/');
             } else {

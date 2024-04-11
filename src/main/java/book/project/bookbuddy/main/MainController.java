@@ -38,7 +38,7 @@ public class MainController { // 로그인과 회원가입 등의 기능
         String user_pwd = map.get("USER_PWD");
         boolean n = mainService.checkUser(vo,user_pwd);
         if(n){
-            return "success";
+            return vo.getUSER_NICK();
         }else{
             return "fail";
         }
