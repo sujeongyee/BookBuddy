@@ -5,7 +5,6 @@ import java.util.List;
 
 import book.project.bookbuddy.command.UserVO;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import book.project.bookbuddy.command.CategoryVO;
 import book.project.bookbuddy.command.KeywordVO;
