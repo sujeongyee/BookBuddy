@@ -16,7 +16,7 @@ function Main({ loginPage, registPage }) {
     const {userData ,setUserData} = useUser();
     const {userId,userNick} = userData;
     const [rememberId,setRemeberId] = useState(localStorage.getItem("remeberId"));
-    
+    const [loginChecked,setLoginChecked] = useState(false);
 
 
     const handleLogin = async (e) => {
@@ -37,6 +37,7 @@ function Main({ loginPage, registPage }) {
                 }else if(checkedId){
                     localStorage.setItem("remeberId",user_id);
                 }
+                
                 alert("로그인 성공");
                 navigate('/');
             } else {
@@ -87,7 +88,7 @@ function Main({ loginPage, registPage }) {
             </div>
             <div className="mainContent">
                 <Header />
-                {!loginPage && !registPage &&
+                {!loginPage && !registPage && !userId &&
                 <NotLoginPosts/>    
                 }
                 

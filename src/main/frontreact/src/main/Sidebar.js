@@ -32,7 +32,8 @@ function Sidebar(){
             {userId ? ( // 로그인 상태에 따라
                 <div className="myInfo">
                     <div className="myinfoP"><p className="hellop"> {userNick} </p><p className="hellop2"> 님 반갑습니다!</p></div>
-                    <button className='my-feed'>My Book</button>
+                    
+                    <Link to="/myBook"><button className='my-feed'>My Book</button></Link>
                     <button className="logout-btn" onClick={logout}>로그아웃</button>
                 </div>
             ):(

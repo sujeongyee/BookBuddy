@@ -26,6 +26,8 @@ function UserRegist() {
     const [selectYear,setSelectYear] = useState('');
     const [selectMonth,setSelectMonth] = useState('');
     const [selectDay,setSelectDay] = useState('');
+    const [profileImage, setProfileImage] = useState(null);
+    const [profileImageUrl, setProfileImageUrl] = useState('');
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [selectedKeywords, setSelectedKeywords] = useState([]);
     const navigate = useNavigate();
@@ -136,6 +138,12 @@ function UserRegist() {
             alert('인증에 실패했습니다.');
         }
     }
+
+    // 이미지 변경 핸들러
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setProfileImage(file);
+    };
 
     const handleRedirect = () => {
         // 회원가입 성공 시 '/' 경로로 이동
@@ -271,6 +279,15 @@ function UserRegist() {
                 <BirthDateSelect setSelectYear={setSelectYear} setSelectMonth={setSelectMonth}
                                  setSelectDay={setSelectDay}/>
                 <p className='msg'></p>
+                
+                <div className='profile-upload-zone'>
+                    <p className="regist-p profile-upload-p">프로필사진 </p>
+                    <input type="file" accept="image/*" className='in-profile profile-upload-p' onChange={handleImageChange} />
+                    {profileImage && (
+                        <img src={URL.createObjectURL(profileImage)} alt="Profile" style={{ width: '160px'}} />
+                    )}
+                </div>
+                
                 <SelectCategory setSelectedCategories={setSelectedCategories}/>
                 <p className='msg'></p>
                 <SelectKeyword setSelectedKeywords={setSelectedKeywords}/>
