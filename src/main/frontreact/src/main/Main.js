@@ -43,13 +43,32 @@ function Main({ loginPage, registPage }) {
         }
     };
 
-    useEffect(()=>{
-        if (userId==='') { // 로그인 X
-
-        } else { // 로그인 O
-
-        }
-    },[userId])
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (!loginPage && !registPage) {
+                    if (userId === '') {
+                        const response = await axios.get('/book/post/getNotLogin');
+                        // 처리
+                    } else {
+                        const response = await axios.get('/book/post/followerCount');
+                        const follows = response.data;
+                        if (follows.length === 0) {
+                            const response = await axios.get('/book/post/getLoginNotFollow');
+                            // 처리
+                        } else {
+                            const response = await axios.get('/book/post/getFollowsBoard');
+                            // 처리
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('데이터 가져오기 에러:', error);
+            }
+        };
+    
+        fetchData();
+    }, [userId, loginPage, registPage]);
 
     useEffect(()=>{
         const rememberId = localStorage.getItem("remeberId");     
@@ -64,6 +83,11 @@ function Main({ loginPage, registPage }) {
             </div>
             <div className="mainContent">
                 <Header />
+                {userId && 
+                    <div>
+
+                    </div>
+                }
                 {loginPage &&
                     <div className="loginContent">
                         <div className="logo-login">
