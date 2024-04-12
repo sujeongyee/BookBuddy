@@ -299,7 +299,7 @@ body, html {
     display: inline-block;
     padding: 10px;
     margin-right: 10px;
-    width: 60px;
+    width: 71px;
     margin-top: 0;
     margin-bottom: 0;
 }
@@ -521,4 +521,11 @@ body, html {
 .login-checkbox label {
     margin-right: 10px;
     font-size: 14px;
+}
+.profile-upload-zone {
+    display: flex;
+    align-items: center; /* 세로 중앙 정렬 */
+}
+.profile-upload-p {
+
 }
