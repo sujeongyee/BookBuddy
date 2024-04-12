@@ -2,10 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import './sidebar.css';
+import './main.css';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import UserRegist from '../component/UserRegist';
 import { useUser } from '../context/UserContext';
+import MainRecommendPosts from '../postcomponent/NotLoginPosts';
+import MainReviewPosts from '../postcomponent/MainReviewPosts';
+import NotLoginPosts from '../postcomponent/NotLoginPosts';
 
 function Main({ loginPage, registPage }) {
 
@@ -14,6 +18,8 @@ function Main({ loginPage, registPage }) {
     const {userData ,setUserData} = useUser();
     const {userId,userNick} = userData;
     const [rememberId,setRemeberId] = useState(localStorage.getItem("remeberId"));
+    
+
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -83,11 +89,9 @@ function Main({ loginPage, registPage }) {
             </div>
             <div className="mainContent">
                 <Header />
-                {userId && 
-                    <div>
-
-                    </div>
-                }
+                
+                <NotLoginPosts/>    
+                
                 {loginPage &&
                     <div className="loginContent">
                         <div className="logo-login">

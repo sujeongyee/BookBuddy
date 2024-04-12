@@ -1,0 +1,25 @@
+
+.toggle-btn {
+  width: 48%;
+  height: 40px;
+  font-size: 15px;
+  background-color: #e5ecfc;
+  border: none;
+  border-radius: 0.2em;
+  cursor: pointer;
+}
+.toggle-btn:hover {
+  background-color: #d8e3ff;
+}
+.first-toggle {
+  margin-right: 2px;
+}
+.toggle-active {
+  background-color: #d8e3ff;
+  border: 1px solid rgb(209, 209, 209);
+}
+
+.main-content {
+  padding: 50px;
+
+}
