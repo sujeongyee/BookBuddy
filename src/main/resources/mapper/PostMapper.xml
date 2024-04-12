@@ -4,7 +4,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="book.project.bookbuddy.main.PostMapper">
-    
+<mapper namespace="book.project.bookbuddy.post.PostMapper">
+
+    <select id="getNotLoginRecommend">
+        SELECT * FROM RECOMMEND LIMIT #{page},5
+    </select>
+
+    <select id="getNotLoginReview">
+        SELECT * FROM REVIEW LIMIT #{page},5
+    </select>
 
 </mapper>
