@@ -7,8 +7,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import UserRegist from '../component/UserRegist';
 import { useUser } from '../context/UserContext';
-import MainRecommendPosts from '../postcomponent/NotLoginPosts';
-import MainReviewPosts from '../postcomponent/MainReviewPosts';
 import NotLoginPosts from '../postcomponent/NotLoginPosts';
 
 function Main({ loginPage, registPage }) {
@@ -89,8 +87,10 @@ function Main({ loginPage, registPage }) {
             </div>
             <div className="mainContent">
                 <Header />
-                
+                {!loginPage && !registPage &&
                 <NotLoginPosts/>    
+                }
+                
                 
                 {loginPage &&
                     <div className="loginContent">

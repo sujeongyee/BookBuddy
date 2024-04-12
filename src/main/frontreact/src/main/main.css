@@ -1,6 +1,6 @@
 
 .toggle-btn {
-  width: 48%;
+  width: 49%;
   height: 40px;
   font-size: 15px;
   background-color: #e5ecfc;
@@ -21,5 +21,61 @@
 
 .main-content {
   padding: 50px;
+}
 
+.post-zone {
+  padding: 11px 63px 8px 51px;
+}
+.post-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 20px;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.post-card:hover {
+  transform: translateY(-5px);
+}
+
+.post-title {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.post-details p {
+  margin: 5px 0;
+}
+
+.post-user {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.post-content {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.post-time,
+.post-like,
+.post-category,
+.post-keyword {
+  font-size: 12px;
+  color: #888;
+}
+
+.post-time::before,
+.post-like::before,
+.post-category::before,
+.post-keyword::before {
+  content: "• ";
+  margin-right: 5px;
+}
+
+.post-time,
+.post-like {
+  margin-right: 10px;
 }
