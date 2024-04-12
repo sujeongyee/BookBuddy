@@ -28,14 +28,10 @@ public class PostController {
   public Map<String,Object> getNotLogin(@RequestParam("reviewPage") int reviewPage,
                                           @RequestParam("recommendPage") int recommendPage) {
     Map<String,Object> map = new HashMap<>();
-    List<RecommendVO> list =  postService.getNotLoginRecommend(recommendPage);
-    List<ReviewVO> list2 =  postService.getNotLoginReview(reviewPage);
-    for(RecommendVO vo : list){
-      System.out.println(vo.toString());
-    }
-    for(ReviewVO vo : list2){
-      System.out.println(vo.toString());
-    }
+    List<RecommendVO> list =  postService.getNotLoginRecommend(recommendPage*5);
+    List<ReviewVO> list2 =  postService.getNotLoginReview(reviewPage*5);
+    map.put("recommendList", list);
+    map.put("reviewList", list2);
     return map;
   }
   
