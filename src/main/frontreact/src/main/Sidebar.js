@@ -39,7 +39,7 @@ function Sidebar(){
         navigate('/');
     }
 
-
+    
     return(
         <div className="sidebar">
             <Link to="/" className="Logo">
