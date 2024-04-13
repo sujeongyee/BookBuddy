@@ -189,6 +189,21 @@ function UserRegist() {
         }else if (selectedKeywords.length === 0) {
             alert('선호하는 키워드를 1개 이상 선택해주세요.');
         }else {
+            const formData = new FormData();
+            formData.append('profileImage', profileImage);
+
+            try {
+                const fileResponse = await axios.post('/book/file/profile', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                alert('프로필 이미지가 업로드되었습니다.');
+            } catch (error) {
+                console.error('프로필 이미지 업로드 오류:', error);
+            }
+
+
             const response = await axios.post('/book/join', JSON.stringify(copy), {
                 headers: {
                     'Content-Type': 'application/json'
