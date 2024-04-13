@@ -20,6 +20,7 @@ public class UserVO {
     private String CATEGORY_NO;
     private String KEYWORD_NO;
     private String USER_EMAIL;
+    private String PROFILE_URL;
 
 
 }

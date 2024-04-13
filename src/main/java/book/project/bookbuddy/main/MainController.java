@@ -72,6 +72,7 @@ public class MainController { // 로그인과 회원가입 등의 기능
                 .USER_EMAIL(map.get("USER_EMAIL"))
                 .CATEGORY_NO(map.get("CATEGORY_NO"))
                 .KEYWORD_NO(map.get("KEYWORD_NO"))
+                .PROFILE_URL(map.get("PROFILE_URL"))
                 .build();
         System.out.println(vo.toString());
         int n = mainService.joinBuddy(vo);
