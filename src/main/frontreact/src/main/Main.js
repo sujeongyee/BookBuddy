@@ -32,7 +32,7 @@ function Main({ loginPage, registPage }) {
                 sessionStorage.setItem("user_Nick",response.data);
                 localStorage.removeItem("remeberId");
                 if(checkedAuto){
-                    localStorage.setItem("remeberId",user_id);
+                    localStorage.setItem("rememberId",user_id);
                     localStorage.setItem("rememberNick",response.data);
                 }else if(checkedId){
                     localStorage.setItem("remeberId",user_id);

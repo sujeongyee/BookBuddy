@@ -6,8 +6,9 @@ export const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState(() => {
 
     const userId = sessionStorage.getItem('user_Id') || localStorage.getItem('rememberId');
-    const userNick = sessionStorage.getItem('user_Nick') || localStorage.getItem('remeberNick');
-    
+    const userNick = sessionStorage.getItem('user_Nick') || localStorage.getItem('rememberNick');
+    console.log(userId);
+    console.log(userNick);
     if (userId && userNick) {
       return { userId, userNick };
     } else if (userNick) {
