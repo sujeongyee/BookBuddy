@@ -7,11 +7,11 @@
 <mapper namespace="book.project.bookbuddy.post.PostMapper">
 
     <select id="getNotLoginRecommend">
-        SELECT * FROM RECOMMEND LIMIT #{page},5
+        SELECT * FROM RECOMMEND ORDER BY RECOMMEND_LIKE DESC LIMIT #{page},5
     </select>
 
     <select id="getNotLoginReview">
-        SELECT * FROM REVIEW LIMIT #{page},5
+        SELECT * FROM REVIEW ORDER BY REVIEW_LIKE LIMIT #{page},5
     </select>
 
 </mapper>

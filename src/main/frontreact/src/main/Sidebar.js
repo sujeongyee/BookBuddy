@@ -10,31 +10,29 @@ function Sidebar(){
     const [showMenuCategory2, setShowMenuCategory2] = useState(false); // 키워드 메뉴 전시 여부
     const navigate = useNavigate();
     const { userData ,setUserData} = useUser();
-    const {userId, userNick} = userData;
+    const {userId, userNick,profileURL} = userData;
     const {id,setId} = useState('');
     const {nick,setNick} = useState('');
     const [profileImg,setProfileImg] = useState('');
 
-    useEffect(() => {
-        async function fetchData() {
-            if (userId) {
-                try {
-                    const response = await axios.get(`/book/file/getProfileUrl?userId=${userId}`);
-                    setProfileImg(response.data);
-                } catch (error) {
-                    console.error('프로필 URL 가져오기 오류:', error);
-                }
-            }
-        }
-    
-        fetchData();
-    }, [userId]);
+    // useEffect(() => {
+    //     async function fetchData() {
+    //         if (userId) {
+    //             try {
+    //                 const response = await axios.get(`/book/file/getProfileUrl?userId=${userId}`);
+    //                 setProfileImg(response.data);
+    //             } catch (error) {
+    //                 console.error('프로필 URL 가져오기 오류:', error);
+    //             }
+    //         }
+    //     }   
+    //     fetchData();
+    // }, [userId]);
 
     const logout = () => {
         localStorage.removeItem("remeberId");
-        localStorage.removeItem("remeberNick");
-        sessionStorage.removeItem("user_Id");
-        sessionStorage.removeItem("user_Nick");
+        localStorage.removeItem("userVO");
+        sessionStorage.removeItem("userVO");
         setUserData({});
         navigate('/');
     }
@@ -45,17 +43,6 @@ function Sidebar(){
             <Link to="/" className="Logo">
                 <img src={process.env.PUBLIC_URL + '/imgs/logo.png'} alt="Logo"/>
             </Link>
-            
-            {userId && ( // 로그인 상태에 따라
-                <div className='profile-zone'>
-                    {profileImg ? (
-                        <img className='profile-img' src={profileImg} alt="profileImg"/>
-                    ) : (
-                        <img className='profile-img' src={process.env.PUBLIC_URL + '/imgs/no-profile.jpg'} alt="profileImg"/>
-                    )}
-                </div>
-            )}
-
             {userId ? (
                 <div className="myInfo">
                     <div className="myinfoP">
