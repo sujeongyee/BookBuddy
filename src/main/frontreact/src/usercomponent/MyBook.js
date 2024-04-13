@@ -21,7 +21,7 @@ function MyBook() {
         <Sidebar />
       </div>
       <div className="mainContent">
-        <Header />
+        <Header/>
       </div>
     </div>
   );

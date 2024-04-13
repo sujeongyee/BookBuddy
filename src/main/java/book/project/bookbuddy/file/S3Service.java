@@ -39,11 +39,6 @@ public class S3Service {
     if(image.isEmpty() || Objects.isNull(image.getOriginalFilename())){
       System.out.println("ErrorCode.EMPTY_FILE_EXCEPTION");
     }
-    return this.uploadImage(image);
-  }
-
-  private String uploadImage(MultipartFile image) {
-    this.validateImageFileExtention(image.getOriginalFilename());
     try {
       return this.uploadImageToS3(image);
     } catch (IOException e) {
@@ -51,19 +46,6 @@ public class S3Service {
     }
   }
 
-  private void validateImageFileExtention(String filename) {
-    int lastDotIndex = filename.lastIndexOf(".");
-    if (lastDotIndex == -1) {
-      System.out.println("ErrorCode.NO_FILE_EXTENTION");
-    }
-
-    String extention = filename.substring(lastDotIndex + 1).toLowerCase();
-    List<String> allowedExtentionList = Arrays.asList("jpg", "jpeg", "png", "gif");
-
-    if (!allowedExtentionList.contains(extention)) {
-      System.out.println("ErrorCode.INVALID_FILE_EXTENTION");
-    }
-  }
 
   private String uploadImageToS3(MultipartFile image) throws IOException {
     String originalFilename = image.getOriginalFilename(); //원본 파일 명

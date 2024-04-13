@@ -151,22 +151,35 @@ function UserRegist() {
     };
 
     const handleRegist = async (e) => {
+
         e.preventDefault();
         const isValid = pwd.length >= 10 && /[0-9]/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
         const phoneNo = "010-" + document.querySelector(".phone-two").value + "-" + document.querySelector(".phone-three").value;
-
         const birth = selectYear+"-"+selectMonth+"-"+selectDay;
-        const copy = {
-            ...form,
-            'USER_PHONE': phoneNo,
-            'USER_BIRTH': birth,
-            'CATEGORY_NO': selectedCategories.join(','),
-            'KEYWORD_NO': selectedKeywords.join(',')
-        };
-
         const nick = document.querySelector(".regist-nick").value;
 
-        const formData = new FormData();
+        if (!idCheck) {
+            alert('아이디 중복체크를 해주세요.');
+        }else if (!isValid){
+            alert('사용 불가능한 비밀번호입니다.\n비밀번호는 10자 이상이어야 하고,\n숫자와 특수문자를 반드시 포함해야 합니다.');
+        }else if(pwd !== pwd2){
+            alert('비밀번호 확인이 일치하지 않습니다.');
+        }else if(!nickCheck){
+            alert('닉네임 중복체크를 해주세요.');
+        }else if(!emailCheck){
+            alert('이메일 인증은 필수입니다!');
+        }else if(selectYear===''){
+            alert('생년월일을 선택해주세요 : 년도 미선택');
+        }else if(selectMonth===''){
+            alert('생년월일을 선택해주세요 : 월 미선택');
+        }else if(selectDay===''){
+            alert('생년월일을 선택해주세요 : 일 미선택');
+        }else if (selectedCategories.length === 0) {
+            alert('선호하는 카테고리를 1개 이상 선택해주세요.');
+        }else if (selectedKeywords.length === 0) {
+            alert('선호하는 키워드를 1개 이상 선택해주세요.');
+        }else {
+            const formData = new FormData();
             formData.append('profileImage', profileImage);
 
             try {
@@ -174,66 +187,34 @@ function UserRegist() {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
+                }); 
+
+                // 파일 업로드가 성공한 경우, 업로드된 파일의 URL을 PROFILE_URL에 할당
+                const copy = {
+                    ...form,
+                    'PROFILE_URL': fileResponse.data,
+                    'USER_PHONE': phoneNo,
+                    'USER_BIRTH': birth,
+                    'CATEGORY_NO': selectedCategories.join(','),
+                    'KEYWORD_NO': selectedKeywords.join(',')
+                };
+
+                const response = await axios.post('/book/join', JSON.stringify(copy), {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 });
-                alert('프로필 이미지가 업로드되었습니다.');
-                console.log(fileResponse.data);
+
+                if (response.data) {
+                    alert('회원가입 성공! 반갑습니다 ' + nick + '님! \n로그인 후 서비스 이용 부탁드립니다!');
+                    handleRedirect();
+                } else {
+                    alert('회원가입 실패');
+                }
             } catch (error) {
                 console.error('프로필 이미지 업로드 오류:', error);
             }
-
-
-        // if (!idCheck) {
-        //     alert('아이디 중복체크를 해주세요.');
-        // }else if (!isValid){
-        //     alert('사용 불가능한 비밀번호입니다.\n비밀번호는 10자 이상이어야 하고,\n숫자와 특수문자를 반드시 포함해야 합니다.');
-        // }else if(pwd !== pwd2){
-        //     alert('비밀번호 확인이 일치하지 않습니다.');
-        // }else if(!nickCheck){
-        //     alert('닉네임 중복체크를 해주세요.');
-        //  }
-        // else if(!emailCheck){
-        //      alert('이메일 인증은 필수입니다!');
-        //  }
-        // else if(selectYear===''){
-        //     alert('생년월일을 선택해주세요 : 년도 미선택');
-        // }else if(selectMonth===''){
-        //     alert('생년월일을 선택해주세요 : 월 미선택');
-        // }else if(selectDay===''){
-        //     alert('생년월일을 선택해주세요 : 일 미선택');
-        // }else if (selectedCategories.length === 0) {
-        //     alert('선호하는 카테고리를 1개 이상 선택해주세요.');
-        // }else if (selectedKeywords.length === 0) {
-        //     alert('선호하는 키워드를 1개 이상 선택해주세요.');
-        // }else {
-        //     const formData = new FormData();
-        //     formData.append('profileImage', profileImage);
-
-        //     try {
-        //         const fileResponse = await axios.post('/book/file/profile', formData, {
-        //             headers: {
-        //                 'Content-Type': 'multipart/form-data'
-        //             }
-        //         });
-        //         alert('프로필 이미지가 업로드되었습니다.');
-        //     } catch (error) {
-        //         console.error('프로필 이미지 업로드 오류:', error);
-        //     }
-
-
-        //     const response = await axios.post('/book/join', JSON.stringify(copy), {
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         }
-        //     });
-        //     if(response.data){
-        //         alert('회원가입 성공! 반갑습니다'+nick+'님! \n로그인 후 서비스 이용 부탁드립니다!');
-        //         handleRedirect();
-        //     }else{
-        //         alert('회원가입 실패');
-        //     }
-        // }
-
-
+        }
 
     }
 
@@ -414,4 +395,4 @@ function BirthDateSelect({ setSelectYear, setSelectMonth, setSelectDay }) {
     );
 }
 
-export default UserRegist;
+export default UserRegist

@@ -2,6 +2,7 @@ import './sidebar.css';
 import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import { useUser } from '../context/UserContext';
+import axios from 'axios';
 
 function Sidebar(){
 
@@ -12,7 +13,22 @@ function Sidebar(){
     const {userId, userNick} = userData;
     const {id,setId} = useState('');
     const {nick,setNick} = useState('');
+    const [profileImg,setProfileImg] = useState('');
 
+    useEffect(() => {
+        async function fetchData() {
+            if (userId) {
+                try {
+                    const response = await axios.get(`/book/file/getProfileUrl?userId=${userId}`);
+                    setProfileImg(response.data);
+                } catch (error) {
+                    console.error('프로필 URL 가져오기 오류:', error);
+                }
+            }
+        }
+    
+        fetchData();
+    }, [userId]);
 
     const logout = () => {
         localStorage.removeItem("remeberId");
@@ -29,14 +45,28 @@ function Sidebar(){
             <Link to="/" className="Logo">
                 <img src={process.env.PUBLIC_URL + '/imgs/logo.png'} alt="Logo"/>
             </Link>
-            {userId ? ( // 로그인 상태에 따라
+            
+            {userId && ( // 로그인 상태에 따라
+                <div className='profile-zone'>
+                    {profileImg ? (
+                        <img className='profile-img' src={profileImg} alt="profileImg"/>
+                    ) : (
+                        <img className='profile-img' src={process.env.PUBLIC_URL + '/imgs/no-profile.jpg'} alt="profileImg"/>
+                    )}
+                </div>
+            )}
+
+            {userId ? (
                 <div className="myInfo">
-                    <div className="myinfoP"><p className="hellop"> {userNick} </p><p className="hellop2"> 님 반갑습니다!</p></div>
+                    <div className="myinfoP">
+                        <p className="hellop"> {userNick} </p>
+                        <p className="hellop2"> 님 반갑습니다!</p>
+                    </div>
                     
                     <Link to="/myBook"><button className='my-feed'>My Book</button></Link>
                     <button className="logout-btn" onClick={logout}>로그아웃</button>
                 </div>
-            ):(
+            ) : (
                 <div className="myLogin">
                     <Link to="/login" className="loginBtn">로그인하기</Link>
                     <Link to="/regist" className="registBtn">회원가입하기</Link>

@@ -74,6 +74,20 @@ body, html {
     background-color: #dbe4f6;
 }
 
+.profile-zone {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    width: 100%;
+}
+
+.profile-img {
+    width: 90px;
+    height: 90px; 
+    border-radius: 50%; 
+    object-fit: cover;
+}
+
 .myInfo {
     padding: 10px;
 }
@@ -88,7 +102,9 @@ body, html {
     margin: 0;
 }
 
-.menuCategory {
+.menuCategory2 {
+    padding: 0;
+    width: 100%;
     border-left: 1px solid #d8d8d8;
     margin-top: 5px;
 }
@@ -110,7 +126,7 @@ body, html {
 .menu ul li a {
     margin-top: 3px;
     color: #323232;
-    padding: 7px;
+    padding: 5px;
 }
 
 .menuCategory2 a {
@@ -443,8 +459,8 @@ body, html {
     font-size: 11px;
     margin: 0;
     padding: 0;
-    margin-left: 90px;
-    height: 12px;
+    margin-left: 101px;
+    height: 16px;
     color: rgb(255, 107, 107);
 }
 
