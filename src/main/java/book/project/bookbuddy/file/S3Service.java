@@ -14,7 +14,6 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
@@ -25,12 +24,10 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+
 @RequiredArgsConstructor
 @Component
-@Service("s3Service")
 public class S3Service {
 
   private final AmazonS3 amazonS3;
@@ -83,12 +80,10 @@ public class S3Service {
     ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
     try{
-      PutObjectRequest putObjectRequest =
-          new PutObjectRequest(bucketName, s3FileName, byteArrayInputStream, metadata)
-              .withCannedAcl(CannedAccessControlList.PublicRead);
+      PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, s3FileName, byteArrayInputStream, metadata);
       amazonS3.putObject(putObjectRequest); // put image to S3
     }catch (Exception e){
-      System.out.println("ErrorCode.PUT_OBJECT_EXCEPTION");
+      System.out.println("Error while putting object to S3: " + e.getMessage());
     }finally {
       byteArrayInputStream.close();
       is.close();

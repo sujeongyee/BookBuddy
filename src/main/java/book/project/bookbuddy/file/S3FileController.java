@@ -24,8 +24,7 @@ public class S3FileController {
     public String uploadProfileImage(@RequestParam("profileImage") MultipartFile file) {
         System.out.println(file.getOriginalFilename());
         String profileImage = s3Service.upload(file);
-        System.out.println(profileImage);
-        return profileImage;      
+        return profileImage;
     }
 
 
