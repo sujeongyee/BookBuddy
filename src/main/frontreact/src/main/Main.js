@@ -14,7 +14,7 @@ function Main({ loginPage, registPage }) {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const {userData ,setUserData} = useUser();
-    const {userId,userNick} = userData;
+    const {userId, userNick,profileURL} = userData;
     const [rememberId,setRemeberId] = useState(localStorage.getItem("remeberId"));
     const [loginChecked,setLoginChecked] = useState(false);
 
@@ -26,16 +26,15 @@ function Main({ loginPage, registPage }) {
             const checkedId = document.getElementById("rememberId").checked;
             const checkedAuto = document.getElementById("autoLogin").checked;
             const response = await axios.post('/book/login', { "USER_ID": user_id, "USER_PWD": password });
-            if (response.data !== 'fail') {
-                setUserData({ userId: user_id, userNick: response.data });
-                sessionStorage.setItem("user_Id",user_id);    
-                sessionStorage.setItem("user_Nick",response.data);
-                localStorage.removeItem("remeberId");
+            console.log(response.data);
+            if (response.data !== 'fail') { //userId && userNick && profileURL
+                setUserData({ userId: response.data.user_ID, userNick: response.data.user_NICK, profileURL: response.data.profile_URL});
+                sessionStorage.setItem("userVO",JSON.stringify(response.data));
+                localStorage.removeItem("userVO");
                 if(checkedAuto){
-                    localStorage.setItem("rememberId",user_id);
-                    localStorage.setItem("rememberNick",response.data);
+                    localStorage.setItem("userVO",JSON.stringify(response.data));
                 }else if(checkedId){
-                    localStorage.setItem("remeberId",user_id);
+                    localStorage.setItem("remeberId",response.data.user_ID);
                 }
                 
                 alert("로그인 성공");

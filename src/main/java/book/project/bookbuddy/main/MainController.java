@@ -26,13 +26,13 @@ public class MainController { // 로그인과 회원가입 등의 기능
     private MainService mainService;
 
     @PostMapping("/login")
-    public String login(@RequestBody Map<String,String> map){
+    public Object login(@RequestBody Map<String,String> map){
         String user_id = map.get("USER_ID");
         UserVO vo = mainService.getVO(user_id);
         String user_pwd = map.get("USER_PWD");
         boolean n = mainService.checkUser(vo,user_pwd);
         if(n){
-            return vo.getUSER_NICK();
+            return vo;
         }else{
             return "fail";
         }
