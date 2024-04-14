@@ -69,7 +69,7 @@ useEffect(() => {
           <button className={`toggle-btn ${!showRecommend ? 'toggle-active' : ''}`} onClick={() => setShowRecommend(false)}>리뷰글 보기</button>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div></div> {/* 여기에 오른쪽 공간을 만들기 위한 빈 div 추가 */}
+          <div></div>
           <p style={{ fontSize: '13px',color:'red' }}>* 비로그인 상태에서는 인기글을 표시합니다.</p>
         </div>
         <div className="post-zone">
