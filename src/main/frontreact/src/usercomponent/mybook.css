@@ -1,29 +1,4 @@
-/* .mainSection {
-  padding: 20px;
-  margin-top: 30px;
-}
-.user-info {
-  padding: 20px;
-  height: 100px;
-  width: 80%;
-  margin: 0 auto;
-  background-color: rgb(242, 242, 242);
-  border-radius: 1em;
-}
-.user-photo {
-  height: 100%;
-  width: 30%;
-  margin-left: 20px;
-  display: inline-block;
-}
-.profile-photo {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-}
-.user-photo p {
-  display: inline-block;
-} */
+
 .mainContent2 {
   flex: 1;
   height: auto;
@@ -67,6 +42,7 @@
   margin-top: 10px;
   justify-content: center;
   border-bottom: 1px solid #ebebeb;
+  margin-bottom: 20px;
   padding-bottom: 20px;
 }
 
@@ -91,83 +67,70 @@
 .edit-profile-button:hover, .write-post-button:hover {
   background-color: #0056b3;
 }
-/* .feed-container {
-  display: flex;
-  flex-direction: row;
-}
-
-.feed-tabs {
-  display: flex;
-  flex-direction: column;
-  width: 12%;
-}
-.tab-second {
-  margin-top: 10px;
-}
-
-.feed-tab {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  background-color: #f0f0f0;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-size: 16px;
-}
-
-.feed-tab.active {
-  background-color: #ffe4e4;
-}
-
-.feed-content {
-  min-height:450px;
-  width: 87%;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  margin: 0 10px;
-} */
 
 .feed-container {
   display: flex;
-  flex-direction: row;
   align-items: stretch;
 }
 
 .feed-tabs {
-  width: 12%;
+  width: 15%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; 
-  align-items: center; 
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .feed-tab {
   padding: 10px 20px;
   border: none;
-  border-radius: 4px;
-  background-color: transparent; 
+  border-radius: 20px; /* 더 둥근 모서리를 만듭니다 */
+  background-color: transparent;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease; 
+  transition: background-color 0.3s ease, color 0.3s ease;
   font-size: 16px;
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
 }
 
 .feed-tab.active {
-  background-color: #ffe4e4; 
-  color: #ff6b6b; 
+  background-color: #ffe4e4;
+  color: #ff6b6b;
 }
 
 .feed-content {
-  width: 88%; 
+  width: 85%;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 20px; 
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  margin-left: 10px; 
+  background-color: #f9f9f9; 
+  margin-left: 20px;
 }
 
 .feed-content p {
-  margin: 0; 
+  margin: 0;
+}
+.my-icon-zone {
+  display:flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+.list-icon svg {
+  margin-left: 7px;
+  cursor: pointer;
+  border-radius: 20%;
+  padding: 4px;
+  fill: #007bff; /* 아이콘 색상 설정 */
+  transition: fill 0.3s ease, transform 0.3s ease; 
+}
+.list-icon svg:hover {
+  fill: #0056b3; /* 호버 시 아이콘 색상 변경 */
+  transform: scale(1.1); /* 호버 시 아이콘 크기 확대 */
+}
+.list-icon svg.active {
+  fill: #0056b3; /* active 클래스가 추가될 때 아이콘 색상 변경 */
+}
+.my-Feed {
+  display: flex;
+  flex-direction: column;
+  width: 92%;
 }
