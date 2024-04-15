@@ -5,6 +5,8 @@ import axios from "axios";
 import { useUser } from "../context/UserContext";
 import Sidebar from "../main/Sidebar";
 import Header from "../main/Header";
+import Modal from 'react-modal';
+import ProfileModal from "./ProfileModal";
 
 function MyBook() {
 
@@ -16,18 +18,35 @@ function MyBook() {
   const [showReviews, setShowReviews] = useState(true);
   const [recommendPosts,setRecommendPosts] = useState([]);
   const [reviewPosts,setReviewPosts] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [vo,setVo] = useState(null);
 
-  const handleEditProfile = () => {
-    console.log('프로필 편집 버튼 클릭');
+  const openModal = () => {
+    setModalIsOpen(true);
   };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
 
   const handleWritePost = () => {
     console.log('글 작성하기 버튼 클릭');
   };
 
-  useEffect(()=>{
-    const response = axios.get(`/book/user/myPage?id=${userId}`);
-  },[])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/book/user/myPage?id=${userId}`);
+        const vo = response.data.vo;
+        setVo(vo);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+  
+    fetchData();
+  }, [userId]);
 
   const [activeTab, setActiveTab] = useState('list'); // 'list' 또는 'grid'로 초기화
 
@@ -65,8 +84,9 @@ function MyBook() {
             </div>           
           </div>
           <div className="action-buttons">
-              <button className="edit-profile-button" onClick={handleEditProfile}>프로필 수정</button>
-              <button className="write-post-button" onClick={handleWritePost}>글 작성하기</button>
+            <button className="edit-profile-button" onClick={openModal}>프로필 수정</button>
+            <ProfileModal isOpen={modalIsOpen} onRequestClose={closeModal} vo={vo} />
+            <button className="write-post-button" onClick={handleWritePost}>글 작성하기</button>
           </div>
           <div className="feed-container">
             <div className="feed-tabs">

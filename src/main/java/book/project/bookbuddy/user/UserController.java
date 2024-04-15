@@ -1,5 +1,8 @@
 package book.project.bookbuddy.user;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +28,13 @@ public class UserController {
   private MainService mainService;
 
   @GetMapping("/myPage")
-  public String getMyPage(@RequestParam("id") String id) {
+  public Map<String,Object> getMyPage(@RequestParam("id") String id) {
+      System.out.println(id);
       UserVO vo =  mainService.getVO(id);
-      return new String();
+      Map<String,Object> map = new HashMap<>();
+      map.put("vo", vo);
+      System.out.println(vo.toString());
+      return map;
   }
   
 
