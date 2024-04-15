@@ -15,19 +15,6 @@ function Sidebar(){
     const {nick,setNick} = useState('');
     const [profileImg,setProfileImg] = useState('');
 
-    // useEffect(() => {
-    //     async function fetchData() {
-    //         if (userId) {
-    //             try {
-    //                 const response = await axios.get(`/book/file/getProfileUrl?userId=${userId}`);
-    //                 setProfileImg(response.data);
-    //             } catch (error) {
-    //                 console.error('프로필 URL 가져오기 오류:', error);
-    //             }
-    //         }
-    //     }   
-    //     fetchData();
-    // }, [userId]);
 
     const logout = () => {
         localStorage.removeItem("remeberId");
@@ -36,6 +23,7 @@ function Sidebar(){
         setUserData({});
         navigate('/');
     }
+
 
     
     return(

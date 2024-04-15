@@ -20,7 +20,7 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  margin-bottom: 20px;
+  margin-bottom: 8  1px;
 }
 
 .user-photo img {
@@ -93,16 +93,16 @@
 }
 
 .feed-tab.active {
-  background-color: #ffe4e4;
-  color: #ff6b6b;
+  background-color: #e4efff;
+  color: #6ba3ff;
 }
 
 .feed-content {
-  width: 85%;
-  padding: 20px;
-  border-radius: 20px; 
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9; 
+  width: 90%;
+  padding: 30px;
+  /* border-radius: 20px; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+  /* background-color: #f9f9f9;  */
   margin-left: 20px;
 }
 
@@ -119,18 +119,25 @@
   cursor: pointer;
   border-radius: 20%;
   padding: 4px;
-  fill: #007bff; /* 아이콘 색상 설정 */
+  fill: #93c7ff; /* 아이콘 색상 설정 */
   transition: fill 0.3s ease, transform 0.3s ease; 
 }
+
 .list-icon svg:hover {
   fill: #0056b3; /* 호버 시 아이콘 색상 변경 */
   transform: scale(1.1); /* 호버 시 아이콘 크기 확대 */
 }
+
 .list-icon svg.active {
   fill: #0056b3; /* active 클래스가 추가될 때 아이콘 색상 변경 */
+  transform: scale(1.1); /* active 클래스가 추가될 때 아이콘 크기 확대 */
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.1); /* active 클래스가 추가될 때 그림자 효과 추가 */
 }
 .my-Feed {
   display: flex;
   flex-direction: column;
   width: 92%;
+}
+.no-post {
+  text-align: center;
 }
