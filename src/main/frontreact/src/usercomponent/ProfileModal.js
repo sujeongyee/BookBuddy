@@ -53,8 +53,8 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
       padding: "20px",
       border: "none",
       borderRadius: "12px",
-      backgroundColor: "#fff",
-      boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+      backgroundColor: "#f7f7f7",
+      boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)",
       overflow: "auto",
     },
   };
@@ -64,32 +64,43 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
     onRequestClose();
   }
   
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setprofileImg(URL.createObjectURL(file));
+    } else {
+      console.error('Uploaded file is not an image.');
+      alert('프로필 사진은 이미지만 첨부 가능합니다.');
+    }
+  };
+  
 
   return(
     <Modal isOpen={isOpen} onRequestClose={onRequestClose} style={customModalStyles} contentLabel="모달">
-      <h2>프로필 수정하기</h2>
-      <button onClick={close}>x</button>
+      <div className="modal-header-h3">
+        <h3>프로필 수정하기</h3>
+      </div>
+      
+      <button className="modal-close" onClick={close}>X</button>
       {updatedVo && (
         <form className="profile-form" onSubmit={handleSubmit}>
-          <div>
-            <label className="form-label">프로필사진</label>
-            {profileImg===profileURL ?
-              <img src={profileImg} alt="profile" style={{width:'100px'}}/>
-              :
-              <img src={URL.createObjectURL(profileImg)} alt="Profile" style={{ width: '100px'}} />
-            }
-            
-            
-          </div>
           <div className="form-group">
-            
-            <input type="file" className="form-input" onChange={(e)=>setprofileImg(e.target.files[0])}></input>
+            <label className="form-label">프로필사진</label>
+            {profileImg === profileURL ?
+              <img src={profileImg} alt="profile" style={{ width: '100px' }} />
+              :
+              <img src={profileImg} alt="Profile" style={{ width: '100px' }} />
+            }
+          </div>
+          <div className="form-group"> 
+            <label className="input-file-btn" for="input-file">프로필 이미지 변경하기</label>          
+            <input style={{display:'none'}} type="file" id="input-file" className="form-input" onChange={handleFileChange}></input>            
           </div>
           <div className="form-group">
             <label className="form-label">아이디</label>
             <input type="text" name="USER_ID" value={updatedVo.user_ID} disabled className="form-input" />
           </div>
-          <div className="form-group">
+          <div className="form-group with-btn">
             <label className="form-label">닉네임</label>
             <input type="text" name="USER_NICK" value={updatedVo.user_NICK} onChange={handleChange} className="form-input" />
             <button className="check-button">중복확인</button>
@@ -100,7 +111,7 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
             <input type="text" className="form-input"></input> -
             <input type="text" className="form-input"></input>
           </div>
-          <div>
+          <div className="form-group">
             <label className="">이메일 </label>
             <input className="l" type="text" placeholder="이메일을 입력해주세요"
                     autoComplete="" value={updatedVo.user_EMAIL}/>
