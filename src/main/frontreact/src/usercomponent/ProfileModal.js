@@ -3,10 +3,14 @@ import React, { useState, useEffect } from "react";
 import Modal from 'react-modal';
 import axios from "axios";
 import './mybook.css';
+import { useUser } from "../context/UserContext";
 
 const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
-
+  const {userData ,setUserData} = useUser();
+  const {userId,userNick,profileURL} = userData;
   const [updatedVo, setUpdatedVo] = useState(null);
+
+  const[profileImg,setprofileImg] = useState(profileURL);
 
   useEffect(() => {
     setUpdatedVo(vo);
@@ -54,52 +58,67 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
       overflow: "auto",
     },
   };
+
+  const close = () => {
+    setprofileImg(profileURL);
+    onRequestClose();
+  }
   
 
   return(
     <Modal isOpen={isOpen} onRequestClose={onRequestClose} style={customModalStyles} contentLabel="모달">
       <h2>프로필 수정하기</h2>
-      <button onClick={onRequestClose}>x</button>
+      <button onClick={close}>x</button>
       {updatedVo && (
         <form className="profile-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label className="form-label">프로필사진</label>
-          <input type="file" className="form-input"></input>
-        </div>
-        <div className="form-group">
-          <label className="form-label">아이디</label>
-          <input type="text" name="USER_ID" value={updatedVo.user_ID} disabled className="form-input" />
-        </div>
-        <div className="form-group">
-          <label className="form-label">닉네임</label>
-          <input type="text" name="USER_NICK" value={updatedVo.user_NICK} onChange={handleChange} className="form-input" />
-          <button className="check-button">중복확인</button>
-        </div>
-        <div className="form-group">
-          <label className="form-label">전화번호</label>
-          <input type="text" className="form-input" value="010" disabled></input>-
-          <input type="text" className="form-input"></input> -
-          <input type="text" className="form-input"></input>
-        </div>
-        <div>
-          <label className="">이메일 </label>
-          <input className="l" type="text" placeholder="이메일을 입력해주세요"
-                  autoComplete="" value={updatedVo.user_EMAIL}/>
-          <select className=''>
-            <option selected>직접입력</option>
-            <option>naver.com</option>
-            <option>gmail.com</option>
-            <option>daum.net</option>
-            <option>nate.com</option>
-            <option>hanmail.net</option>
-            <option>yahoo.com</option>
-            <option>hotmail.com</option>
-            <option>outlook.com</option>
-            <option>icloud.com</option>
-            <option>hanmir.com</option>            
-          </select>
-          <button>인증하기</button>
-        </div>    
+          <div>
+            <label className="form-label">프로필사진</label>
+            {profileImg===profileURL ?
+              <img src={profileImg} alt="profile" style={{width:'100px'}}/>
+              :
+              <img src={URL.createObjectURL(profileImg)} alt="Profile" style={{ width: '100px'}} />
+            }
+            
+            
+          </div>
+          <div className="form-group">
+            
+            <input type="file" className="form-input" onChange={(e)=>setprofileImg(e.target.files[0])}></input>
+          </div>
+          <div className="form-group">
+            <label className="form-label">아이디</label>
+            <input type="text" name="USER_ID" value={updatedVo.user_ID} disabled className="form-input" />
+          </div>
+          <div className="form-group">
+            <label className="form-label">닉네임</label>
+            <input type="text" name="USER_NICK" value={updatedVo.user_NICK} onChange={handleChange} className="form-input" />
+            <button className="check-button">중복확인</button>
+          </div>
+          <div className="form-group">
+            <label className="form-label">전화번호</label>
+            <input type="text" className="form-input" value="010" disabled></input>-
+            <input type="text" className="form-input"></input> -
+            <input type="text" className="form-input"></input>
+          </div>
+          <div>
+            <label className="">이메일 </label>
+            <input className="l" type="text" placeholder="이메일을 입력해주세요"
+                    autoComplete="" value={updatedVo.user_EMAIL}/>
+            <select className=''>
+              <option selected>직접입력</option>
+              <option>naver.com</option>
+              <option>gmail.com</option>
+              <option>daum.net</option>
+              <option>nate.com</option>
+              <option>hanmail.net</option>
+              <option>yahoo.com</option>
+              <option>hotmail.com</option>
+              <option>outlook.com</option>
+              <option>icloud.com</option>
+              <option>hanmir.com</option>            
+            </select>
+            <button>인증하기</button>
+          </div>    
       </form>
       )}
     </Modal>
