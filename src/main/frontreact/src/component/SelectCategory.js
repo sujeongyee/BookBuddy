@@ -13,7 +13,7 @@ function SelectCategory({ setSelectedCategories }){
           throw new Error("서버에서 카테고리 리스트를 가져오지 못했습니다.");
         }
         const data = await response.json();
-        setCategories(data); // 카테고리 리스트 설정
+        setCategories(data); 
       } catch (error) {
         console.error(error);
       }
@@ -23,17 +23,14 @@ function SelectCategory({ setSelectedCategories }){
   },[]);
 
   const handleClick = (category) => {
-     // 이미 선택된 카테고리를 클릭한 경우 제거
     if (selectedCategories.includes(category)) {
       setSelectedCategoriesLocal(selectedCategories.filter((c) => c !== category));
     } else {
-      // 선택되지 않은 카테고리를 클릭한 경우 추가
       setSelectedCategoriesLocal([...selectedCategories, category]);
     }
   };
 
   useEffect(() => {
-    // 부모 컴포넌트로 선택된 카테고리 리스트 업데이트
     setSelectedCategories(selectedCategories);
   }, [selectedCategories, setSelectedCategories]);
 

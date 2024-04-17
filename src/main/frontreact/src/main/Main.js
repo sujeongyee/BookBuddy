@@ -26,7 +26,6 @@ function Main({ loginPage, registPage }) {
             const checkedId = document.getElementById("rememberId").checked;
             const checkedAuto = document.getElementById("autoLogin").checked;
             const response = await axios.post('/book/login', { "USER_ID": user_id, "USER_PWD": password });
-            console.log(response.data);
             if (response.data !== 'fail') { //userId && userNick && profileURL
                 setUserData({ userId: response.data.user_ID, userNick: response.data.user_NICK, profileURL: response.data.profile_URL});
                 sessionStorage.setItem("userVO",JSON.stringify(response.data));
