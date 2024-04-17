@@ -50,7 +50,7 @@ public class MainServiceImpl implements MainService{
     }
 
     public Timestamp getTimeStamp(String time){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");    
         long timestamp = 0;
         try {
             Date parsedDate = dateFormat.parse(time);
