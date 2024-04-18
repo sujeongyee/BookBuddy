@@ -12,6 +12,7 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
   const {userData ,setUserData} = useUser();
   const {userId,userNick,profileURL} = userData;
   const [updatedVo, setUpdatedVo] = useState(null);
+  const [newVo,setNewVo] = useState(null);
   const [startDate, setStartDate] = useState(new Date());
   const [golDisplay,setGolDisplay] = useState(false)
   const [profileImg,setprofileImg] = useState(profileURL);
@@ -19,6 +20,17 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
   const [kwdList,setKwdList] = useState([]);
   const [selectedCategories,setSelectedCategories] = useState([]);
   const [selectedKeywords,setSelectedKeywords] = useState([]);
+  const [code,setCode] = useState('');
+  const [emailAuthCheck,setEmailAuthCheck] = useState(true);
+  const [emailDisplay,setEmailDisplay] = useState(false);
+  const [nicknmCheck,setNicknmCheck] = useState(false);
+  const [nickMsg,setNickMsg] = useState('');
+  const [emailMsg,setEmailMsg] = useState('');
+  // useEffect(()=>{
+  //   console.log('vo 변경사항');
+  //   console.log(updatedVo);
+  // },[updatedVo]);
+
   useEffect(()=>{
     const fetchData = async () => {
       try {
@@ -30,9 +42,7 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
         console.error('Error fetching data:', error);
       }
     };
-  
     fetchData();
-
   },[]);
 
   useEffect(() => {
@@ -45,6 +55,7 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
     }
   }, [vo]);
 
+  // 값변경
   const handleChange = (event) => {
     const { name, value } = event.target;
     if(name=='emailOption'&& value!=='직접입력'){
@@ -52,21 +63,200 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
     }else{
       setGolDisplay(false);
     }
+    if(name=='USER_NICK'){
+      setNicknmCheck(false);
+    }
+    if(name=='email'||name=='emailOption'){
+      setEmailMsg(false);
+      setEmailAuthCheck(false);      
+    }
     setUpdatedVo({ ...updatedVo, [name]: value });
   };
 
-  const handleSubmit = async () => {
-    try {
-
-      onRequestClose();
-    } catch (error) {
-      console.error('Error updating profile:', error);
+  //모달창끄기
+  const close = () => {
+    onRequestClose();
+  }
+  //프사변경
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      //setprofileImg(URL.createObjectURL(file));
+      setprofileImg(file);
+    } else {
+      console.error('Uploaded file is not an image.');
+      alert('프로필 사진은 이미지만 첨부 가능합니다.');
     }
   };
-  const dateChange = (date) => {
+  //원래프사로
+  const usuallyImg = () => {
+    setprofileImg(profileURL);
+  }
+  // 닉넴 중복체크
+  const nickCheck = async(e) => {
+    e.preventDefault();
+    const nick = updatedVo.USER_NICK;
+    if(typeof nick === 'undefined'){
+      setNickMsg('원래 사용하던 닉네임입니다.');
+    }else{
+      const response = await axios.post('/book/checkDuplicateNick', {nick});
+      if (response.data) {
+        setNickMsg('사용 가능한 닉네임입니다.');
+        setNicknmCheck(true);
+      } else {
+        setNickMsg('중복된 닉네임입니다.' );
+      }
+    }  
+  }
+  // 이메일
+  const emailAuth = (e) => {
+    e.preventDefault();
+    const email = updatedVo.email;
+    const mailOption = updatedVo.emailOption;
+    if(email&&mailOption){
+      const mail = email+'@'+mailOption;
+      if(mail==updatedVo.user_EMAIL){
+        setEmailMsg('원래 사용하던 이메일 입니다.');
+        setEmailAuthCheck(true);
+        return;
+      }
+      setUpdatedVo({ ...updatedVo, ['USER_EMAIL']: mail });
+      auth(mail);      
+    }else if(email){
+      if(email==updatedVo.user_EMAIL){
+        setEmailMsg('원래 사용하던 이메일 입니다.');
+        setEmailAuthCheck(true);
+        return;
+      }
+      setUpdatedVo({ ...updatedVo, ['USER_EMAIL']: email });
+      auth(email);
+    }else{
+      setEmailMsg('원래 사용하던 이메일 입니다.');
+    } 
+  }
+  // 이메일 인증 보내기
+  const auth = async(email)=>{
+    setEmailDisplay(true);
+    const response = await axios.post('/book/regist/sendMail', {email});
+    setCode(response.data);
+    
+  }
+  // 인증번호 확인하기
+  const checkAuth = () => {
+    const cd = document.querySelector(".codeInput").value;
+    if(code==cd){
+      setEmailAuthCheck(true);
+      setEmailDisplay(false);
+      setEmailMsg('(인증 완료)')
+    }else{
+      alert('인증번호가 틀립니다.');
+    }
+  }
+
+  // 날짜변경
+  const dateChange = (date,event) => {
+    const { name, value } = event.target;
     setStartDate(date);
+    setUpdatedVo({ ...updatedVo, [name]: date });
+  };
+   
+  
+  //카테고리선택
+  const handleClick = (category) => {
+    if (selectedCategories.includes(category)) {
+      setSelectedCategories(selectedCategories.filter((c) => c !== category));
+    } else {
+      setSelectedCategories([...selectedCategories, category]);
+    }
+  };
+  //키워드선택
+  const handleClick2 = (keyword) => {
+    if (selectedKeywords.includes(keyword)) {
+      setSelectedKeywords(selectedKeywords.filter((c) => c !== keyword));
+    } else {
+      setSelectedKeywords([...selectedKeywords, keyword]);
+    }
+  };
+  
+  ///// 수정하기 버튼
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const phonePattern = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
+    const phoneNo = document.querySelector(".phone-one").value + document.querySelector(".phone-two").value + "-" + document.querySelector(".phone-three").value;
+    setNewVo({...newVo,['USER_PHONE']:updatedVo.user_PHONE});
+    
+    if(!updatedVo.USER_NICK){
+      setNewVo({...newVo,['USER_NICK']:updatedVo.user_NICK});
+    }else if(updatedVo.USER_NICK!=updatedVo.user_NICK){
+      if(!nicknmCheck){
+        alert('닉네임 중복 체크 해주세요.');
+        return;
+      }
+    }
+    
+    if(updatedVo.phone1 || updatedVo.phone2 || updatedVo.phone3){
+      if(phonePattern.test(phoneNo)){
+        setNewVo({...newVo,['USER_PHONE']:phoneNo});
+      }else{
+        alert('유효하지 않은 전화번호입니다.');
+        return;
+      }
+    }
+    if(!emailAuthCheck){
+      alert('이메일 인증 해주세요');
+      return;
+    }else{
+      if(!updatedVo.USER_EMAIL){
+        setNewVo({ ...newVo, ['USER_EMAIL']: updatedVo.user_EMAIL });
+      }
+    }
+    if(!updatedVo.USER_BIRTH){
+      setNewVo({ ...newVo, ['USER_BIRTH']: updatedVo.user_BIRTH });
+    }
+    if(selectedCategories.length==0){
+      alert('카테고리 선택은 필수입니다.');
+      return;
+    }else if(selectedKeywords.length==0){
+      alert('키워드 선택은 필수입니다.');
+    }else {
+      setNewVo({...newVo,['category_NO']:selectedCategories,['keyword_NO']:selectedKeywords});
+    }
+    try {
+      if(profileImg!=profileURL){
+        const formData = new FormData();
+        formData.append('profileImage', profileImg);
+        const fileResponse = await axios.post('/book/file/profile', formData, {
+          headers: {
+              'Content-Type': 'multipart/form-data'
+          }
+        });
+        setNewVo({...newVo,['PROFILE_URL']:fileResponse.data,['USER_ID']:updatedVo.user_ID});
+      }else{
+        setNewVo({...newVo,['PROFILE_URL']:updatedVo.profile_URL,['USER_ID']:updatedVo.user_ID});
+      }
+    } catch (error) {
+      console.error('프로필 이미지 업로드 오류:', error);
+    }
+    
+    const response = await axios.post('/book/user/updateProfile', JSON.stringify(newVo), {
+      headers: {
+          'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.data) {
+        alert('프로필을 수정 했습니다!');
+        onRequestClose();
+    } else {
+        alert('프로필 수정을 실패했습니다!');
+    }
+    
   };
 
+  
+  
+  // 모달 css
   const customModalStyles = {
     overlay: {
       backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -92,38 +282,7 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
     },
   };
 
-  const close = () => {
-    setprofileImg(profileURL);
-    onRequestClose();
-  }
-  
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-      setprofileImg(URL.createObjectURL(file));
-    } else {
-      console.error('Uploaded file is not an image.');
-      alert('프로필 사진은 이미지만 첨부 가능합니다.');
-    }
-  };
-  const usuallyImg = () => {
-    setprofileImg(profileURL);
-  }
-  const handleClick = (category) => {
-    if (selectedCategories.includes(category)) {
-      setSelectedCategories(selectedCategories.filter((c) => c !== category));
-    } else {
-      setSelectedCategories([...selectedCategories, category]);
-    }
-  };
-  const handleClick2 = (keyword) => {
-    if (selectedKeywords.includes(keyword)) {
-      setSelectedCategories(selectedKeywords.filter((c) => c !== keyword));
-    } else {
-      setSelectedCategories([...selectedKeywords, keyword]);
-    }
-  };
-  
+
 
   return(
     <Modal isOpen={isOpen} onRequestClose={onRequestClose} style={customModalStyles} contentLabel="모달">
@@ -139,34 +298,34 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
             {profileImg === profileURL ?
               <img src={profileImg} alt="profile" style={{ width: '100px' }} />
               :
-              <img src={profileImg} alt="Profile" style={{ width: '100px' }} />
+              <img src={URL.createObjectURL(profileImg)} alt="Profile" style={{ width: '100px' }} />
             }
           </div>
           <div className="form-group"> 
             <label className="input-file-btn" htmlFor="input-file">프로필 이미지 변경하기</label>  
             <label className="input-file-btn usuallyImg" onClick={usuallyImg}>원래 이미지 사용하기</label>          
-            <input style={{display:'none'}} type="file" id="input-file" className="form-input" onChange={handleFileChange}></input>            
+            <input style={{display:'none'}} type="file"  accept="image/*" id="input-file" className="form-input" onChange={handleFileChange}></input>            
           </div>
           <div className="form-group">
             <label className="form-label modal-form-id">아이디</label><label className="id-nonChange">아이디는 변경이 불가합니다.</label>
             <input type="text" name="USER_ID" defaultValue={updatedVo.user_ID} disabled className="form-input" />
           </div>
           <div className="form-group with-btn">
-            <label className="form-label">닉네임</label>
+            <p className="form-label form-p1" >닉네임</p><p className="form-p2">{nickMsg}</p><div></div>
             <input type="text" name="USER_NICK" defaultValue={updatedVo.user_NICK} onChange={handleChange} className="form-input" />
-            <button className="check-button">중복확인</button>
+            <button className="check-button" onClick={nickCheck}>중복확인</button>
           </div>
           <div className="form-group">
             <label className="form-label">전화번호</label>
-            <input type="text" className="form-input modal-phone" value="010" disabled></input>-
-            <input type="text" className="form-input modal-phone"></input> -
-            <input type="text" className="form-input modal-phone"></input>
+            <input type="text" className="form-input modal-phone phone-one" defaultValue={updatedVo.user_PHONE.split('-')[0]} name="phone1" onChange={handleChange}></input>-
+            <input type="text" className="form-input modal-phone phone-two" defaultValue={updatedVo.user_PHONE.split('-')[1]} name="phone2" onChange={handleChange}></input> -
+            <input type="text" className="form-input modal-phone phone-three" defaultValue={updatedVo.user_PHONE.split('-')[2]} name="phone3" onChange={handleChange}></input>
           </div>
           <div className="form-group">
-            <label className="form-label">이메일 </label>
-            <input className="form-input modal-email" type="text" placeholder="이메일을 입력해주세요" name="USER_EMAIL"
+            <p className="form-label form-p1">이메일 </p><p className="form-p2">{emailMsg}</p><div></div>
+            <input className="form-input modal-email" type="text" placeholder="이메일을 입력해주세요" name="email"
                     autoComplete="" defaultValue={updatedVo.user_EMAIL} onChange={handleChange}/>
-                    {golDisplay&&<span class="gol" style={{marginLeft: '5px'}}>@</span>}
+                    {golDisplay&&<span className="gol" style={{marginLeft: '5px'}}>@</span>}
             <select className='modal-form-sel mail-select' name="emailOption" defaultValue="직접입력" onChange={handleChange}>
               <option>직접입력</option>
               <option>naver.com</option>
@@ -180,11 +339,17 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
               <option>icloud.com</option>
               <option>hanmir.com</option>            
             </select>
-            <button className="check-button">인증하기</button>
+            <button className="check-button" onClick={emailAuth}>인증하기</button>
           </div>
+          {emailDisplay&&
+          <div>
+            <input type="text" name="code" placeholder="인증코드를 입력해주세요" className="codeInput"></input>
+            <button className="code-btn" onClick={checkAuth}>확인</button>
+          </div>
+          }
           <div className="form-group">
               <label className="form-label">생년월일</label>
-              <DatePicker dateFormat="yyyy-MM-dd" selected={startDate} onChange={dateChange} />
+              <DatePicker dateFormat="yyyy-MM-dd" name="USER_BIRTH" selected={startDate} onChange={dateChange} />
           </div>
           <div className="form-group cate-form">
             <div className="modal-cate-list">
@@ -214,6 +379,7 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
               </ul>
             </div>           
           </div>
+          <button type="submit" onClick={handleSubmit}>수정</button>
       </form>
       )}
     </Modal>

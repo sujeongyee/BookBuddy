@@ -62,6 +62,7 @@ public class MainController { // 로그인과 회원가입 등의 기능
 
     @PostMapping("/join")
     public boolean joinMember(@RequestBody Map<String,String> map){
+        
         Timestamp birth =  mainService.getTimeStamp(String.valueOf(map.get("USER_BIRTH")));
 
         UserVO vo = new UserVO().builder().USER_ID(String.valueOf(map.get("USER_ID")))

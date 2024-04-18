@@ -154,31 +154,33 @@ function UserRegist() {
 
         e.preventDefault();
         const isValid = pwd.length >= 10 && /[0-9]/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
-        const phoneNo = "010-" + document.querySelector(".phone-two").value + "-" + document.querySelector(".phone-three").value;
+        const phoneNo = document.querySelector(".phone-one").value + document.querySelector(".phone-two").value + "-" + document.querySelector(".phone-three").value;
         const birth = selectYear+"-"+selectMonth+"-"+selectDay;
         const nick = document.querySelector(".regist-nick").value;
-
-        // if (!idCheck) {
-        //     alert('아이디 중복체크를 해주세요.');
-        // }else if (!isValid){
-        //     alert('사용 불가능한 비밀번호입니다.\n비밀번호는 10자 이상이어야 하고,\n숫자와 특수문자를 반드시 포함해야 합니다.');
-        // }else if(pwd !== pwd2){
-        //     alert('비밀번호 확인이 일치하지 않습니다.');
-        // }else if(!nickCheck){
-        //     alert('닉네임 중복체크를 해주세요.');
-        // }else if(!emailCheck){
-        //     alert('이메일 인증은 필수입니다!');
-        // }else if(selectYear===''){
-        //     alert('생년월일을 선택해주세요 : 년도 미선택');
-        // }else if(selectMonth===''){
-        //     alert('생년월일을 선택해주세요 : 월 미선택');
-        // }else if(selectDay===''){
-        //     alert('생년월일을 선택해주세요 : 일 미선택');
-        // }else if (selectedCategories.length === 0) {
-        //     alert('선호하는 카테고리를 1개 이상 선택해주세요.');
-        // }else if (selectedKeywords.length === 0) {
-        //     alert('선호하는 키워드를 1개 이상 선택해주세요.');
-        // }else {
+        const phonePattern = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
+        if (!idCheck) {
+            alert('아이디 중복체크를 해주세요.');
+        }else if (!isValid){
+            alert('사용 불가능한 비밀번호입니다.\n비밀번호는 10자 이상이어야 하고,\n숫자와 특수문자를 반드시 포함해야 합니다.');
+        }else if(pwd !== pwd2){
+            alert('비밀번호 확인이 일치하지 않습니다.');
+        }else if(!nickCheck){
+            alert('닉네임 중복체크를 해주세요.');
+        }else if(!phonePattern.test(phoneNo)){
+            alert('유효하지 않은 전화번호입니다.')
+        }else if(!emailCheck){
+            alert('이메일 인증은 필수입니다!');
+        }else if(selectYear===''){
+            alert('생년월일을 선택해주세요 : 년도 미선택');
+        }else if(selectMonth===''){
+            alert('생년월일을 선택해주세요 : 월 미선택');
+        }else if(selectDay===''){
+            alert('생년월일을 선택해주세요 : 일 미선택');
+        }else if (selectedCategories.length === 0) {
+            alert('선호하는 카테고리를 1개 이상 선택해주세요.');
+        }else if (selectedKeywords.length === 0) {
+            alert('선호하는 키워드를 1개 이상 선택해주세요.');
+        }else {
             const formData = new FormData();
             let copy;
             if(profileImage!=null){
@@ -226,7 +228,7 @@ function UserRegist() {
             } else {
                 alert('회원가입 실패');
             }
-        //}
+        }
 
     }
 
@@ -271,8 +273,8 @@ function UserRegist() {
                 <button className="id-check" onClick={checkNick}>중복확인</button>
                 <p className='msg nickNameMsg'>{nickMsg}</p>
                 <div>
-                    <p className="regist-p">전화번호</p>
-                    <input type="text" className="phone-input phone-input-first phone-one" value="010" disabled></input>{" "}-
+                    <p className="regist-p">휴대전화</p>
+                    <input type="text" className="phone-input phone-input-first phone-one"></input>{" "}-                   
                     <input type="text" className="phone-input phone-two"></input> -
                     <input type="text" className="phone-input phone-three"></input>
                 </div>
