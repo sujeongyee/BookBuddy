@@ -13,6 +13,9 @@ import book.project.bookbuddy.main.MainService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -36,6 +39,14 @@ public class UserController {
       System.out.println(vo.toString());
       return map;
   }
+
+  @PostMapping("/updateProfile")
+  public boolean updateProfile(@RequestBody Map<String,Object> map) {
+      System.out.println(map.toString());
+      
+      return true;
+  }
+  
 
 
   
