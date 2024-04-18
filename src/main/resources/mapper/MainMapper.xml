@@ -27,7 +27,7 @@
     <insert id="joinBuddy" parameterType="UserVO">
         INSERT INTO USER (USER_ID, USER_PWD, USER_NICK, USER_PHONE, USER_BIRTH, CATEGORY_NO, KEYWORD_NO, USER_EMAIL,PROFILE_URL)
         VALUES
-            (#{USER_ID}, #{USER_PWD}, #{USER_NICK}, #{USER_PHONE}, #{USER_BIRTH}, #{CATEGORY_NO}, #{KEYWORD_NO}, #{USER_EMAIL},#{PROFILE_URL});
+            (#{user_ID}, #{user_PWD}, #{user_NICK}, #{user_PHONE}, #{user_BIRTH}, #{category_NO}, #{keyword_NO}, #{user_EMAIL},#{profile_URL});
     </insert>
 
 </mapper>

@@ -46,7 +46,7 @@ function MyBook() {
     };
   
     fetchData();
-  }, [userId]);
+  }, [userId,userNick,profileURL]);
 
   const [activeTab, setActiveTab] = useState('list'); // 'list' 또는 'grid'로 초기화
 
