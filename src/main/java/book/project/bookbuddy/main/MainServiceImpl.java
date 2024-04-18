@@ -28,7 +28,7 @@ public class MainServiceImpl implements MainService{
     @Override
     public boolean checkUser(UserVO vo, String user_pwd) {
         if(vo != null){
-            return passwordEncoder.matches(user_pwd, vo.getUSER_PWD());
+            return passwordEncoder.matches(user_pwd, vo.getUser_PWD());
         }
         return false;
     }
@@ -62,8 +62,8 @@ public class MainServiceImpl implements MainService{
         return timestamp2;
     }
     public int joinBuddy(UserVO vo){
-        String encodedPassword = passwordEncoder.encode(vo.getUSER_PWD());
-        vo.setUSER_PWD(encodedPassword);
+        String encodedPassword = passwordEncoder.encode(vo.getUser_PWD());
+        vo.setUser_PWD(encodedPassword);
         int n = mainMapper.joinBuddy(vo);
         return n;
     }

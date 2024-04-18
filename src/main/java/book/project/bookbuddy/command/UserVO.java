@@ -11,16 +11,16 @@ import java.sql.Timestamp;
 @Getter
 public class UserVO {
 
-    private int USER_NO;
-    private String USER_ID;
-    private String USER_PWD;
-    private String USER_NICK;
-    private String USER_PHONE;
-    private Timestamp USER_BIRTH;
-    private String CATEGORY_NO;
-    private String KEYWORD_NO;
-    private String USER_EMAIL;
-    private String PROFILE_URL;
+    private Integer user_NO;
+    private String user_ID;
+    private String user_PWD;
+    private String user_NICK;
+    private String user_PHONE;
+    private Timestamp user_BIRTH;
+    private String category_NO;
+    private String keyword_NO;
+    private String user_EMAIL;
+    private String profile_URL;
 
 
 }

@@ -61,20 +61,9 @@ public class MainController { // 로그인과 회원가입 등의 기능
     }
 
     @PostMapping("/join")
-    public boolean joinMember(@RequestBody Map<String,String> map){
-        
-        Timestamp birth =  mainService.getTimeStamp(String.valueOf(map.get("USER_BIRTH")));
+    public boolean joinMember(@RequestBody UserVO vo){
 
-        UserVO vo = new UserVO().builder().USER_ID(String.valueOf(map.get("USER_ID")))
-                .USER_PWD(map.get("USER_PWD"))
-                .USER_NICK(map.get("USER_NICK"))
-                .USER_PHONE(map.get("USER_PHONE"))
-                .USER_BIRTH(birth)
-                .USER_EMAIL(map.get("USER_EMAIL"))
-                .CATEGORY_NO(map.get("CATEGORY_NO"))
-                .KEYWORD_NO(map.get("KEYWORD_NO"))
-                .PROFILE_URL(map.get("PROFILE_URL"))
-                .build();
+        
         System.out.println(vo.toString());
         int n = mainService.joinBuddy(vo);
         if(n==1) return true;

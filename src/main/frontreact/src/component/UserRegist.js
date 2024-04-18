@@ -154,7 +154,7 @@ function UserRegist() {
 
         e.preventDefault();
         const isValid = pwd.length >= 10 && /[0-9]/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
-        const phoneNo = document.querySelector(".phone-one").value + document.querySelector(".phone-two").value + "-" + document.querySelector(".phone-three").value;
+        const phoneNo = document.querySelector(".phone-one").value + "-" + document.querySelector(".phone-two").value + "-" + document.querySelector(".phone-three").value;
         const birth = selectYear+"-"+selectMonth+"-"+selectDay;
         const nick = document.querySelector(".regist-nick").value;
         const phonePattern = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
@@ -282,8 +282,8 @@ function UserRegist() {
                 <p className="regist-p">이메일 </p>
                 <input className="regist-input regist-mail" type="text" placeholder="이메일을 입력해주세요"
                        autoComplete="username" onChange={(e) => setEmailCheck(false)}/>@
-                <select className='mail-select' value={selectedDomain} onChange={handleSelectChange}>
-                    <option selected>naver.com</option>
+                <select className='mail-select' defaultValue={selectedDomain} onChange={handleSelectChange}>
+                    <option>naver.com</option>
                     <option>gmail.com</option>
                     <option>daum.net</option>
                     <option>nate.com</option>
@@ -351,8 +351,8 @@ function BirthYearSelect({ setSelectYear }) {
     };
 
     return (
-        <select className="birth-box birth-year-box" id="birth-year" onChange={handleYearChange}>
-            <option disabled selected>출생 연도</option>
+        <select className="birth-box birth-year-box" id="birth-year" defaultValue={'출생 연도'}onChange={handleYearChange}>
+            <option disabled>출생 연도</option>
             {birthYears.map(year => (
                 <option className='birth-option' key={year} value={year}>{year}</option>
             ))}
@@ -369,8 +369,8 @@ function BirthMonthSelect({ setSelectMonth }) {
     };
 
     return (
-        <select className="birth-box" id="birth-month" onChange={handleMonthChange}>
-            <option disabled selected>월</option>
+        <select className="birth-box" id="birth-month" defaultValue={'월'} onChange={handleMonthChange}>
+            <option disabled>월</option>
             {months.map(month => (
                 <option className='birth-option' key={month} value={month}>
                     {String(month).padStart(2, '0')}
@@ -389,8 +389,8 @@ function BirthDaySelect({setSelectDay}) {
     };
 
     return (
-        <select className="birth-box" id="birth-day" onChange={handleDayChange}>
-            <option disabled selected>일</option>
+        <select className="birth-box" id="birth-day" defaultValue={'일'} onChange={handleDayChange}>
+            <option disabled>일</option>
             {days.map(day => (
                 <option className='birth-option' key={day} value={day}>{String(day).padStart(2, '0')}</option>
             ))}

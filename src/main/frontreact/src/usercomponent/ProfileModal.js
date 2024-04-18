@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 import axios from "axios";
 import './mybook.css';
@@ -9,10 +10,10 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
 
+  const navigate = useNavigate();
   const {userData ,setUserData} = useUser();
   const {userId,userNick,profileURL} = userData;
   const [updatedVo, setUpdatedVo] = useState(null);
-  const [newVo,setNewVo] = useState(null);
   const [startDate, setStartDate] = useState(new Date());
   const [golDisplay,setGolDisplay] = useState(false)
   const [profileImg,setprofileImg] = useState(profileURL);
@@ -26,10 +27,7 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
   const [nicknmCheck,setNicknmCheck] = useState(false);
   const [nickMsg,setNickMsg] = useState('');
   const [emailMsg,setEmailMsg] = useState('');
-  // useEffect(()=>{
-  //   console.log('vo 변경사항');
-  //   console.log(updatedVo);
-  // },[updatedVo]);
+
 
   useEffect(()=>{
     const fetchData = async () => {
@@ -63,7 +61,7 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
     }else{
       setGolDisplay(false);
     }
-    if(name=='USER_NICK'){
+    if(name=='newNick'){
       setNicknmCheck(false);
     }
     if(name=='email'||name=='emailOption'){
@@ -81,7 +79,6 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file && file.type.startsWith('image/')) {
-      //setprofileImg(URL.createObjectURL(file));
       setprofileImg(file);
     } else {
       console.error('Uploaded file is not an image.');
@@ -95,7 +92,7 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
   // 닉넴 중복체크
   const nickCheck = async(e) => {
     e.preventDefault();
-    const nick = updatedVo.USER_NICK;
+    const nick = updatedVo.newNick;
     if(typeof nick === 'undefined'){
       setNickMsg('원래 사용하던 닉네임입니다.');
     }else{
@@ -114,13 +111,18 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
     const email = updatedVo.email;
     const mailOption = updatedVo.emailOption;
     if(email&&mailOption){
-      const mail = email+'@'+mailOption;
+      let mail;
+      if(mailOption=='직접입력'){
+        mail = email;
+      }else{
+        mail = email+'@'+mailOption;
+      }
       if(mail==updatedVo.user_EMAIL){
         setEmailMsg('원래 사용하던 이메일 입니다.');
         setEmailAuthCheck(true);
         return;
       }
-      setUpdatedVo({ ...updatedVo, ['USER_EMAIL']: mail });
+      setUpdatedVo({ ...updatedVo, ['newMail']: mail });
       auth(mail);      
     }else if(email){
       if(email==updatedVo.user_EMAIL){
@@ -128,7 +130,7 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
         setEmailAuthCheck(true);
         return;
       }
-      setUpdatedVo({ ...updatedVo, ['USER_EMAIL']: email });
+      setUpdatedVo({ ...updatedVo, ['newMail']: email });
       auth(email);
     }else{
       setEmailMsg('원래 사용하던 이메일 입니다.');
@@ -155,9 +157,9 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
 
   // 날짜변경
   const dateChange = (date,event) => {
-    const { name, value } = event.target;
-    setStartDate(date);
-    setUpdatedVo({ ...updatedVo, [name]: date });
+    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    setStartDate(localDate); 
+    setUpdatedVo({ ...updatedVo, ['newBirth']: localDate });
   };
    
   
@@ -181,14 +183,11 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
   ///// 수정하기 버튼
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const phonePattern = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
-    const phoneNo = document.querySelector(".phone-one").value + document.querySelector(".phone-two").value + "-" + document.querySelector(".phone-three").value;
-    setNewVo({...newVo,['USER_PHONE']:updatedVo.user_PHONE});
+    const phoneNo = document.querySelector(".phone-one").value + "-" + document.querySelector(".phone-two").value + "-" + document.querySelector(".phone-three").value;
     
-    if(!updatedVo.USER_NICK){
-      setNewVo({...newVo,['USER_NICK']:updatedVo.user_NICK});
-    }else if(updatedVo.USER_NICK!=updatedVo.user_NICK){
+
+    if(updatedVo.newNick!=updatedVo.user_NICK&&updatedVo.newNick){
       if(!nicknmCheck){
         alert('닉네임 중복 체크 해주세요.');
         return;
@@ -196,32 +195,24 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
     }
     
     if(updatedVo.phone1 || updatedVo.phone2 || updatedVo.phone3){
-      if(phonePattern.test(phoneNo)){
-        setNewVo({...newVo,['USER_PHONE']:phoneNo});
-      }else{
+      if(!phonePattern.test(phoneNo)){
         alert('유효하지 않은 전화번호입니다.');
         return;
       }
     }
+
     if(!emailAuthCheck){
       alert('이메일 인증 해주세요');
       return;
-    }else{
-      if(!updatedVo.USER_EMAIL){
-        setNewVo({ ...newVo, ['USER_EMAIL']: updatedVo.user_EMAIL });
-      }
     }
-    if(!updatedVo.USER_BIRTH){
-      setNewVo({ ...newVo, ['USER_BIRTH']: updatedVo.user_BIRTH });
-    }
+
     if(selectedCategories.length==0){
       alert('카테고리 선택은 필수입니다.');
       return;
     }else if(selectedKeywords.length==0){
       alert('키워드 선택은 필수입니다.');
-    }else {
-      setNewVo({...newVo,['category_NO']:selectedCategories,['keyword_NO']:selectedKeywords});
     }
+    let ImgUrl;
     try {
       if(profileImg!=profileURL){
         const formData = new FormData();
@@ -231,15 +222,26 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
               'Content-Type': 'multipart/form-data'
           }
         });
-        setNewVo({...newVo,['PROFILE_URL']:fileResponse.data,['USER_ID']:updatedVo.user_ID});
+        ImgUrl=fileResponse.data;
       }else{
-        setNewVo({...newVo,['PROFILE_URL']:updatedVo.profile_URL,['USER_ID']:updatedVo.user_ID});
+        ImgUrl=profileURL;
       }
     } catch (error) {
       console.error('프로필 이미지 업로드 오류:', error);
     }
-    
-    const response = await axios.post('/book/user/updateProfile', JSON.stringify(newVo), {
+    const UserVO = {
+      'user_NO': parseInt(updatedVo.user_NO),
+      'user_ID': updatedVo.user_ID,
+      'user_PWD': updatedVo.user_PWD,
+      'user_NICK': updatedVo.newNick ? updatedVo.newNick : updatedVo.user_NICK,
+      'user_PHONE': updatedVo.phone1 || updatedVo.phone2 || updatedVo.phone3 ? phoneNo : updatedVo.user_PHONE,
+      'user_BIRTH': updatedVo.newBirth ? new Date(updatedVo.newBirth) : new Date(updatedVo.user_BIRTH),     
+      'category_NO': selectedCategories.join(','),
+      'keyword_NO': selectedKeywords.join(','),
+      'user_EMAIL': updatedVo.newMail ? updatedVo.newMail : updatedVo.user_EMAIL,
+      'profile_URL': ImgUrl,
+    };
+    const response = await axios.post('/book/user/updateProfile', UserVO, {
       headers: {
           'Content-Type': 'application/json'
       }
@@ -247,12 +249,20 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
 
     if (response.data) {
         alert('프로필을 수정 했습니다!');
+        setUserData({ userId: response.data.user_ID, userNick: response.data.user_NICK, profileURL: response.data.profile_URL});
+        sessionStorage.setItem("userVO",JSON.stringify(response.data));
+        if(localStorage.getItem("userVO")){
+          localStorage.setItem("userVO",JSON.stringify(response.data));
+        }
         onRequestClose();
+        window.location.reload();
     } else {
         alert('프로필 수정을 실패했습니다!');
     }
     
+    
   };
+
 
   
   
@@ -312,7 +322,7 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
           </div>
           <div className="form-group with-btn">
             <p className="form-label form-p1" >닉네임</p><p className="form-p2">{nickMsg}</p><div></div>
-            <input type="text" name="USER_NICK" defaultValue={updatedVo.user_NICK} onChange={handleChange} className="form-input" />
+            <input type="text" name="newNick" defaultValue={updatedVo.user_NICK} onChange={handleChange} className="form-input" />
             <button className="check-button" onClick={nickCheck}>중복확인</button>
           </div>
           <div className="form-group">

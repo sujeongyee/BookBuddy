@@ -32,19 +32,18 @@ public class UserController {
 
   @GetMapping("/myPage")
   public Map<String,Object> getMyPage(@RequestParam("id") String id) {
-      System.out.println(id);
       UserVO vo =  mainService.getVO(id);
       Map<String,Object> map = new HashMap<>();
       map.put("vo", vo);
-      System.out.println(vo.toString());
       return map;
   }
 
   @PostMapping("/updateProfile")
-  public boolean updateProfile(@RequestBody Map<String,Object> map) {
-      System.out.println(map.toString());
-      
-      return true;
+  public Object updateProfile(@RequestBody UserVO userVo) {
+      System.out.println(userVo.toString());
+      int n = userService.updateProfile(userVo);
+      UserVO vo = mainService.getVO(userVo.getUser_ID());
+      return n==1?vo:false;
   }
   
 
