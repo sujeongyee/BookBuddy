@@ -258,12 +258,9 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
         window.location.reload();
     } else {
         alert('프로필 수정을 실패했습니다!');
-    }
-    
+    }    
     
   };
-
-
   
   
   // 모달 css
@@ -283,7 +280,7 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
       maxWidth: "500px",
       width: "90%",
       maxHeight: "80%",
-      padding: "20px",
+      padding: "20px 30px 20px 20px",
       border: "none",
       borderRadius: "12px",
       backgroundColor: "#f7f7f7",
@@ -389,7 +386,7 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
               </ul>
             </div>           
           </div>
-          <button type="submit" onClick={handleSubmit}>수정</button>
+          <button type="submit" className="update-profile-btn" onClick={handleSubmit}>수정하기</button>
       </form>
       )}
     </Modal>

@@ -7,6 +7,7 @@ import Sidebar from "../main/Sidebar";
 import Header from "../main/Header";
 import Modal from 'react-modal';
 import ProfileModal from "./ProfileModal";
+import WritePost from "./WritePost";
 
 function MyBook() {
 
@@ -15,25 +16,15 @@ function MyBook() {
   const [followerCount, setFollowerCount] = useState(100);
   const [followingCount, setFollowingCount] = useState(150);
   const [postCount, setPostCount] = useState(20);
-  const [showReviews, setShowReviews] = useState(true);
+  const [showReviews, setShowReviews] = useState(false);
   const [recommendPosts,setRecommendPosts] = useState([]);
   const [reviewPosts,setReviewPosts] = useState([]);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [profilemodalIsOpen, setProfileModalIsOpen] = useState(false);
   const [vo,setVo] = useState(null);
+  const [writemodalIsOpen,setWriteModalIsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('list'); // 'list' 또는 'grid'로 초기화
 
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
-
-
-  const handleWritePost = () => {
-    console.log('글 작성하기 버튼 클릭');
-  };
-
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -47,8 +38,6 @@ function MyBook() {
   
     fetchData();
   }, [userId,userNick,profileURL]);
-
-  const [activeTab, setActiveTab] = useState('list'); // 'list' 또는 'grid'로 초기화
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -84,9 +73,10 @@ function MyBook() {
             </div>           
           </div>
           <div className="action-buttons">
-            <button className="edit-profile-button" onClick={openModal}>프로필 수정</button>
-            <ProfileModal isOpen={modalIsOpen} onRequestClose={closeModal} vo={vo} />
-            <button className="write-post-button" onClick={handleWritePost}>글 작성하기</button>
+            <button className="edit-profile-button" onClick={()=>{setProfileModalIsOpen(true)}}>프로필 수정</button>
+            <ProfileModal isOpen={profilemodalIsOpen} onRequestClose={()=>{setProfileModalIsOpen(false)}} vo={vo} />
+            <button className="write-post-button" onClick={()=>{setWriteModalIsOpen(true)}}>글 작성하기</button>
+            <WritePost isOpen={writemodalIsOpen} onRequestClose={()=>{setWriteModalIsOpen(false)}}></WritePost>
           </div>
           <div className="feed-container">
             <div className="feed-tabs">
