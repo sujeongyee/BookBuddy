@@ -274,17 +274,17 @@
 }
 
 .modal-cate.active {
-  background-color: #fbd797;
+  background-color: #dbe4f6;
 }
 
 .modal-cate:hover {
-  background-color: #fbd797;
+  background-color: #dbe4f6;
 }
 .modal-kwd.active {
-  background-color: #e2d6f6;
+  background-color: #dbe4f6;
 }
 .modal-kwd:hover {
-  background-color: #d3bcec;
+  background-color: #dbe4f6;
 }
 .check-button {
   margin-left: 5px;
@@ -309,4 +309,141 @@
   margin:5px;
   font-size: 12px;
   color: rgb(255, 87, 87);
+}
+.update-profile-btn {
+  width: 100%;
+  padding: 7px 11px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 5px 0;
+}
+
+.ReactModal__Content::-webkit-scrollbar {
+  width: 15px;
+}
+
+.ReactModal__Content::-webkit-scrollbar-thumb {
+  background-color: #dbe4f6;
+  border-radius: 50px;
+}
+
+.ReactModal__Content::-webkit-scrollbar-track {
+  background-color:rgb(247, 247, 247);
+  border-radius: 10px;
+  box-shadow: inset 0px 0px 5px white;
+}
+
+/* //////////////////모달글작성/////////////////////// */
+
+/* Modal container */
+.modalWrite-container {
+  font-family: Arial, sans-serif;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+/* Modal header */
+.modalWrite-header {
+  background-color: #e5ecfc;
+  padding: 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.modalWrite-title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.modalWrite-closeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.modalWrite-form {
+  padding: 20px;
+}
+
+.modalWrite-row {
+  margin-bottom: 20px;
+}
+
+.modalWrite-label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.modalWrite-input,
+.modalWrite-textarea,
+.modalWrite-ratingInput {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.modalWrite-inputTitle {
+  width: calc(100% - 120px);
+  margin-right: 10px;
+}
+
+.modalWrite-searchButton {
+  padding: 10px 20px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.modalWrite-searchButton:hover {
+  background-color: #0056b3;
+}
+
+.radio-buttons {
+  display: flex;
+}
+
+.radio-button {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.radio-button input {
+  margin-right: 5px;
+}
+
+.radio-button.selected {
+  font-weight: bold;
+}
+
+/* Images */
+.modalWrite-bookImage,
+.modalWrite-selectedImage {
+  cursor: pointer;
+  max-width: 100px;
+  max-height: 100px;
+  margin: 5px;
+}
+
+/* Submit button */
+.modalWrite-submitButton {
+  padding: 10px 20px;
+  background-color: #28a745;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.modalWrite-submitButton:hover {
+  background-color: #218838;
 }
