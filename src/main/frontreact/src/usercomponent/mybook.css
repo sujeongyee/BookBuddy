@@ -355,11 +355,12 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .modalWrite-title {
   margin: 0;
-  font-size: 24px;
+  font-size: 20px;
   color: #333;
 }
 
