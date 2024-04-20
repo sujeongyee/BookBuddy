@@ -81,12 +81,12 @@ const WritePost = ({ isOpen, onRequestClose}) => {
   
   const handleImageUpload = (files) => {
     // 파일 업로드 및 정보 저장
-    if (files.length > 4) {
+    if (uploadFiles.length>=4) {
       alert("최대 4개의 이미지만 선택할 수 있습니다.");
       return;
     }
     const uploadedFiles = Array.from(files);
-    setUploadFiles(uploadedFiles);
+    setUploadFiles([...uploadFiles, ...uploadedFiles]);
   };
 
   const handleDeleteFile = (index) => {
@@ -141,14 +141,7 @@ const WritePost = ({ isOpen, onRequestClose}) => {
                 <label htmlFor="postTitle" className="modalWrite-label">게시글 제목</label>
               </td>
               <td>
-                <input
-                      type="text"
-                      id="postTitle"
-                      value={postTitle}
-                      onChange={(e) => setPostTitle(e.target.value)}
-                      className="modalWrite-input modalWrite-inputTitle"
-                      placeholder="게시글 제목을 입력하세요."
-                    />
+                <input type="text" id="postTitle" value={postTitle} onChange={(e) => setPostTitle(e.target.value)} className="modalWrite-input modalWrite-inputTitle" placeholder="게시글 제목을 입력하세요."/>
               </td>
             </tr>
             <tr className="modalWrite-row">
@@ -239,13 +232,7 @@ const WritePost = ({ isOpen, onRequestClose}) => {
                     <path d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31zM2.19 4a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4zm4.69-1.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139q.323-.119.684-.12h5.396z"/>
                   </svg>
                 </label>
-                <input
-                  type="file"
-                  id="img-btn"
-                  style={{ display: "none" }}
-                  multiple
-                  onChange={(e) => handleImageUpload(e.target.files)}
-                  accept="image/*"
+                <input type="file" id="img-btn" style={{ display: "none" }} multiple onChange={(e) => handleImageUpload(e.target.files)} accept="image/*"
                 />
                 
                 {/* 업로드된 파일들의 이름과 미리보기 */}
@@ -253,7 +240,7 @@ const WritePost = ({ isOpen, onRequestClose}) => {
                   {uploadFiles.map((file, index) => (
                     <div key={index} style={{ position: "relative", marginRight: "15px" }}>
                       {/* 삭제 아이콘 */}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" style={{ position: "absolute", top: "-2", right: "-4", zIndex: "1" }} className="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" style={{ position: "absolute", top: "-2", right: "-4", zIndex: "1", cursor:"pointer"}} className="bi bi-x-circle-fill" viewBox="0 0 16 16">
                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"
                         onClick={() => handleDeleteFile(index)}/>
                       </svg>
