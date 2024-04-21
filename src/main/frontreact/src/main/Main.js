@@ -54,15 +54,15 @@ function Main({ loginPage, registPage }) {
                         const response = await axios.get('/book/post/getNotLogin');
                         // 처리
                     } else {
-                        const response = await axios.get('/book/post/followerCount');
-                        const follows = response.data;
-                        if (follows.length === 0) {
-                            const response = await axios.get('/book/post/getLoginNotFollow');
-                            // 처리
-                        } else {
-                            const response = await axios.get('/book/post/getFollowsBoard');
-                            // 처리
-                        }
+                        // const response = await axios.get('/book/post/followerCount');
+                        // const follows = response.data;
+                        // if (follows.length === 0) {
+                        //     const response = await axios.get('/book/post/getLoginNotFollow');
+                        //     // 처리
+                        // } else {
+                        //     const response = await axios.get('/book/post/getFollowsBoard');
+                        //     // 처리
+                        // }
                     }
                 }
             } catch (error) {

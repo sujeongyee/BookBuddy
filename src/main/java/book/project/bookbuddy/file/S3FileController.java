@@ -1,11 +1,18 @@
 package book.project.bookbuddy.file;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Map;
 
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,13 +48,26 @@ public class S3FileController {
     return s3FileSerivce.getProfileUrl(id);  
   }
 
-  @PostMapping("/imgUrlToFile")
-  public String imgUrlToFile(@RequestBody Map<String,String> map){
-    System.out.println(map.toString());
-    String userNo = map.get("userNo");
-    String imgUrl = map.get("imgUrl");
-    return "";
+  @PostMapping("/rcmImgUrlToFile")
+  public String rcmImgUrlToFile(@RequestParam("rcmNo") String rcmNo,@RequestParam("imgUrl") String imgUrl,
+                                @RequestParam("uploadFiles") MultipartFile[] uploadFiles){
+    
+    if(!imgUrl.equals("")&&imgUrl!=null){
+        MultipartFile multipartFile = s3FileSerivce.linkToFile(imgUrl);
+        // S3에 업로드
+        String s3Url = s3Service.upload(multipartFile);
+        s3FileSerivce.insertRecommendImg(rcmNo, s3Url);
+    }
+    if(uploadFiles.length>0){
+        for (MultipartFile file : uploadFiles) {
+            String s3Url = s3Service.upload(file);
+            s3FileSerivce.insertRecommendImg(rcmNo, s3Url);
+        }
+    }   
+    return "success";  
   }
+  
+  
 
   
   

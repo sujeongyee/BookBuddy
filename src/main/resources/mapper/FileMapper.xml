@@ -10,5 +10,10 @@
         SELECT PROFILE_URL FROM USER WHERE USER_ID = #{id}
     </select>
 
+    <insert id="insertRecommendImg">
+        INSERT INTO FILE (FILE_URL,FILE_CATEGORY,RECOMMEND_NO) 
+        VALUES (#{url},'recommend',#{rcm_no})
+    </insert>
+
 
 </mapper>
