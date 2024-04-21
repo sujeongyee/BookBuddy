@@ -14,6 +14,10 @@
         INSERT INTO FILE (FILE_URL,FILE_CATEGORY,RECOMMEND_NO) 
         VALUES (#{url},'recommend',#{rcm_no})
     </insert>
+    <insert id="insertReviewImg">
+        INSERT INTO FILE (FILE_URL,FILE_CATEGORY,REVIEW_NO) 
+        VALUES (#{url},'review',#{rv_no})
+    </insert>
 
 
 </mapper>

@@ -23,4 +23,9 @@
         SELECT RECOMMEND_NO FROM RECOMMEND WHERE USER_NO=#{userNo} ORDER BY RECOMMEND_TIME DESC LIMIT 1;
     </select>
 
+    <insert id="writeReviewPost" parameterType="ReviewVO">
+        INSERT INTO RECOMMEND (REVIEW_TITLE, REVIEW_CONTENT, REVIEW_CATEGORY, REVIEW_KEYWORD, USER_NO, REVIEW_BOOKTITLE,REVIEW_RATING)
+        VALUES (#{review_TITLE}, #{review_CONTENT}, #{review_CATEGORY}, #{review_KEYWORD}, #{user_NO}, #{review_BOOKTITLE},#{review_RATING});
+    </insert>
+
 </mapper>

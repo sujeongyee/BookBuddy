@@ -66,6 +66,25 @@ public class S3FileController {
     }   
     return "success";  
   }
+
+  @PostMapping("/rvImgUrlToFile")
+  public String rvImgUrlToFile(@RequestParam("rvNo") String rvNo,@RequestParam("imgUrl") String imgUrl,
+                                @RequestParam("uploadFiles") MultipartFile[] uploadFiles){
+    
+    if(!imgUrl.equals("")&&imgUrl!=null){
+        MultipartFile multipartFile = s3FileSerivce.linkToFile(imgUrl);
+        // S3에 업로드
+        String s3Url = s3Service.upload(multipartFile);
+        s3FileSerivce.insertReviewImg(rvNo, s3Url);
+    }
+    if(uploadFiles.length>0){
+        for (MultipartFile file : uploadFiles) {
+          String s3Url = s3Service.upload(file);
+          s3FileSerivce.insertReviewImg(rvNo, s3Url);
+        }
+    }   
+    return "success";  
+  }
   
   
 

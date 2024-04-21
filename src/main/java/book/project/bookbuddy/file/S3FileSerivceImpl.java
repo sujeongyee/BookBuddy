@@ -26,6 +26,9 @@ public class S3FileSerivceImpl implements S3FileSerivce {
   public int insertRecommendImg(String rcm_no,String url){
     return s3FileMapper.insertRecommendImg(rcm_no,url);
   }
+  public int insertReviewImg(String rv_no,String url){
+    return s3FileMapper.insertReviewImg(rv_no, url);
+  }
   
   public MultipartFile linkToFile(String imgUrl){
     try {

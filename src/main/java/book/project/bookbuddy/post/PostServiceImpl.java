@@ -28,4 +28,12 @@ public class PostServiceImpl implements PostService{
   public int getRecommendNo(int userNo){
     return postMapper.getRecommendNo(userNo);
   }
+
+  public int writeReviewPost(ReviewVO vo){
+    return postMapper.writeReviewPost(vo);
+  }
+
+  public int getReviewNo(int userNo){
+    return postMapper.getReviewNo(userNo);
+  }
 }
