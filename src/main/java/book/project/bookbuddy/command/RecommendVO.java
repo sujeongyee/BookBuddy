@@ -11,12 +11,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class RecommendVO {
-  private int RECOMMEND_NO;
-  private String RECOMMEND_TITLE;
-  private String RECOMMEND_CONTENT;
-  private Timestamp RECOMMEND_TIME;
-  private String RECOMMEND_CATEGORY;
-  private String RECOMMEND_KEYWORD;
-  private int RECOMMEND_LIKE;
-  private int USER_NO;
+  private int recommend_NO;
+  private String recommend_TITLE;
+  private String recommend_CONTENT;
+  private Timestamp recommend_TIME;
+  private String recommend_CATEGORY;
+  private String recommend_KEYWORD;
+  private int recommend_LIKE;
+  private int user_NO;
+  private String recommend_BOOKTITLE;
 }

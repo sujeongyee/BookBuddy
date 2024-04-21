@@ -14,4 +14,13 @@
         SELECT * FROM REVIEW ORDER BY REVIEW_LIKE LIMIT #{page},5
     </select>
 
+    <insert id="writeRecommendPost" parameterType="RecommendVO">
+        INSERT INTO RECOMMEND (RECOMMEND_TITLE, RECOMMEND_CONTENT, RECOMMEND_CATEGORY, RECOMMEND_KEYWORD, USER_NO, RECOMMEND_BOOKTITLE)
+        VALUES (#{recommend_TITLE}, #{recommend_CONTENT}, #{recommend_CATEGORY}, #{recommend_KEYWORD}, #{user_NO}, #{recommend_BOOKTITLE});
+    </insert>
+
+    <select id="getRecommendNo">
+        SELECT RECOMMEND_NO FROM RECOMMEND WHERE USER_NO=#{userNo} ORDER BY RECOMMEND_TIME DESC LIMIT 1;
+    </select>
+
 </mapper>

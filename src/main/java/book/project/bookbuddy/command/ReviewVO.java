@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 @Data
 public class ReviewVO {
 
-  private int REVIEW_NO;
-  private String REVIEW_TITLE;
-  private String REVIEW_CONTENT;
-  private Timestamp REVIEW_TIME;
-  private String REVIEW_CATEGORY;
-  private String REVIEW_KEYWORD;
-  private int REVIEW_LIKE;
-  private int USER_NO;
+  private int review_NO;
+  private String review_TITLE;
+  private String review_CONTENT;
+  private Timestamp review_TIME;
+  private String review_CATEGORY;
+  private String review_KEYWORD;
+  private int review_LIKE;
+  private int user_NO;
 
 }

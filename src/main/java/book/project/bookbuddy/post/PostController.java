@@ -6,14 +6,21 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.amazonaws.Response;
 
 import book.project.bookbuddy.command.RecommendVO;
 import book.project.bookbuddy.command.ReviewVO;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -34,6 +41,20 @@ public class PostController {
     map.put("reviewList", list2);
     return map;
   }
+
+  @PostMapping("/writeRecommendPost")
+  public ResponseEntity<Integer> writeRecommendPost(@RequestBody RecommendVO vo) {
+    int n = postService.writeRecommendPost(vo);
+    int userNo = vo.getUser_NO();
+    int rcmNo=0;
+    if(n==1){
+      rcmNo = postService.getRecommendNo(userNo);
+    }else{
+      rcmNo=-1;
+    }
+    return new ResponseEntity<>(rcmNo,HttpStatus.OK);
+  }
+  
   
 
   

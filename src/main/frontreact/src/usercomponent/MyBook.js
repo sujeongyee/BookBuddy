@@ -76,7 +76,7 @@ function MyBook() {
             <button className="edit-profile-button" onClick={()=>{setProfileModalIsOpen(true)}}>프로필 수정</button>
             <ProfileModal isOpen={profilemodalIsOpen} onRequestClose={()=>{setProfileModalIsOpen(false)}} vo={vo} />
             <button className="write-post-button" onClick={()=>{setWriteModalIsOpen(true)}}>글 작성하기</button>
-            <WritePost isOpen={writemodalIsOpen} onRequestClose={()=>{setWriteModalIsOpen(false)}}></WritePost>
+            <WritePost isOpen={writemodalIsOpen} onRequestClose={()=>{setWriteModalIsOpen(false)}} vo={vo}></WritePost>
           </div>
           <div className="feed-container">
             <div className="feed-tabs">

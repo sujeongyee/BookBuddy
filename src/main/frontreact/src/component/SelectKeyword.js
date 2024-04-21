@@ -1,6 +1,6 @@
 import {useState, useEffect } from "react";
 
-function SelectKeyword({ setSelectedKeywords }){
+function SelectKeyword({ setSelectedKeywords,msg }){
 
   const [keywords, setKeywords] = useState([]);
   const [selectedKeywords, setSelectedKeywordsLocal] = useState([]);
@@ -40,7 +40,7 @@ function SelectKeyword({ setSelectedKeywords }){
   return(
     <div className="reigst-k">
         <div className='regist-kwd'>
-          <p className='regist-kwd-p'>선호하는 키워드</p>
+          {msg?<p className='regist-kwd-p'>이 책의 키워드</p>:<p className='regist-kwd-p'>선호하는 키워드</p>}
           <p className='regist-kwd-p2'>{`${selectedKeywords.length}개 선택됨`}</p>
         </div>
         <div className='regist-select-kwd'>

@@ -21,6 +21,11 @@ public class PostServiceImpl implements PostService{
     return postMapper.getNotLoginReview(page);
   }
 
-  
-  
+  public int writeRecommendPost(RecommendVO vo){
+    return postMapper.writeRecommendPost(vo);
+  }
+
+  public int getRecommendNo(int userNo){
+    return postMapper.getRecommendNo(userNo);
+  }
 }

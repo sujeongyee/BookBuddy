@@ -11,6 +11,6 @@ import book.project.bookbuddy.command.ReviewVO;
 public interface PostMapper {
   public List<RecommendVO> getNotLoginRecommend(int page);
   public List<ReviewVO> getNotLoginReview(int page);
-
-
+  public int writeRecommendPost(RecommendVO vo);
+  public int getRecommendNo(int userNo);
 }

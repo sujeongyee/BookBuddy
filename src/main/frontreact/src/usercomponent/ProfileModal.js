@@ -229,7 +229,7 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
     } catch (error) {
       console.error('프로필 이미지 업로드 오류:', error);
     }
-    const UserVO = {
+    const UserVO = { 
       'user_NO': parseInt(updatedVo.user_NO),
       'user_ID': updatedVo.user_ID,
       'user_PWD': updatedVo.user_PWD,
