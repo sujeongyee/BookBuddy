@@ -21,5 +21,6 @@ public class ReviewVO {
   private String review_KEYWORD;
   private int review_LIKE;
   private int user_NO;
-
+  private String review_BOOKTITLE;
+  private int review_RATING;
 }

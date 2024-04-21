@@ -13,4 +13,6 @@ public interface PostMapper {
   public List<ReviewVO> getNotLoginReview(int page);
   public int writeRecommendPost(RecommendVO vo);
   public int getRecommendNo(int userNo);
+  public int writeReviewPost(ReviewVO vo);
+  public int getReviewNo(int userNo);
 }

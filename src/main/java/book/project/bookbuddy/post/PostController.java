@@ -54,6 +54,19 @@ public class PostController {
     }
     return new ResponseEntity<>(rcmNo,HttpStatus.OK);
   }
+
+  @PostMapping("/writeReviewPost")
+  public ResponseEntity<Integer> writeReviewPost(@RequestBody ReviewVO vo) {
+    int n = postService.writeReviewPost(vo);
+    int userNo = vo.getUser_NO();
+    int rcmNo=0;
+    if(n==1){
+      rcmNo = postService.getReviewNo(userNo);
+    }else{
+      rcmNo=-1;
+    }
+    return new ResponseEntity<>(rcmNo,HttpStatus.OK);
+  }
   
   
 

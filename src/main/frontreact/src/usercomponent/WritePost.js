@@ -98,40 +98,34 @@ const WritePost = ({ isOpen, onRequestClose, vo}) => {
       alert('키워드를 하나 이상 선택해주세요');
     }else{
       if(postType=='recommendation'){//추천글이라면
-        // const form = {
-        //   recommend_TITLE:postTitle,
-        //   recommend_BOOKTITLE:bookTitle,
-        //   recommend_CONTENT:postContent,
-        //   recommend_CATEGORY:selectedCategories.join(','),
-        //   recommend_KEYWORD:selectedKeywords.join(','),
-        //   user_NO:updatedVo.user_NO,
-        //   recommend_BOOKTITLE:bookTitle
-        // };
-        // const response = await axios.post('/book/post/writeRecommendPost', form, {
-        //   headers: {
-        //       'Content-Type': 'application/json'
-        //   }
-        // });
-        if(true){//response.data>=0
+        const form = {
+          recommend_TITLE:postTitle,
+          recommend_BOOKTITLE:bookTitle,
+          recommend_CONTENT:postContent,
+          recommend_CATEGORY:selectedCategories.join(','),
+          recommend_KEYWORD:selectedKeywords.join(','),
+          user_NO:updatedVo.user_NO,
+          recommend_BOOKTITLE:bookTitle
+        };
+        const response = await axios.post('/book/post/writeRecommendPost', form, {
+          headers: {
+              'Content-Type': 'application/json'
+          }
+        });
+        if(response.data>=0){
           try {
             const formData = new FormData();
             if(selectedImage){
               formData.append('imgUrl',selectedImage);
-              // const response = await axios.post('/book/file/rcmImgUrlToFile', data);
-              // if(response.data=='fail'){
-              //   alert('이미지 업로드 중 오류 발생');
-              //   return;
-              // }
             }
             
             if(uploadFiles){
               uploadFiles.forEach((file) => {
                 formData.append('uploadFiles', file); // 파일들 추가
               });
-              formData.append('rcmNo', 8); // 추천 번호 추가
+              formData.append('rcmNo', response.data); // 추천 번호 추가
             }
             const response = await axios.post('/book/file/rcmImgUrlToFile', formData);
-            //const uploadResponse = await axios.post('/book/file/rcmUploadImgs', formData);
             
           } catch (error) {
             console.error('Error posting recommended images:', error);
@@ -141,7 +135,42 @@ const WritePost = ({ isOpen, onRequestClose, vo}) => {
         }
 
       }else{//리뷰글이라면
-
+        const form = {
+          review_TITLE:postTitle,
+          review_BOOKTITLE:bookTitle,
+          review_CONTENT:postContent,
+          review_CATEGORY:selectedCategories.join(','),
+          review_KEYWORD:selectedKeywords.join(','),
+          user_NO:updatedVo.user_NO,
+          recommend_BOOKTITLE:bookTitle,
+          review_RATING:rating
+        };
+        const response = await axios.post('/book/post/writeReviewPost', form, {
+          headers: {
+              'Content-Type': 'application/json'
+          }
+        });
+        if(response.data>=0){
+          try {
+            const formData = new FormData();
+            if(selectedImage){
+              formData.append('imgUrl',selectedImage);
+            }
+            
+            if(uploadFiles){
+              uploadFiles.forEach((file) => {
+                formData.append('uploadFiles', file); // 파일들 추가
+              });
+              formData.append('rvNo', response.data); // 추천 번호 추가
+            }
+            const response = await axios.post('/book/file/rvImgUrlToFile', formData);
+            
+          } catch (error) {
+            console.error('Error posting recommended images:', error);
+          }
+        } else{
+          alert('글을 등록하는 중 오류가 발생했습니다. 다시 시도해주세요.');
+        }
       }
     }
     
