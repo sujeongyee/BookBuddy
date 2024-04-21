@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CategoryVO {
 
-  private String CATEGORY_NO;
-  private String CATEGORY_NAME;
+  private String category_NO;
+  private String category_NAME;
   
 }

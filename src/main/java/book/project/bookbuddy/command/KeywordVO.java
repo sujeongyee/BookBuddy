@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class KeywordVO {
-    private String KEYWORD_NO;
-    private String KEYWORD_NAME;
+    private String keyword_NO;
+    private String keyword_NAME;
 }

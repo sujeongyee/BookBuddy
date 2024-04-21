@@ -1,6 +1,6 @@
 import {useState, useEffect } from "react";
 
-function SelectCategory({ setSelectedCategories }){
+function SelectCategory({ setSelectedCategories,msg }){
 
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategoriesLocal] = useState([]);
@@ -38,7 +38,8 @@ function SelectCategory({ setSelectedCategories }){
   return(
     <>
       <div className='regist-cate'>
-        <p className="regist-cate-p">선호하는 카테고리</p>
+        
+        {msg? <p className="regist-cate-p">이 책의 카테고리</p>:<p className="regist-cate-p">선호하는 카테고리</p>}
         <p className="regist-cate-p2">{`${selectedCategories.length}개 선택됨`}</p>
       </div>
       <div className="regist-category-select">

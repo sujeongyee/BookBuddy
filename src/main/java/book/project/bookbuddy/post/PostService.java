@@ -9,5 +9,7 @@ public interface PostService {
 
   public List<RecommendVO> getNotLoginRecommend(int page);
   public List<ReviewVO> getNotLoginReview(int page);
+  public int writeRecommendPost(RecommendVO vo);
+  public int getRecommendNo(int userNo);
 
 }

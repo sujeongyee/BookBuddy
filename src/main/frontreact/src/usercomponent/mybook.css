@@ -341,7 +341,7 @@
 /* //////////////////모달글작성/////////////////////// */
 /* Modal Write Container */
 .modalWrite-container {
-  max-width: 520px;
+  max-width: 600px;
   margin: 50px auto;
   padding: 20px;
   background-color: #fff;
@@ -486,4 +486,27 @@
 .star-rating{
   padding: 1px;
   color: #f07070;
+}
+
+.modalWrite-selectImg{
+  display: flex;
+  align-items: center;
+}
+.postContent {
+  position:relative;
+}
+.modalWrite-characterCount {
+  position:absolute;
+  top: 520px;
+  right: 107px;
+  color: #838383;
+  font-size: 12px;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-transition: background-color 9999s ease-out;
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
 }
