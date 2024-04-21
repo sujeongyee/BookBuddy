@@ -114,17 +114,28 @@ const WritePost = ({ isOpen, onRequestClose, vo}) => {
         // });
         if(true){//response.data>=0
           try {
+            const formData = new FormData();
             if(selectedImage){
-              const data = {userNo:8,imgUrl:selectedImage};
-              const response = await axios.post('/book/file/imgUrlToFile', data);
+              formData.append('imgUrl',selectedImage);
+              // const response = await axios.post('/book/file/rcmImgUrlToFile', data);
+              // if(response.data=='fail'){
+              //   alert('이미지 업로드 중 오류 발생');
+              //   return;
+              // }
             }
+            
+            if(uploadFiles){
+              uploadFiles.forEach((file) => {
+                formData.append('uploadFiles', file); // 파일들 추가
+              });
+              formData.append('rcmNo', 8); // 추천 번호 추가
+            }
+            const response = await axios.post('/book/file/rcmImgUrlToFile', formData);
+            //const uploadResponse = await axios.post('/book/file/rcmUploadImgs', formData);
             
           } catch (error) {
             console.error('Error posting recommended images:', error);
           }
-          // selectedImage,uploadFiles를 다 form에 담아서 스프링부트 컨트롤러에 보내줄거야
-          // /book/file/postRecommendImg로 보낼거야
-          // 스프링부트 컨트롤러에서도 어떻게 받는지 알려줘
         } else{
           alert('글을 등록하는 중 오류가 발생했습니다. 다시 시도해주세요.');
         }
