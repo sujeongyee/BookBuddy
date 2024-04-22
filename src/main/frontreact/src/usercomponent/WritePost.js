@@ -115,17 +115,18 @@ const WritePost = ({ isOpen, onRequestClose, vo}) => {
         if(response.data>=0){
           try {
             const formData = new FormData();
+            formData.append('rcmNo', response.data); // 방금 올린 게시글의 pk값
             if(selectedImage){
-              formData.append('imgUrl',selectedImage);
+              formData.append('imgUrl',selectedImage); // api 결과로 선택된 이미지링크 추가
             }
             
             if(uploadFiles){
               uploadFiles.forEach((file) => {
                 formData.append('uploadFiles', file); // 파일들 추가
               });
-              formData.append('rcmNo', response.data); // 추천 번호 추가
+              
             }
-            const response = await axios.post('/book/file/rcmImgUrlToFile', formData);
+            const responseImg = await axios.post('/book/file/rcmImgUrlToFile', formData);
             
           } catch (error) {
             console.error('Error posting recommended images:', error);
@@ -145,12 +146,14 @@ const WritePost = ({ isOpen, onRequestClose, vo}) => {
           recommend_BOOKTITLE:bookTitle,
           review_RATING:rating
         };
+        
         const response = await axios.post('/book/post/writeReviewPost', form, {
           headers: {
               'Content-Type': 'application/json'
           }
         });
         if(response.data>=0){
+          console.log('이미지');
           try {
             const formData = new FormData();
             if(selectedImage){
@@ -163,7 +166,7 @@ const WritePost = ({ isOpen, onRequestClose, vo}) => {
               });
               formData.append('rvNo', response.data); // 추천 번호 추가
             }
-            const response = await axios.post('/book/file/rvImgUrlToFile', formData);
+            const responseImg= await axios.post('/book/file/rvImgUrlToFile', formData);
             
           } catch (error) {
             console.error('Error posting recommended images:', error);
@@ -216,7 +219,7 @@ const WritePost = ({ isOpen, onRequestClose, vo}) => {
           <h3 className="modalWrite-title">게시글 작성</h3>
           <button className="modalWrite-closeButton" onClick={onRequestClose}>X</button>
         </div>
-    
+        
         <form onSubmit={handleSubmit} className="modalWrite-form">
           <table className="modalWrite-table">
             <tbody>

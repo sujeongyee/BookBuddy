@@ -24,8 +24,11 @@
     </select>
 
     <insert id="writeReviewPost" parameterType="ReviewVO">
-        INSERT INTO RECOMMEND (REVIEW_TITLE, REVIEW_CONTENT, REVIEW_CATEGORY, REVIEW_KEYWORD, USER_NO, REVIEW_BOOKTITLE,REVIEW_RATING)
+        INSERT INTO REVIEW (REVIEW_TITLE, REVIEW_CONTENT, REVIEW_CATEGORY, REVIEW_KEYWORD, USER_NO, REVIEW_BOOKTITLE,REVIEW_RATING)
         VALUES (#{review_TITLE}, #{review_CONTENT}, #{review_CATEGORY}, #{review_KEYWORD}, #{user_NO}, #{review_BOOKTITLE},#{review_RATING});
     </insert>
 
+    <select id="getReviewNo">
+        SELECT REVIEW_NO FROM REVIEW WHERE USER_NO=#{userNo} ORDER BY REVIEW_TIME DESC LIMIT 1;
+    </select>
 </mapper>
