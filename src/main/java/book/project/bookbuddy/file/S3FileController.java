@@ -49,17 +49,24 @@ public class S3FileController {
   }
 
   @PostMapping("/rcmImgUrlToFile")
-  public String rcmImgUrlToFile(@RequestParam("rcmNo") String rcmNo,@RequestParam("imgUrl") String imgUrl,
-                                @RequestParam("uploadFiles") MultipartFile[] uploadFiles){
-    
-    if(!imgUrl.equals("")&&imgUrl!=null){
+  public String rcmImgUrlToFile(@RequestParam("rcmNo") String rcmNo, @RequestParam("imgUrl") String imgUrl,
+                              @RequestParam("uploadFiles") MultipartFile[] uploadFiles) {
+    if (imgUrl == null && uploadFiles.length == 0) {
+        return "false";
+    }
+
+    if (!imgUrl.equals("") && imgUrl != null) {
+        System.out.println(imgUrl);
         MultipartFile multipartFile = s3FileSerivce.linkToFile(imgUrl);
         // S3에 업로드
         String s3Url = s3Service.upload(multipartFile);
+        // FILE 테이블에 정보 저장
         s3FileSerivce.insertRecommendImg(rcmNo, s3Url);
     }
-    if(uploadFiles.length>0){
+    
+    if (uploadFiles.length > 0) {
         for (MultipartFile file : uploadFiles) {
+          System.out.println(file.getOriginalFilename());
             String s3Url = s3Service.upload(file);
             s3FileSerivce.insertRecommendImg(rcmNo, s3Url);
         }
@@ -70,7 +77,11 @@ public class S3FileController {
   @PostMapping("/rvImgUrlToFile")
   public String rvImgUrlToFile(@RequestParam("rvNo") String rvNo,@RequestParam("imgUrl") String imgUrl,
                                 @RequestParam("uploadFiles") MultipartFile[] uploadFiles){
-    
+
+    if (imgUrl == null && uploadFiles.length == 0) {
+      return "false";
+    }
+    System.out.println("------------------------------------------도착");
     if(!imgUrl.equals("")&&imgUrl!=null){
         MultipartFile multipartFile = s3FileSerivce.linkToFile(imgUrl);
         // S3에 업로드
