@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import book.project.bookbuddy.command.GridVO;
 import book.project.bookbuddy.command.RecommendVO;
 import book.project.bookbuddy.command.ReviewVO;
 
@@ -17,6 +18,6 @@ public interface PostMapper {
   public int writeReviewPost(ReviewVO vo);
   public int getReviewNo(int userNo);
   public List<RecommendVO> getRcmPostMyPage(String userId);
-  public Map<String,String> getRcmPostGrid(String userId);
+  public List<GridVO>  getRcmPostGrid(String userId);
   public List<ReviewVO> getRvPostMyPage(String userId);
 }

@@ -9,10 +9,9 @@ const PostList = ({type}) => {
   const [rvPosts,setRvPosts] = useState([]);
   useEffect(() => {
     const fetchData = async () => { 
-      console.log('PostList : --->' + type);
       if(type === 'recommend') {
         try {
-          const response = await axios.get(`/book/post/getRcmPostMyPage?id=${userId}`);
+          const response = await axios.get(`/book/post/getRcmPostMyPage?id=${userId}&type=list`);
           setRcmPosts(response.data);
         } catch(error) {
           console.error("추천글 가져오는 중 오류 발생", error);
