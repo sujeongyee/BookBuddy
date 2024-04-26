@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.amazonaws.Response;
 
+import book.project.bookbuddy.command.GridVO;
 import book.project.bookbuddy.command.RecommendVO;
 import book.project.bookbuddy.command.ReviewVO;
 
@@ -70,10 +71,9 @@ public class PostController {
 
   @GetMapping("/getRcmPostMyPage")
   public Object getRcmPostMyPage(@RequestParam("id") String userId, @RequestParam("type") String type) {
-    System.out.println("++++++++++++++++++++++"+userId+"//////////////////"+type);
     if(type.equals("grid")){
-      Map<String,String> map = postService.getRcmPostGrid(userId);
-      return map;
+      List<GridVO> vos = postService.getRcmPostGrid(userId);
+      return vos;
     }else{
       List<RecommendVO> list = postService.getRcmPostMyPage(userId);
       return list;

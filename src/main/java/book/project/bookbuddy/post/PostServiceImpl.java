@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import book.project.bookbuddy.command.GridVO;
 import book.project.bookbuddy.command.RecommendVO;
 import book.project.bookbuddy.command.ReviewVO;
 
@@ -40,7 +41,7 @@ public class PostServiceImpl implements PostService{
   public List<RecommendVO> getRcmPostMyPage(String userId){
     return postMapper.getRcmPostMyPage(userId);    
   }
-  public Map<String,String> getRcmPostGrid(String userId){
+  public List<GridVO>  getRcmPostGrid(String userId){
     return postMapper.getRcmPostGrid(userId);
   }
   public List<ReviewVO> getRvPostMyPage(String userId){
