@@ -16,19 +16,38 @@
 
     <insert id="writeRecommendPost" parameterType="RecommendVO">
         INSERT INTO RECOMMEND (RECOMMEND_TITLE, RECOMMEND_CONTENT, RECOMMEND_CATEGORY, RECOMMEND_KEYWORD, USER_NO, RECOMMEND_BOOKTITLE)
-        VALUES (#{recommend_TITLE}, #{recommend_CONTENT}, #{recommend_CATEGORY}, #{recommend_KEYWORD}, #{user_NO}, #{recommend_BOOKTITLE});
+        VALUES (#{recommend_TITLE}, #{recommend_CONTENT}, #{recommend_CATEGORY}, #{recommend_KEYWORD}, #{user_NO}, #{recommend_BOOKTITLE})
     </insert>
 
     <select id="getRecommendNo">
-        SELECT RECOMMEND_NO FROM RECOMMEND WHERE USER_NO=#{userNo} ORDER BY RECOMMEND_TIME DESC LIMIT 1;
+        SELECT RECOMMEND_NO FROM RECOMMEND WHERE USER_NO=#{userNo} ORDER BY RECOMMEND_TIME DESC LIMIT 1
     </select>
 
     <insert id="writeReviewPost" parameterType="ReviewVO">
         INSERT INTO REVIEW (REVIEW_TITLE, REVIEW_CONTENT, REVIEW_CATEGORY, REVIEW_KEYWORD, USER_NO, REVIEW_BOOKTITLE,REVIEW_RATING)
-        VALUES (#{review_TITLE}, #{review_CONTENT}, #{review_CATEGORY}, #{review_KEYWORD}, #{user_NO}, #{review_BOOKTITLE},#{review_RATING});
+        VALUES (#{review_TITLE}, #{review_CONTENT}, #{review_CATEGORY}, #{review_KEYWORD}, #{user_NO}, #{review_BOOKTITLE},#{review_RATING})
     </insert>
 
     <select id="getReviewNo">
-        SELECT REVIEW_NO FROM REVIEW WHERE USER_NO=#{userNo} ORDER BY REVIEW_TIME DESC LIMIT 1;
+        SELECT REVIEW_NO FROM REVIEW WHERE USER_NO=#{userNo} ORDER BY REVIEW_TIME DESC LIMIT 1
+    </select>
+
+    <select id="getRcmPostMyPage">
+        SELECT * FROM RECOMMEND WHERE USER_NO = (SELECT USER_NO FROM USER WHERE USER_ID = #{userId})
+    </select>
+
+    <select id="getRcmPostGrid">
+        SELECT r.recommend_no, r.recommend_title,r.recommend_content,
+        r.recommend_time,r.recommend_booktitle,f.file_no,f.file_url   
+        FROM 
+        RECOMMEND R LEFT JOIN FILE F 
+        ON R.RECOMMEND_NO = F.RECOMMEND_NO 
+        WHERE R.USER_NO = (SELECT USER_NO FROM USER WHERE USER_ID = #{userId}) AND 
+        FILE_NO = (SELECT FILE_NO FROM FILE WHERE RECOMMEND_NO=R.RECOMMEND_NO ORDER BY FILE_DATE LIMIT 1)
+        ORDER BY R.RECOMMEND_TIME DESC
+    </select>
+
+    <select id="getRvPostMyPage">
+        SELECT * FROM REVIEW WHERE USER_NO = (SELECT USER_NO FROM USER WHERE USER_ID = #{userId})
     </select>
 </mapper>

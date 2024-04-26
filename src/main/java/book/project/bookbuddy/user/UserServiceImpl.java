@@ -14,5 +14,12 @@ public class UserServiceImpl implements UserService{
   public int updateProfile(UserVO vo){
     return userMapper.updateProfile(vo);
   }
+
+  public int getRecommendPostCount(String userId){
+    return userMapper.getRecommendPostCount(userId);
+  }
+  public int getReviewPostCount(String userId){
+    return userMapper.getReviewPostCount(userId);
+  }
   
 }

@@ -8,5 +8,7 @@ import book.project.bookbuddy.command.UserVO;
 public interface UserMapper {
 
   public int updateProfile(UserVO vo);
+  public int getRecommendPostCount(String userId);
+  public int getReviewPostCount(String userId);
 
 }
