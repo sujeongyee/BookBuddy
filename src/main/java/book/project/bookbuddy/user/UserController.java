@@ -40,10 +40,20 @@ public class UserController {
 
   @PostMapping("/updateProfile")
   public Object updateProfile(@RequestBody UserVO userVo) {
-      System.out.println(userVo.toString());
       int n = userService.updateProfile(userVo);
       UserVO vo = mainService.getVO(userVo.getUser_ID());
       return n==1?vo:false;
+  }
+  
+  @GetMapping("/getPosts")
+  public Map<String,Integer> getPosts(@RequestParam("id") String userId) {
+    Map<String,Integer> map = new HashMap<>();
+    int recommendPostCount = userService.getRecommendPostCount(userId);
+    map.put("recommendPostCount", recommendPostCount);
+
+    int reviewPostCount = userService.getReviewPostCount(userId);
+    map.put("reviewPostCount", reviewPostCount);
+    return map;
   }
   
 

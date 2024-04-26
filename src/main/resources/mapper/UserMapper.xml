@@ -17,7 +17,13 @@
         USER_EMAIL = #{user_EMAIL},
         PROFILE_URL = #{profile_URL}
     WHERE user_NO = #{user_NO}
-</update>
+  </update>
+  <select id="getRecommendPostCount">
+    SELECT COUNT(*) FROM RECOMMEND WHERE USER_NO = (SELECT USER_NO FROM USER WHERE USER_ID=#{userId})
+  </select>
+  <select id="getReviewPostCount">
+    SELECT COUNT(*) FROM REVIEW WHERE USER_NO = (SELECT USER_NO FROM USER WHERE USER_ID=#{userId})
+  </select>
     
 
 </mapper>

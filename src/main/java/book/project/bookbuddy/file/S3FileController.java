@@ -81,7 +81,6 @@ public class S3FileController {
     if (imgUrl == null && uploadFiles.length == 0) {
       return "false";
     }
-    System.out.println("------------------------------------------도착");
     if(!imgUrl.equals("")&&imgUrl!=null){
         MultipartFile multipartFile = s3FileSerivce.linkToFile(imgUrl);
         // S3에 업로드

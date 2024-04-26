@@ -67,6 +67,25 @@ public class PostController {
     }
     return new ResponseEntity<>(rcmNo,HttpStatus.OK);
   }
+
+  @GetMapping("/getRcmPostMyPage")
+  public Object getRcmPostMyPage(@RequestParam("id") String userId, @RequestParam("type") String type) {
+    System.out.println("++++++++++++++++++++++"+userId+"//////////////////"+type);
+    if(type.equals("grid")){
+      Map<String,String> map = postService.getRcmPostGrid(userId);
+      return map;
+    }else{
+      List<RecommendVO> list = postService.getRcmPostMyPage(userId);
+      return list;
+    }
+  }
+
+  @GetMapping("/getRvPostMyPage")
+  public List<ReviewVO> getRvPostMyPage(@RequestParam("id") String userId) {
+    List<ReviewVO> list = postService.getRvPostMyPage(userId);
+    return list;
+  }
+  
   
   
 

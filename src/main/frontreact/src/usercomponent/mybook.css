@@ -467,7 +467,7 @@
 .modalWrite-submitButton:hover {
   background-color: #0056b3;
 }
-.label-img {
+.label-img{
   width: 20px;
   display: inline-block;
   padding: 10px 15px;
@@ -491,6 +491,7 @@
 .modalWrite-selectImg{
   display: flex;
   align-items: center;
+  position: relative;
 }
 .postContent {
   position:relative;
@@ -509,4 +510,13 @@ input:-webkit-autofill:active {
     transition: background-color 5000s ease-in-out 0s;
     -webkit-transition: background-color 9999s ease-out;
     -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+}
+
+.book-search-img {
+  padding: 10px 20px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
 }
