@@ -46,7 +46,6 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
   useEffect(() => {
     if(vo){
       setUpdatedVo(vo);
-      console.log(vo);
       setStartDate(vo.user_BIRTH);
       setSelectedCategories(vo.category_NO.split(','));
       setSelectedKeywords(vo.keyword_NO.split(','));
