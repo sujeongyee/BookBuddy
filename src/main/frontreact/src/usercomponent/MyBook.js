@@ -10,8 +10,10 @@ import ProfileModal from "./ProfileModal";
 import WritePost from "./WritePost";
 import PostGrid from "../postcomponent/PostGrid";
 import PostList from "../postcomponent/PostList";
+import Loading from "../main/Loading";
+import ToastMsg from "../main/ToastMsg";
 
-function MyBook() {
+function MyBook() { 
 
   const {userData ,setUserData} = useUser();
   const {userId,userNick,profileURL} = userData;
@@ -26,6 +28,9 @@ function MyBook() {
   const [loading,setLoading] = useState('true');
   const [rcmCnt,setRcmCnt] = useState(0);
   const [rvCnt,setRvCnt] = useState(0);
+  const [showToast, setShowToast] = useState(false);
+  const [showToast2,setShowToast2] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -71,7 +76,9 @@ function MyBook() {
       </div>
       <div className="mainContent2">
         <Header/>
-        {loading? <loading/> :
+        {showToast && <ToastMsg prop="success" />}
+        {showToast2 && <ToastMsg prop="success2"/>}
+        {loading? <Loading/> :
           <div className="mainSection">
             <div className="user-profile">
               <div className="user-photo">
@@ -98,7 +105,7 @@ function MyBook() {
               <button className="edit-profile-button" onClick={()=>{setProfileModalIsOpen(true)}}>프로필 수정</button>
               <ProfileModal isOpen={profilemodalIsOpen} onRequestClose={()=>{setProfileModalIsOpen(false)}} vo={vo} />
               <button className="write-post-button" onClick={()=>{setWriteModalIsOpen(true)}}>글 작성하기</button>
-              <WritePost isOpen={writemodalIsOpen} onRequestClose={()=>{setWriteModalIsOpen(false)}} vo={vo}></WritePost>
+              <WritePost isOpen={writemodalIsOpen} onRequestClose={()=>{setWriteModalIsOpen(false)}} vo={vo} onRequestShowMsg={()=>{setShowToast(true)}} onRequestShowMsg2={()=>{setShowToast2(true)}}></WritePost>
             </div>
             <div className="feed-container">
               <div className="feed-tabs">

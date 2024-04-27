@@ -11,9 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.amazonaws.Response;
-
 import book.project.bookbuddy.command.GridVO;
 import book.project.bookbuddy.command.RecommendVO;
 import book.project.bookbuddy.command.ReviewVO;
@@ -31,7 +28,7 @@ public class PostController {
   @Autowired
   @Qualifier("postService")
   private PostService postService;
-
+  // 비로그인 유저의 메인페이지 게시글 불러오기
   @GetMapping("/getNotLogin")
   public Map<String,Object> getNotLogin(@RequestParam("reviewPage") int reviewPage,
                                           @RequestParam("recommendPage") int recommendPage) {
@@ -42,7 +39,7 @@ public class PostController {
     map.put("reviewList", list2);
     return map;
   }
-
+  // 추천 게시글 작성
   @PostMapping("/writeRecommendPost")
   public ResponseEntity<Integer> writeRecommendPost(@RequestBody RecommendVO vo) {
     int n = postService.writeRecommendPost(vo);
@@ -55,7 +52,7 @@ public class PostController {
     }
     return new ResponseEntity<>(rcmNo,HttpStatus.OK);
   }
-
+  // 리뷰 게시글 작성
   @PostMapping("/writeReviewPost")
   public ResponseEntity<Integer> writeReviewPost(@RequestBody ReviewVO vo) {
     int n = postService.writeReviewPost(vo);
@@ -68,7 +65,7 @@ public class PostController {
     }
     return new ResponseEntity<>(rcmNo,HttpStatus.OK);
   }
-
+  // 마이페이지에서 추천 게시글 불러오기
   @GetMapping("/getRcmPostMyPage")
   public Object getRcmPostMyPage(@RequestParam("id") String userId, @RequestParam("type") String type) {
     if(type.equals("grid")){
@@ -79,11 +76,17 @@ public class PostController {
       return list;
     }
   }
-
+  // 마이페이지에서 리뷰 게시글 불러오기 
   @GetMapping("/getRvPostMyPage")
-  public List<ReviewVO> getRvPostMyPage(@RequestParam("id") String userId) {
-    List<ReviewVO> list = postService.getRvPostMyPage(userId);
-    return list;
+  public Object getRvPostMyPage(@RequestParam("id") String userId, @RequestParam("type") String type) {
+    if(type.equals("grid")){
+      List<GridVO> vos = postService.getRvPostGrid(userId);
+      return vos;
+    }else{
+      List<ReviewVO> list = postService.getRvPostMyPage(userId);
+      return list;
+    }
+    
   }
   
   

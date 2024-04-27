@@ -50,4 +50,16 @@
     <select id="getRvPostMyPage">
         SELECT * FROM REVIEW WHERE USER_NO = (SELECT USER_NO FROM USER WHERE USER_ID = #{userId})
     </select>
+
+    <select id="getRvPostGrid">
+        SELECT r.review_no, r.review_title,r.review_content,
+        r.review_time,r.review_booktitle,f.file_no,f.file_url   
+        FROM 
+        REVIEW R LEFT JOIN FILE F 
+        ON R.REVIEW_NO = F.REVIEW_NO 
+        WHERE R.USER_NO = (SELECT USER_NO FROM USER WHERE USER_ID = #{userId}) AND 
+        FILE_NO = (SELECT FILE_NO FROM FILE WHERE REVIEW_NO=R.REVIEW_NO ORDER BY FILE_DATE LIMIT 1)
+        ORDER BY R.REVIEW_TIME DESC
+    </select>
+
 </mapper>

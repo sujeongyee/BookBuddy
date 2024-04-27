@@ -47,4 +47,7 @@ public class PostServiceImpl implements PostService{
   public List<ReviewVO> getRvPostMyPage(String userId){
     return postMapper.getRvPostMyPage(userId);
   }
+  public List<GridVO> getRvPostGrid(String userId){
+    return postMapper.getRvPostGrid(userId);
+  }
 }

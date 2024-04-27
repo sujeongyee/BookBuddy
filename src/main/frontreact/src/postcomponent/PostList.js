@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useUser } from "../context/UserContext";
+import toast, { Toaster } from 'react-hot-toast';
 
 const PostList = ({type}) => {
   const {userData ,setUserData} = useUser();
   const {userId} = userData;
   const [rcmPosts,setRcmPosts] = useState([]);
   const [rvPosts,setRvPosts] = useState([]);
-  useEffect(() => {
+  useEffect(() => { 
     const fetchData = async () => { 
       if(type === 'recommend') {
         try {

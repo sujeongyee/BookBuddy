@@ -18,4 +18,5 @@ public interface PostService {
   public List<RecommendVO> getRcmPostMyPage(String userId);
   public List<GridVO>  getRcmPostGrid(String userId);
   public List<ReviewVO> getRvPostMyPage(String userId);
+  public List<GridVO> getRvPostGrid(String userId);
 }

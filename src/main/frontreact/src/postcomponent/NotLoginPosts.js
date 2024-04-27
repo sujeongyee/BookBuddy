@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import '../main/main.css';
+import Loading from "../main/Loading";
 
 function NotLoginPosts() {
   const [showRecommend, setShowRecommend] = useState(true);
@@ -62,7 +63,9 @@ useEffect(() => {
 }, [showRecommend]);
 
   return (
+    
     <div className="main-content">      
+    {loading? <Loading/> :
       <div>
         <div className="main-toggle">
           <button className={`toggle-btn first-toggle ${showRecommend ? 'toggle-active' : ''}`} onClick={() => setShowRecommend(true)}>추천글 보기</button>
@@ -119,7 +122,7 @@ useEffect(() => {
             </div>
           )}
         </div>
-      </div>
+      </div>}
     </div>
   );
 }
