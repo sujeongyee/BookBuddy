@@ -9,8 +9,7 @@ const PostGrid = ({type}) => {
   const [rcmPosts,setRcmPosts] = useState([]);
   const [rvPosts,setRvPosts] = useState([]);
   useEffect(() => {
-    const fetchData = async () => { 
-      console.log(type);
+    const fetchData = async () => {
       if(type === 'recommend') {
         try {
           const response = await axios.get(`/book/post/getRcmPostMyPage?id=${userId}&type=grid`);
@@ -35,10 +34,16 @@ const PostGrid = ({type}) => {
   return( 
     <div className="post-grid-container">
       {type==='recommend' && rcmPosts && rcmPosts.map((post) => (
-        <img key={post.recommend_no} src={post.file_url} alt={post.book_title} className="post-img" />
+        <a href={`/recommendPost/${post.recommend_no}`}  className="post-img-container" key={post.recommend_no}>
+          <img src={post.file_url} alt={post.recommend_booktitle} className="post-img" />
+          <div className="post-title">{post.recommend_title}</div>
+      </a>
       ))}
       {type==='review' && rvPosts && rvPosts.map((post) => (
-        <img key={post.review_no} src={post.file_url} alt={post.book_title} className="post-img" />
+        <a href={`/reviewPost/${post.review_no}`}  className="post-img-container" key={post.review_no}>
+          <img src={post.file_url} alt={post.review_booktitle} className="post-img" />
+          <div className="post-title">{post.review_title}</div>
+      </a>
       ))}
     </div>
   )
