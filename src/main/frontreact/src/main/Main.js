@@ -17,8 +17,7 @@ function Main({ loginPage, registPage }) {
     const {userId, userNick,profileURL} = userData;
     const [rememberId,setRemeberId] = useState(localStorage.getItem("remeberId"));
     const [loginChecked,setLoginChecked] = useState(false);
-
-
+    
     const handleLogin = async (e) => {
         e.preventDefault();
         try {

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class RecommendVO {
+public class RecommendVO { // 추천게시글 vo
   private int recommend_NO;
   private String recommend_TITLE;
   private String recommend_CONTENT;

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GridVO {
+public class GridVO { // 그리드 형식으로 게시글 불러올 때 필요한 값들
 
   private Integer recommend_no;
   private String recommend_title;
@@ -22,5 +22,10 @@ public class GridVO {
   private String recommend_booktitle;
   private Integer file_no;
   private String file_url;
+  private Integer review_no;
+  private String review_title;
+  private String review_content;
+  private Timestamp review_time;
+  private String review_booktitle;
   
 }

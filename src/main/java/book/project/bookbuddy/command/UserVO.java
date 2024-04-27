@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Builder
 @Getter
-public class UserVO {
+public class UserVO { // 유저 vo
 
     private Integer user_NO;
     private String user_ID;

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ReviewVO {
+public class ReviewVO { // 리뷰게시글 vo
 
   private int review_NO;
   private String review_TITLE;
