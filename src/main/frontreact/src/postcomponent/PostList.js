@@ -34,17 +34,28 @@ const PostList = ({type}) => {
 
   }, [userId, type]); 
 
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   const posts = type === 'recommend' ? recommendPosts : reviewPosts;
   const tp = type === 'recommend' ? 'recommend' : 'review';
   return( 
     <div className="post-list-container">
-      {posts.map((post) => (
+      {posts.map(post => (
         <div className="post-item" key={post[type === 'recommend' ? 'recommend_NO' : 'review_NO']}>
           <a href={`/${type === 'recommend' ? 'recommendPost' : 'reviewPost'}/${post[type === 'recommend' ? 'recommend_NO' : 'review_NO']}`} className="post-link">
-              <div className="post-content">
-              <h3 className="post-title2">{post[type === 'recommend' ? 'recommend_TITLE' : 'review_TITLE']}</h3>
-              <p className="post-description">{post[type === 'recommend' ? 'recommend_CONTENT' : 'review_CONTENT']}</p>
-              <p className="post-category">{post[type === 'recommend' ? 'recommend_CATEGORY' : 'review_CATEGORY']}</p>
+            <div className="post-list-title">{post[type === 'recommend' ? 'recommend_TITLE' : 'review_TITLE']}</div>
+            <div className="post-book-title">{post[type === 'recommend' ? 'recommend_BOOKTITLE' : 'review_BOOKTITLE']}</div>
+            <div className="post-details">
+              <span className="post-time">{formatDate(post[type === 'recommend' ? 'recommend_TIME' : 'review_TIME'])}</span>
+              <span className="post-likes">좋아요 수: {post.likeCnt}</span>
+              <span className="post-comments">댓글 수: {post.cmtCnt}</span>
+              {/* 여기에 필요한 다른 정보 추가 */}
             </div>
           </a>
         </div>
