@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import book.project.bookbuddy.command.GridVO;
+import book.project.bookbuddy.command.ListVO;
 import book.project.bookbuddy.command.RecommendVO;
 import book.project.bookbuddy.command.ReviewVO;
 
@@ -72,7 +73,7 @@ public class PostController {
       List<GridVO> vos = postService.getRcmPostGrid(userId);
       return vos;
     }else{
-      List<RecommendVO> list = postService.getRcmPostMyPage(userId);
+      List<ListVO> list = postService.getMyPageList(userId, "recommend");
       return list;
     }
   }
@@ -83,7 +84,7 @@ public class PostController {
       List<GridVO> vos = postService.getRvPostGrid(userId);
       return vos;
     }else{
-      List<ReviewVO> list = postService.getRvPostMyPage(userId);
+      List<ListVO> list = postService.getMyPageList(userId, "review");
       return list;
     }
     
