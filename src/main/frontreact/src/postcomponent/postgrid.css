@@ -42,4 +42,49 @@
 }
 .post-link {
   text-decoration: none;
+  color: black;
+}
+
+.post-list-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.post-item {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.post-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  padding: 20px;
+}
+
+.post-list-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.post-book-title {
+  font-style: italic;
+  margin-bottom: 5px;
+}
+
+.post-details {
+  display: flex;
+  align-items: center;
+}
+
+.post-time {
+  margin-right: 10px;
+}
+
+.post-likes,
+.post-comments {
+  margin-right: 20px;
 }
