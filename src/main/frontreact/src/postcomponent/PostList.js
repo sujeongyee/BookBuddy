@@ -35,7 +35,7 @@ const PostList = ({type}) => {
   }, [userId, type]); 
 
   const posts = type === 'recommend' ? recommendPosts : reviewPosts;
-
+  const tp = type === 'recommend' ? 'recommend' : 'review';
   return( 
     <div className="post-list-container">
       {posts.map((post) => (

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import book.project.bookbuddy.command.GridVO;
+import book.project.bookbuddy.command.ListVO;
 import book.project.bookbuddy.command.RecommendVO;
 import book.project.bookbuddy.command.ReviewVO;
 
@@ -49,5 +50,8 @@ public class PostServiceImpl implements PostService{
   }
   public List<GridVO> getRvPostGrid(String userId){
     return postMapper.getRvPostGrid(userId);
+  }
+  public List<ListVO> getMyPageList(String userId,String type){
+    return postMapper.getMyPageList(userId, type);
   }
 }
