@@ -47,15 +47,18 @@ const PostList = ({type}) => {
   return( 
     <div className="post-list-container">
       {posts.map(post => (
-        <div className="post-item" key={post[type === 'recommend' ? 'recommend_NO' : 'review_NO']}>
-          <a href={`/${type === 'recommend' ? 'recommendPost' : 'reviewPost'}/${post[type === 'recommend' ? 'recommend_NO' : 'review_NO']}`} className="post-link">
-            <div className="post-list-title">{post[type === 'recommend' ? 'recommend_TITLE' : 'review_TITLE']}</div>
-            <div className="post-book-title">{post[type === 'recommend' ? 'recommend_BOOKTITLE' : 'review_BOOKTITLE']}</div>
-            <div className="post-details">
-              <span className="post-time">{formatDate(post[type === 'recommend' ? 'recommend_TIME' : 'review_TIME'])}</span>
-              <span className="post-likes">좋아요 수: {post.likeCnt}</span>
-              <span className="post-comments">댓글 수: {post.cmtCnt}</span>
-              {/* 여기에 필요한 다른 정보 추가 */}
+        <div className="post-list-item" key={post[type === 'recommend' ? 'recommend_NO' : 'review_NO']}>
+          <a href={`/${type === 'recommend' ? 'recommendPost' : 'reviewPost'}/${post[type === 'recommend' ? 'recommend_NO' : 'review_NO']}`} className="post-list-link">
+            <div className="post-list-content">
+              <div className="post-list-header">
+                <img src={post.fileUrl} alt={post[type === 'recommend' ? 'recommend_BOOKTITLE' : 'review_BOOKTITLE']} className="post-list-img" />
+                <div className="post-list-title">{post[type === 'recommend' ? 'recommend_TITLE' : 'review_TITLE']}</div>
+              </div>
+              <div className="post-list-details">
+                <span className="post-list-time">작성일: {formatDate(post[type === 'recommend' ? 'recommend_TIME' : 'review_TIME'])}</span>
+                <span className="post-list-likes">좋아요 수: {post.likeCnt}</span>
+                <span className="post-list-comments">댓글 수: {post.cmtCnt}</span>
+              </div>
             </div>
           </a>
         </div>
