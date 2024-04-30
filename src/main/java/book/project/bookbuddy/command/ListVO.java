@@ -23,5 +23,6 @@ public class ListVO {
   private Timestamp review_TIME;
   private Integer likeCnt;
   private Integer cmtCnt;
+  private String fileUrl;
   
 }
