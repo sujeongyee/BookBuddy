@@ -3,31 +3,35 @@ import axios from "axios";
 import { useUser } from "../context/UserContext";
 import toast, { Toaster } from 'react-hot-toast';
 import "./postgrid.css";
+import { useLoading } from "../context/LoadingContext";
 const PostList = ({type}) => {
   const {userData ,setUserData} = useUser();
   const {userId} = userData;
   const [recommendPosts, setRecommendPosts] = useState([]);
   const [reviewPosts, setReviewPosts] = useState([]);
-
+  const {showLoading,hideLoading} = useLoading();
   useEffect(() => { 
     const fetchData = async () => { 
-      console.log(type);
       if(type === 'recommend') {
         try {
+          showLoading();
           const response = await axios.get(`/book/post/getRcmPostMyPage?id=${userId}&type=list`);
-          console.log(response.data);
           setRecommendPosts(response.data);
+          hideLoading();
         } catch(error) {
           console.error("추천글 가져오는 중 오류 발생", error);
         }
+        hideLoading();
       } else {
         try {
+          showLoading();
           const response = await axios.get(`/book/post/getRvPostMyPage?id=${userId}&type=list`);
-          console.log(response.data);
           setReviewPosts(response.data);
+          hideLoading();
         } catch(error) {
           console.error("리뷰글 가져오는 중 오류 발생", error);
         }
+        hideLoading();
       }
     };
     fetchData(); 
@@ -52,13 +56,18 @@ const PostList = ({type}) => {
             <div className="post-list-content">
               <div className="post-list-header">
                 <img src={post.fileUrl} alt={post[type === 'recommend' ? 'recommend_BOOKTITLE' : 'review_BOOKTITLE']} className="post-list-img" />
-                <div className="post-list-title">{post[type === 'recommend' ? 'recommend_TITLE' : 'review_TITLE']}</div>
+                <div className="post-list-title">
+                  <div>{post[type === 'recommend' ? 'recommend_TITLE' : 'review_TITLE']}</div>
+                  <span className="post-list-time">작성일: {formatDate(post[type === 'recommend' ? 'recommend_TIME' : 'review_TIME'])}</span>
+                <span className="post-list-likes">좋아요 수: {post.likeCnt}</span>
+                <span className="post-list-comments">댓글 수: {post.cmtCnt}</span>
+                </div>
               </div>
-              <div className="post-list-details">
+              {/* <div className="post-list-details">
                 <span className="post-list-time">작성일: {formatDate(post[type === 'recommend' ? 'recommend_TIME' : 'review_TIME'])}</span>
                 <span className="post-list-likes">좋아요 수: {post.likeCnt}</span>
                 <span className="post-list-comments">댓글 수: {post.cmtCnt}</span>
-              </div>
+              </div> */}
             </div>
           </a>
         </div>

@@ -78,7 +78,6 @@
 .post-list-img {
   width: 100px;
   height: 100px;
-  border-radius: 50%;
   margin-right: 20px;
   object-fit: cover;
 }
@@ -100,6 +99,7 @@
 .post-list-comments {
   font-size: 0.9rem;
   color: #666;
+  margin-right: 27px;
 }
 
 @media (max-width: 768px) {

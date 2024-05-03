@@ -3,27 +3,36 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useUser } from "../context/UserContext";
 import "./postgrid.css";
+import { useLoading } from "../context/LoadingContext";
 const PostGrid = ({type}) => {
   const {userData ,setUserData} = useUser();
   const {userId,userNick,profileURL} = userData;
   const [rcmPosts,setRcmPosts] = useState([]);
   const [rvPosts,setRvPosts] = useState([]);
+  const {showLoading,hideLoading} = useLoading();
+
   useEffect(() => {
     const fetchData = async () => {
       if(type === 'recommend') {
         try {
+          showLoading();
           const response = await axios.get(`/book/post/getRcmPostMyPage?id=${userId}&type=grid`);
           setRcmPosts(response.data);
+          hideLoading();
         } catch(error) {
           console.error("추천글 가져오는 중 오류 발생", error);
         }
+        hideLoading();
       } else if(type ==='review'){
         try {
+          showLoading();
           const response = await axios.get(`/book/post/getRvPostMyPage?id=${userId}&type=grid`);
           setRvPosts(response.data);
+          hideLoading();
         } catch(error) {
           console.error("리뷰글 가져오는 중 오류 발생", error);
         }
+        hideLoading();
       }
     };
     fetchData(); 
