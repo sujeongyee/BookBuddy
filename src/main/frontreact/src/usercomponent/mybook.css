@@ -22,11 +22,17 @@
   justify-content: space-around;
   margin-bottom: 8  1px;
 }
+.user-photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .user-photo img {
   width: 100px;
   height: 100px;
   border-radius: 50%;
+  margin-top: 5px;
 }
 
 

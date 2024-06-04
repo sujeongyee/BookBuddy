@@ -19,6 +19,8 @@ public class ListVO {
   private String review_TITLE;
   private String recommend_BOOKTITLE;
   private String review_BOOKTITLE;
+  private String recommend_CONTENT;
+  private String review_CONTENT;
   private Timestamp recommend_TIME;
   private Timestamp review_TIME;
   private Integer likeCnt;

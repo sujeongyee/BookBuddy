@@ -84,6 +84,7 @@ function MyBook() {
               ) : (
                 <img className='profile-photo' src={process.env.PUBLIC_URL + '/imgs/no-profile.jpg'} alt="profileImg"/>
               )}
+              <p style={{fontSize:'12px',color:'gray'}}>{userNick}</p>
             </div>           
             <div className="stat">
               <span className="count">{followerCount}</span>
