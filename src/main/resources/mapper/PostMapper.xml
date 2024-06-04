@@ -63,7 +63,7 @@
     </select>
 
     <select id="getMyPageList">
-        SELECT ${type}_TITLE, ${type}_BOOKTITLE, ${type}_NO,${type}_TIME,
+        SELECT ${type}_TITLE, ${type}_BOOKTITLE, ${type}_NO,${type}_TIME,${type}_CONTENT,
             (SELECT COUNT(LIKE_NO) FROM likes WHERE likes.LIKE_POSTNO = ${type}.${type}_NO AND LIKE_TYPE = '${type}') AS likeCnt,
             (SELECT COUNT(COMMENT_NO) FROM comment WHERE comment.${type}_NO = ${type}.${type}_NO) AS cmtCnt,
             (SELECT FILE_URL FROM file WHERE file.${type}_NO = ${type}.${type}_NO ORDER BY FILE_DATE LIMIT 1) AS fileUrl

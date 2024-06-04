@@ -37,7 +37,7 @@
 }
 
 .post-img-container:hover .post-title {
-  bottom: 45%; /* 아래로 올라옴 */
+  bottom: 45%; 
   opacity: 1;
 }
 
@@ -49,17 +49,18 @@
 }
 
 .post-list-item {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.2s ease;
+  background-color: #ffffff; 
+  border-radius: 15px; 
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease; 
+  padding: 20px;
+  margin-bottom: 20px;
 }
 
 .post-list-item:hover {
-  transform: translateY(-5px);
+  transform: translateY(-10px); 
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2); 
 }
-
 .post-list-link {
   text-decoration: none;
   color: inherit;
@@ -67,32 +68,15 @@
 
 .post-list-content {
   padding: 20px;
-}
-
-.post-list-header {
   display: flex;
-  align-items: center;
-    margin-bottom: 25px;
+  flex-direction: row;
+  gap: 20px;
 }
 
 .post-list-img {
-  width: 100px;
-  height: 100px;
-  margin-right: 20px;
-  object-fit: cover;
+  width: 20%;
 }
 
-.post-list-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.post-list-details {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
 
 .post-list-time,
 .post-list-likes,
@@ -101,6 +85,34 @@
   color: #666;
   margin-right: 27px;
 }
+/*////////////*/
+.post-list-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 20px;
+  gap:20px;
+} 
+
+.post-list-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.post-list-time, .post-list-postContent {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.post-list-likes,
+.post-list-comments {
+  margin: 5px;
+  margin-right: 20px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+
 
 @media (max-width: 768px) {
   .post-list-img {
