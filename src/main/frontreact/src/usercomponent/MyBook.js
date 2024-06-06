@@ -31,19 +31,22 @@ function MyBook() {
   const {showLoading,hideLoading} = useLoading();
   const [followmodalIsOpen,setFollowModalIsOpen] = useState(false); // 팔로우,팔로잉 모달
   const [mode, setMode] = useState(null);
-
+  const [loading, setLoading] = useState(true);
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
         showLoading();
         const response = await axios.get(`/book/user/myPage?id=${userId}`);
         const vo = response.data.vo;
-        hideLoading();
         setFollowerCount(response.data.follower);
         setFollowingCount(response.data.following);
         setVo(vo);
+        hideLoading();
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setLoading(false);
       }
     };
     const fetchPost = async () => {
@@ -87,6 +90,7 @@ function MyBook() {
         <Header/>
         {showToast && <ToastMsg prop="success" />}
         {showToast2 && <ToastMsg prop="success2"/>}
+        {!loading && (
         <div className="mainSection">
           <div className="user-profile">
             <div className="user-photo">
@@ -164,7 +168,7 @@ function MyBook() {
             </div>
           
           </div>
-        </div>  
+        </div>  )}
       </div>
     </div>
   );
