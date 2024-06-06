@@ -39,5 +39,11 @@ public class UserServiceImpl implements UserService{
   public List<UserVO> getFollowingList(int userNo){
     return userMapper.getFollowingList(userNo);
   }
-  
+
+  public int addFollow(int userNo, int toUserNo){
+    return userMapper.addFollow(userNo, toUserNo);
+  }
+  public int cancelFollow(int userNo, int toUserNo){
+    return userMapper.cancelFollow(userNo, toUserNo);
+  }
 }

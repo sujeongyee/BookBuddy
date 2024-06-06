@@ -3,16 +3,20 @@ import Modal from 'react-modal';
 import { useUser } from "../context/UserContext";
 import axios from "axios";
 import "./mybook.css";
+import ToastMsg from "../main/ToastMsg";
 
 const FollowModal = ({ isOpen, onRequestClose, mode }) => {
   const { userData } = useUser();
   const { userId } = userData;
   const [followData, setFollowData] = useState([]);
   const [loading,setLoading] = useState(false);
-
+  const [showToast, setShowToast] = useState(false);
+  const [showToast2, setShowToast2] = useState(false);
 
   useEffect(() => {
     resetData();
+    setShowToast(false);
+    setShowToast2(false);
     if (isOpen) {
       setLoading(true);
       getFollow();
@@ -27,13 +31,58 @@ const FollowModal = ({ isOpen, onRequestClose, mode }) => {
   const getFollow = async () => {
     try {
       const response = await axios.get(`/book/user/getFollowList?id=${userId}&mode=${mode}`);
-      console.log(response.data);
       setFollowData(response.data);
       setLoading(false);
     } catch (error) {
       console.error('팔로워 목록 불러오는 중 오류 발생:', error);
     }
   };
+
+  const close = () => {
+    onRequestClose();
+  }
+
+  const doFollow = async (userNo) => {
+    setShowToast(false);
+    setShowToast2(false);
+    const isConfirmed = window.confirm('팔로우 하시겠습니까?');
+    if (isConfirmed) {
+      try {
+        const response = await axios.get(`/book/user/addFollow?id=${userId}&toUserNo=${userNo}`);
+        if (response.data == 1) {
+          setShowToast(true);
+          setFollowData(prevFollowData =>
+            prevFollowData.map(follow =>
+              follow.user_NO === userNo ? { ...follow, check_following: true } : follow
+            )
+          );
+        }
+      } catch (error) {
+        console.error('팔로우 하는 도중 오류 발생:', error);
+      }
+    }
+  }
+
+  const resetFollow = async (userNo) => {
+    setShowToast(false);
+    setShowToast2(false);
+    const isConfirmed = window.confirm('팔로우 취소하시겠습니까?');
+    if (isConfirmed) {
+      try {
+        const response = await axios.get(`/book/user/cancelFollow?id=${userId}&toUserNo=${userNo}`);
+        if (response.data == 1) {
+          setShowToast2(true);
+          setFollowData(prevFollowData =>
+            prevFollowData.map(follow =>
+              follow.user_NO === userNo ? { ...follow, check_following: false } : follow
+            )
+          );
+        }
+      } catch (error) {
+        console.error('팔로우 취소 하는 도중 오류 발생', error);
+      }
+    }
+  }
 
   // 모달 css
   const customModalStyles = {
@@ -71,9 +120,16 @@ const FollowModal = ({ isOpen, onRequestClose, mode }) => {
           <img src={process.env.PUBLIC_URL + '/imgs/loading3.gif'} alt="loading" />
         </div>
       )}
+      {showToast && <ToastMsg prop="addFollowSuccess" />}
+      {showToast2 && <ToastMsg prop="cancelFollowSuccess" />}
       <div className="follow-modal">
         <h2>{mode === 'follower' ? '팔로워' : '팔로잉'}</h2>
+        <button className="modal-close2" onClick={close}>X</button>
         <ul className="follow-list">
+          {!loading && followData.length==0 &&(
+          <div style={{marginTop:'100px',color:'#838383'}}>
+            {mode === 'follower' ? '팔로워 Buddy가 없습니다' : '팔로잉 한 Buddy가 없습니다.'}
+          </div>)}
           {followData && followData.map((follow) => (
             follow && (
               <li key={follow.user_NO} className="follow-item">
@@ -82,12 +138,12 @@ const FollowModal = ({ isOpen, onRequestClose, mode }) => {
                 <div className="follow-modal-btnZ">
                   {mode === 'follower' ? (
                     follow.check_following ? (
-                      <button className="follow-button2">팔로우취소</button>
+                      <button className="follow-button2" onClick={() => resetFollow(follow.user_NO)}>팔로우취소</button>
                     ) : (
-                      <button className="follow-button">팔로우하기</button>
+                      <button className="follow-button" onClick={() => doFollow(follow.user_NO)}>팔로우하기</button>
                     )
                   ) : (
-                    <button className="follow-button2">팔로우취소</button>
+                    <button className="follow-button2" onClick={() => resetFollow(follow.user_NO)}>팔로우취소</button>
                   )}
                 </div>
               </li>

@@ -73,6 +73,18 @@ public class UserController {
       return list;
     }
   }
+
+  @GetMapping("/addFollow")
+  public int addFollow(@RequestParam("id") String userId , @RequestParam("toUserNo") int toUserNo) {
+    int userNo = userService.getUserNo(userId);
+    return userService.addFollow(userNo, toUserNo);
+  }
+  @GetMapping("/cancelFollow")
+  public int cancelFollow(@RequestParam("id") String userId , @RequestParam("toUserNo") int toUserNo) {
+    int userNo = userService.getUserNo(userId);
+    return userService.cancelFollow(userNo, toUserNo);
+  }
+  
   
   
 

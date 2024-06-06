@@ -49,4 +49,10 @@
     FROM FOLLOWER F LEFT JOIN USER U ON F.FOLLOW_NO = U.USER_NO
     WHERE F.USER_NO = #{userNo}
   </select>
+  <insert id="addFollow">
+    INSERT INTO FOLLOWER (`USER_NO`,`FOLLOW_NO`) VALUES(#{userNo},#{toUserNo})
+  </insert>
+  <delete id="cancelFollow">
+    DELETE FROM FOLLOWER WHERE USER_NO= #{userNo} AND FOLLOW_NO = #{toUserNo}
+  </delete>
 </mapper>

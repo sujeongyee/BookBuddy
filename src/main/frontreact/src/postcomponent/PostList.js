@@ -18,7 +18,6 @@ const PostList = ({type}) => {
         try {
           showLoading();
           const response = await axios.get(`/book/post/getRcmPostMyPage?id=${userId}&type=list`);
-          console.log(response.data);
           setRecommendPosts(response.data);
           hideLoading();
         } catch(error) {
