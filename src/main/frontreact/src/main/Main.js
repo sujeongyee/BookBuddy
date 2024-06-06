@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import UserRegist from '../component/UserRegist';
 import { useUser } from '../context/UserContext';
 import NotLoginPosts from '../postcomponent/NotLoginPosts';
+import ToastMsg from "./ToastMsg";
+
 
 function Main({ loginPage, registPage }) {
 
@@ -17,7 +19,8 @@ function Main({ loginPage, registPage }) {
     const {userId, userNick,profileURL} = userData;
     const [rememberId,setRemeberId] = useState(localStorage.getItem("remeberId"));
     const [loginChecked,setLoginChecked] = useState(false);
-    
+    const [showToast, setShowToast] = useState(false);
+
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
@@ -34,8 +37,8 @@ function Main({ loginPage, registPage }) {
                 }else if(checkedId){
                     localStorage.setItem("remeberId",response.data.user_ID);
                 }
-                
-                alert("로그인 성공");
+                setShowToast(true);
+                //alert("로그인 성공");
                 navigate('/');
             } else {
                 alert("로그인 실패! 다시 시도해주세요");
@@ -89,7 +92,7 @@ function Main({ loginPage, registPage }) {
                 <NotLoginPosts/>    
                 }
                 
-                
+                {showToast && <ToastMsg prop="loginSuccess" />}
                 {loginPage &&
                     <div className="loginContent">
                         <div className="logo-login">

@@ -218,9 +218,30 @@
   cursor: pointer;
   transition: background-color 0.3s, transform 0.3s;
 }
+.modal-close2 {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #717171;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
 
 .modal-close:hover {
   background-color: #0056b3;
+  transform: scale(1.1);
+}
+.modal-close2:hover {
+  background-color: #454545;
   transform: scale(1.1);
 }
 .modal-header-h3 {

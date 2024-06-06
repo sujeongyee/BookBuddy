@@ -13,4 +13,6 @@ public interface UserService {
   public int getUserNo(String userId);
   public List<UserVO> getFollowerList(int userNo);
   public List<UserVO> getFollowingList(int userNo);
+  public int addFollow(int userNo, int toUserNo);
+  public int cancelFollow(int userNo, int toUserNo);
 }

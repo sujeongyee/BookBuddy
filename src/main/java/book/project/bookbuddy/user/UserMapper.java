@@ -3,6 +3,7 @@ package book.project.bookbuddy.user;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import book.project.bookbuddy.command.FollowerVO;
 import book.project.bookbuddy.command.UserVO;
@@ -17,4 +18,6 @@ public interface UserMapper {
   public int getUserNo(String userId);
   public List<UserVO> getFollowerList(int userNo);
   public List<UserVO> getFollowingList(int userNo);
+  public int addFollow(@Param("userNo") int userNo, @Param("toUserNo") int toUserNo);
+  public int cancelFollow(@Param("userNo") int userNo, @Param("toUserNo") int toUserNo);
 }
