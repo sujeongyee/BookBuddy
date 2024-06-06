@@ -5,20 +5,19 @@ import axios from "axios";
 import { useUser } from "../context/UserContext";
 import Sidebar from "../main/Sidebar";
 import Header from "../main/Header";
-import Modal from 'react-modal';
 import ProfileModal from "./ProfileModal";
 import WritePost from "./WritePost";
 import PostGrid from "../postcomponent/PostGrid";
 import PostList from "../postcomponent/PostList";
-import Loading from "../main/Loading";
 import ToastMsg from "../main/ToastMsg";
-
+import { useLoading } from "../context/LoadingContext";
+import FollowModal from "./FollowModal";
 function MyBook() { 
 
   const {userData ,setUserData} = useUser();
   const {userId,userNick,profileURL} = userData;
-  const [followerCount, setFollowerCount] = useState(100);
-  const [followingCount, setFollowingCount] = useState(150);
+  const [followerCount, setFollowerCount] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
   const [postCount, setPostCount] = useState(0);
   const [showReviews, setShowReviews] = useState(false);
   const [profilemodalIsOpen, setProfileModalIsOpen] = useState(false);
@@ -29,12 +28,19 @@ function MyBook() {
   const [rvCnt,setRvCnt] = useState(0);
   const [showToast, setShowToast] = useState(false);
   const [showToast2,setShowToast2] = useState(false);
+  const {showLoading,hideLoading} = useLoading();
+  const [followmodalIsOpen,setFollowModalIsOpen] = useState(false); // 팔로우,팔로잉 모달
+  const [mode, setMode] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        showLoading();
         const response = await axios.get(`/book/user/myPage?id=${userId}`);
         const vo = response.data.vo;
+        hideLoading();
+        setFollowerCount(response.data.follower);
+        setFollowingCount(response.data.following);
         setVo(vo);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -67,6 +73,11 @@ function MyBook() {
     setActiveTab(tab);
   };
 
+  const followModalOpen = (mode) => {
+    setMode(mode);
+    setFollowModalIsOpen(true);
+  }
+
   return (
     <div className="mainContainer">
       <div className="side">
@@ -87,11 +98,12 @@ function MyBook() {
               <p style={{fontSize:'12px',color:'gray'}}>{userNick}</p>
             </div>           
             <div className="stat">
-              <span className="count">{followerCount}</span>
+              <span className="count followCnt" onClick={()=>{followModalOpen('follower')}}>{followerCount}</span>
+              <FollowModal isOpen={followmodalIsOpen} onRequestClose={()=>{setFollowModalIsOpen(false)}} mode={mode}/>
               <span className="label">팔로워</span>
             </div>
             <div className="stat">
-              <span className="count">{followingCount}</span>
+              <span className="count followCnt" onClick={()=>{followModalOpen('following')}}>{followingCount}</span>
               <span className="label">팔로잉</span>
             </div>
             <div className="stat">

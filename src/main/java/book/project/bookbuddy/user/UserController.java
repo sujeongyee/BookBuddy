@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import book.project.bookbuddy.command.FollowerVO;
 import book.project.bookbuddy.command.UserVO;
 import book.project.bookbuddy.main.MainService;
 
@@ -34,7 +35,11 @@ public class UserController {
   public Map<String,Object> getMyPage(@RequestParam("id") String id) {
       UserVO vo =  mainService.getVO(id);
       Map<String,Object> map = new HashMap<>();
+      int userNo = userService.getUserNo(id);
+      FollowerVO fvo = userService.getFollow(userNo);
       map.put("vo", vo);
+      map.put("follower",fvo.getFollower());
+      map.put("following",fvo.getFollowing());
       return map;
   }
 

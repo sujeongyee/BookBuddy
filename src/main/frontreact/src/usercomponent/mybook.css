@@ -526,3 +526,6 @@ input:-webkit-autofill:active {
   color: #fff;
   cursor: pointer;
 }
+.followCnt {
+  cursor: pointer;
+}

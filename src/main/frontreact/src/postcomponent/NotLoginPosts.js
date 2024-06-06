@@ -2,21 +2,20 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import '../main/main.css';
 import Loading from "../main/Loading";
-
+import { useLoading } from "../context/LoadingContext";
 function NotLoginPosts() {
   const [showRecommend, setShowRecommend] = useState(true);
   const [reviewPosts, setReviewPosts] = useState([]);
   const [recommendPosts, setRecommendPosts] = useState([]);
   const [reviewPage, setReviewPage] = useState(0);
   const [recommendPage, setRecommendPage] = useState(0);
-  const [loading, setLoading] = useState(false);
-
+  const {showLoading,hideLoading} = useLoading();
 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
+        showLoading();
         const response = await axios.get(
           `/book/post/getNotLogin?reviewPage=${reviewPage}&recommendPage=${recommendPage}`
         );
@@ -28,10 +27,10 @@ function NotLoginPosts() {
         }else if(!showRecommend){          
           setReviewPosts(prevPosts => [...prevPosts, ...response.data.reviewList]);
         }
-        setLoading(false);
+        hideLoading();
       } catch (error) {
         console.error("데이터 가져오기 에러:", error);
-        setLoading(false);
+        hideLoading();
       }
     };
     fetchData();
@@ -46,7 +45,7 @@ function NotLoginPosts() {
       document.body.scrollHeight;
     const clientHeight =
       document.documentElement.clientHeight || window.innerHeight;
-    if (scrollTop + clientHeight >= scrollHeight - 20 && !loading) {  
+    if (scrollTop + clientHeight >= scrollHeight - 20 ) {  
       if (showRecommend) {
         setRecommendPage(prevPage => prevPage + 1);
       } else {
@@ -65,7 +64,7 @@ useEffect(() => {
   return (
     
     <div className="main-content">      
-    {loading? <Loading/> :
+    
       <div>
         <div className="main-toggle">
           <button className={`toggle-btn first-toggle ${showRecommend ? 'toggle-active' : ''}`} onClick={() => setShowRecommend(true)}>추천글 보기</button>
@@ -122,7 +121,7 @@ useEffect(() => {
             </div>
           )}
         </div>
-      </div>}
+      </div>
     </div>
   );
 }
