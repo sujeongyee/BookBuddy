@@ -26,8 +26,17 @@
   </select>
   <select id="getFollow">
     SELECT (SELECT COUNT(*) AS following FROM FOLLOWER WHERE USER_NO = #{userNo}) AS following,
-    COUNT(*) AS follower FROM FOLLOWER WHERE FOLLOW_NO = #{userNo};
+    COUNT(*) AS follower FROM FOLLOWER WHERE FOLLOW_NO = #{userNo}
   </select>
   <select id="getUserNo">SELECT USER_NO FROM USER WHERE USER_ID=#{userId}</select>    
-
+  <select id="getFollowerList">
+    SELECT U.* 
+    FROM FOLLOWER F LEFT JOIN USER U ON F.USER_NO = U.USER_NO
+    WHERE F.FOLLOW_NO = #{userNo}
+  </select>
+  <select id="getFollowingList">
+    SELECT U.* 
+    FROM FOLLOWER F LEFT JOIN USER U ON F.FOLLOW_NO = U.USER_NO
+    WHERE F.USER_NO = #{userNo}
+  </select>
 </mapper>
