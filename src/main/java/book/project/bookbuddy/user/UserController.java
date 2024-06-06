@@ -1,6 +1,7 @@
 package book.project.bookbuddy.user;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,19 @@ public class UserController {
     map.put("reviewPostCount", reviewPostCount);
     return map;
   }
+
+  @GetMapping("/getFollowList")
+  public List<UserVO> getFollowList(@RequestParam("id") String userId , @RequestParam("mode") String mode) {
+    int userNo = userService.getUserNo(userId);
+    if(mode.equals("follower")){
+      List<UserVO> list = userService.getFollowerList(userNo);
+      return list;
+    }else{
+      List<UserVO> list = userService.getFollowingList(userNo);
+      return list;
+    }
+  }
+  
   
 
 

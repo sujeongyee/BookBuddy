@@ -1,5 +1,7 @@
 package book.project.bookbuddy.user;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,13 @@ public class UserServiceImpl implements UserService{
 
   public int getUserNo(String userId){
     return userMapper.getUserNo(userId);
+  }
+
+  public List<UserVO> getFollowerList(int userNo){
+    return userMapper.getFollowerList(userNo);
+  }
+  public List<UserVO> getFollowingList(int userNo){
+    return userMapper.getFollowingList(userNo);
   }
   
 }

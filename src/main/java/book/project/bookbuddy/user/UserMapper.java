@@ -1,5 +1,7 @@
 package book.project.bookbuddy.user;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import book.project.bookbuddy.command.FollowerVO;
@@ -13,4 +15,6 @@ public interface UserMapper {
   public int getReviewPostCount(String userId);
   public FollowerVO getFollow(int userNO);
   public int getUserNo(String userId);
+  public List<UserVO> getFollowerList(int userNo);
+  public List<UserVO> getFollowingList(int userNo);
 }
