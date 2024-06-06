@@ -24,6 +24,10 @@
   <select id="getReviewPostCount">
     SELECT COUNT(*) FROM REVIEW WHERE USER_NO = (SELECT USER_NO FROM USER WHERE USER_ID=#{userId})
   </select>
-    
+  <select id="getFollow">
+    SELECT (SELECT COUNT(*) AS following FROM FOLLOWER WHERE USER_NO = #{userNo}) AS following,
+    COUNT(*) AS follower FROM FOLLOWER WHERE FOLLOW_NO = #{userNo};
+  </select>
+  <select id="getUserNo">SELECT USER_NO FROM USER WHERE USER_ID=#{userId}</select>    
 
 </mapper>
