@@ -3,24 +3,33 @@ import Modal from 'react-modal';
 import { useUser } from "../context/UserContext";
 import axios from "axios";
 import "./mybook.css";
+
 const FollowModal = ({ isOpen, onRequestClose, mode }) => {
   const { userData } = useUser();
   const { userId } = userData;
   const [followData, setFollowData] = useState([]);
   const [loading,setLoading] = useState(false);
 
+
   useEffect(() => {
-    setLoading(false);
+    resetData();
     if (isOpen) {
+      setLoading(true);
       getFollow();
     }
-    setLoading(true);
-  }, [mode, isOpen]);
+    
+  }, [mode,isOpen]);
+
+  const resetData = () => {
+    setFollowData([]);
+  }
 
   const getFollow = async () => {
     try {
       const response = await axios.get(`/book/user/getFollowList?id=${userId}&mode=${mode}`);
+      console.log(response.data);
       setFollowData(response.data);
+      setLoading(false);
     } catch (error) {
       console.error('팔로워 목록 불러오는 중 오류 발생:', error);
     }
@@ -40,7 +49,7 @@ const FollowModal = ({ isOpen, onRequestClose, mode }) => {
       left: "auto",
       right: "auto",
       bottom: "auto",
-      maxWidth: "500px",
+      maxWidth: "400px",
       width: "90%",
       height: "90%",
       maxHeight: "80%",
@@ -55,7 +64,14 @@ const FollowModal = ({ isOpen, onRequestClose, mode }) => {
 
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose} style={customModalStyles}>
-      {loading && <div className="follow-modal">
+
+      {loading && (
+        <div className="loading-container">
+          
+          <img src={process.env.PUBLIC_URL + '/imgs/loading3.gif'} alt="loading" />
+        </div>
+      )}
+      <div className="follow-modal">
         <h2>{mode === 'follower' ? '팔로워' : '팔로잉'}</h2>
         <ul className="follow-list">
           {followData && followData.map((follow) => (
@@ -63,11 +79,23 @@ const FollowModal = ({ isOpen, onRequestClose, mode }) => {
               <li key={follow.user_NO} className="follow-item">
                 <img src={follow.profile_URL || process.env.PUBLIC_URL + '/imgs/no-profile.jpg'} alt={follow.user_NICK} className="follow-img" />
                 <p className="follow-name">{follow.user_NICK}</p>
+                <div className="follow-modal-btnZ">
+                  {mode === 'follower' ? (
+                    follow.check_following ? (
+                      <button className="follow-button2">팔로우취소</button>
+                    ) : (
+                      <button className="follow-button">팔로우하기</button>
+                    )
+                  ) : (
+                    <button className="follow-button2">팔로우취소</button>
+                  )}
+                </div>
               </li>
             )
           ))}
+          
         </ul>
-      </div>}
+      </div>
     </Modal>
   );
 }

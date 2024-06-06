@@ -30,9 +30,19 @@
   </select>
   <select id="getUserNo">SELECT USER_NO FROM USER WHERE USER_ID=#{userId}</select>    
   <select id="getFollowerList">
-    SELECT U.* 
-    FROM FOLLOWER F LEFT JOIN USER U ON F.USER_NO = U.USER_NO
-    WHERE F.FOLLOW_NO = #{userNo}
+    SELECT 
+    U.*,
+    CASE 
+        WHEN F2.USER_NO IS NOT NULL THEN 'true'
+        ELSE 'false'
+    END AS CHECK_FOLLOWING
+    FROM 
+        FOLLOWER F
+        LEFT JOIN USER U ON F.USER_NO = U.USER_NO
+        LEFT JOIN FOLLOWER F2 ON F2.FOLLOW_NO = U.USER_NO AND F2.USER_NO = #{userNo}
+    WHERE 
+        F.FOLLOW_NO = #{userNo}
+        AND U.USER_NO IS NOT NULL
   </select>
   <select id="getFollowingList">
     SELECT U.* 

@@ -21,6 +21,6 @@ public class UserVO { // 유저 vo
     private String keyword_NO;
     private String user_EMAIL;
     private String profile_URL;
-
+    private boolean check_following;
 
 }
