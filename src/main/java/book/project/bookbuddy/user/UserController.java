@@ -1,5 +1,6 @@
 package book.project.bookbuddy.user;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,15 +63,34 @@ public class UserController {
     return map;
   }
 
-  @GetMapping("/getFollowList")
-  public List<UserVO> getFollowList(@RequestParam("id") String userId , @RequestParam("mode") String mode) {
+  @GetMapping("/getFollowList") 
+  public List<UserVO> getFollowList(@RequestParam("id") String userId , @RequestParam("mode") String mode , @RequestParam(value = "userNo", required = false) String feedId) {
     int userNo = userService.getUserNo(userId);
+    System.out.println("-----------------------------------------------");
+    System.out.println("-------------------------"+feedId);
+    System.out.println("-------------------------------");
     if(mode.equals("follower")){
-      List<UserVO> list = userService.getFollowerList(userNo);
-      return list;
+      if(feedId!=null){
+        System.out.println("------------notnull------------------");
+        int feedNo = userService.getUserNo(feedId);
+        List<UserVO> list = userService.getFollowerList2(feedNo,userNo);
+        return list;
+      }else{
+        List<UserVO> list = userService.getFollowerList(userNo);
+        return list;
+      }
+      
     }else{
-      List<UserVO> list = userService.getFollowingList(userNo);
-      return list;
+      if(feedId!=null){
+        System.out.println("------------notnull------------------");
+        int feedNo = userService.getUserNo(feedId);
+        List<UserVO> list = userService.getFollowingList2(feedNo,userNo);
+        return list;
+      }else{
+        List<UserVO> list = userService.getFollowingList(userNo);
+        return list;
+      }
+      
     }
   }
 

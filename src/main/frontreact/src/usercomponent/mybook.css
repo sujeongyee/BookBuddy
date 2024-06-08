@@ -90,7 +90,7 @@
 .feed-tab {
   padding: 10px 20px;
   border: none;
-  border-radius: 20px; /* 더 둥근 모서리를 만듭니다 */
+  border-radius: 20px; 
   background-color: transparent;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -125,19 +125,19 @@
   cursor: pointer;
   border-radius: 20%;
   padding: 4px;
-  fill: #93c7ff; /* 아이콘 색상 설정 */
+  fill: #93c7ff; 
   transition: fill 0.3s ease, transform 0.3s ease; 
 }
 
 .list-icon svg:hover {
-  fill: #0056b3; /* 호버 시 아이콘 색상 변경 */
-  transform: scale(1.1); /* 호버 시 아이콘 크기 확대 */
+  fill: #0056b3;
+  transform: scale(1.1);
 }
 
 .list-icon svg.active {
-  fill: #0056b3; /* active 클래스가 추가될 때 아이콘 색상 변경 */
-  transform: scale(1.1); /* active 클래스가 추가될 때 아이콘 크기 확대 */
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.1); /* active 클래스가 추가될 때 그림자 효과 추가 */
+  fill: #0056b3; 
+  transform: scale(1.1); 
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.1); 
 }
 .my-Feed {
   display: flex;
@@ -407,7 +407,7 @@
 .modalWrite-table {
   width: 100%;
   border-collapse: separate;
-  border-spacing: 0 10px; /* 위아래 간격을 조절할 수 있습니다. */
+  border-spacing: 0 10px; 
 }
 
 .modalWrite-row {
@@ -571,7 +571,6 @@ input:-webkit-autofill:active {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 15px;
   padding: 10px;
   border-bottom: 1px solid #ddd;
 }
@@ -619,3 +618,16 @@ input:-webkit-autofill:active {
 .follow-button2:hover {
   background-color: #cd606b;
 }
+.follow-modal-hov {
+  display:flex;
+  flex-direction: row;
+  gap:15px;
+  cursor:pointer;
+}
+/* .follow-modal-hov>p:hover {
+  font-weight: bold;
+  color: #ffb1b1;
+} */
+ .follow-item:hover {
+  background-color: #f1e4e5;
+ }

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 import { useUser } from "../context/UserContext";
 import axios from "axios";
 import "./mybook.css";
 import ToastMsg from "../main/ToastMsg";
 
-const FollowModal = ({ isOpen, onRequestClose, mode }) => {
+const FollowModal = ({ isOpen, onRequestClose, mode,userNo }) => {
   const { userData } = useUser();
   const { userId } = userData;
   const [followData, setFollowData] = useState([]);
@@ -30,8 +31,15 @@ const FollowModal = ({ isOpen, onRequestClose, mode }) => {
 
   const getFollow = async () => {
     try {
-      const response = await axios.get(`/book/user/getFollowList?id=${userId}&mode=${mode}`);
-      setFollowData(response.data);
+      if(userNo!=null){
+        console.log("다른사용자피드:"+userNo);
+        const response = await axios.get(`/book/user/getFollowList?id=${userId}&mode=${mode}&userNo=${userNo}`);
+        setFollowData(response.data);
+      }else{
+        const response = await axios.get(`/book/user/getFollowList?id=${userId}&mode=${mode}`);
+        setFollowData(response.data);
+      }
+      
       setLoading(false);
     } catch (error) {
       console.error('팔로워 목록 불러오는 중 오류 발생:', error);
@@ -83,6 +91,11 @@ const FollowModal = ({ isOpen, onRequestClose, mode }) => {
       }
     }
   }
+  const navigate = useNavigate();
+  const toUserFeed = async (userId) =>{
+    
+    navigate(`/userFeed/${userId}`);
+  }
 
   // 모달 css
   const customModalStyles = {
@@ -133,8 +146,11 @@ const FollowModal = ({ isOpen, onRequestClose, mode }) => {
           {followData && followData.map((follow) => (
             follow && (
               <li key={follow.user_NO} className="follow-item">
-                <img src={follow.profile_URL || process.env.PUBLIC_URL + '/imgs/no-profile.jpg'} alt={follow.user_NICK} className="follow-img" />
-                <p className="follow-name">{follow.user_NICK}</p>
+                <div className="follow-modal-hov" onClick={()=> toUserFeed(follow.user_ID)}>
+                  <img src={follow.profile_URL || process.env.PUBLIC_URL + '/imgs/no-profile.jpg'} alt={follow.user_NICK} className="follow-img" />
+                  <p className="follow-name">{follow.user_NICK}</p>
+                </div>
+                
                 <div className="follow-modal-btnZ">
                   {mode === 'follower' ? (
                     follow.check_following ? (

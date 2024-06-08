@@ -4,7 +4,7 @@ import axios from "axios";
 import { useUser } from "../context/UserContext";
 import "./postgrid.css";
 import { useLoading } from "../context/LoadingContext";
-const PostGrid = ({type}) => {
+const PostGrid = ({type,userNo}) => {
   const {userData ,setUserData} = useUser();
   const {userId,userNick,profileURL} = userData;
   const [rcmPosts,setRcmPosts] = useState([]);
@@ -12,12 +12,20 @@ const PostGrid = ({type}) => {
   const {showLoading,hideLoading} = useLoading();
 
   useEffect(() => {
+    console.log(userNo);
     const fetchData = async () => {
       if(type === 'recommend') {
         try {
           showLoading();
-          const response = await axios.get(`/book/post/getRcmPostMyPage?id=${userId}&type=grid`);
-          setRcmPosts(response.data);
+          if(userNo!=null){
+            const response = await axios.get(`/book/post/getRcmPostMyPage?id=${userNo}&type=grid`);
+            setRcmPosts(response.data);
+          }else{
+            const response = await axios.get(`/book/post/getRcmPostMyPage?id=${userId}&type=grid`);
+            setRcmPosts(response.data);
+          }
+          
+          
           hideLoading();
         } catch(error) {
           console.error("추천글 가져오는 중 오류 발생", error);
@@ -26,8 +34,14 @@ const PostGrid = ({type}) => {
       } else if(type ==='review'){
         try {
           showLoading();
-          const response = await axios.get(`/book/post/getRvPostMyPage?id=${userId}&type=grid`);
-          setRvPosts(response.data);
+          if(userNo!=null){
+            const response = await axios.get(`/book/post/getRvPostMyPage?id=${userNo}&type=grid`);
+            setRvPosts(response.data);
+          }else{
+            const response = await axios.get(`/book/post/getRvPostMyPage?id=${userId}&type=grid`);
+            setRvPosts(response.data);
+          }
+          
           hideLoading();
         } catch(error) {
           console.error("리뷰글 가져오는 중 오류 발생", error);
