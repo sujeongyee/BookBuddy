@@ -44,10 +44,38 @@
         F.FOLLOW_NO = #{userNo}
         AND U.USER_NO IS NOT NULL
   </select>
+  <select id="getFollowerList2">
+    SELECT U.*, 
+       CASE 
+           WHEN EXISTS (
+               SELECT 1 
+               FROM FOLLOWER F2 
+               WHERE F2.USER_NO = #{userNo} AND F2.FOLLOW_NO = U.USER_NO
+           ) THEN true 
+           ELSE false 
+       END AS CHECK_FOLLOWING
+    FROM FOLLOWER F 
+    LEFT JOIN USER U ON F.USER_NO = U.USER_NO
+    WHERE F.FOLLOW_NO = #{feedNo}
+  </select>
   <select id="getFollowingList">
     SELECT U.* 
     FROM FOLLOWER F LEFT JOIN USER U ON F.FOLLOW_NO = U.USER_NO
     WHERE F.USER_NO = #{userNo}
+  </select>
+  <select id="getFollowingList2">
+    SELECT U.*, 
+       CASE 
+           WHEN EXISTS ( 
+               SELECT 1 
+               FROM FOLLOWER F2 
+               WHERE F2.USER_NO = #{userNo} AND F2.FOLLOW_NO = U.USER_NO
+           ) THEN true 
+           ELSE false 
+       END AS CHECK_FOLLOWING
+    FROM FOLLOWER F 
+    LEFT JOIN USER U ON F.FOLLOW_NO = U.USER_NO
+    WHERE F.USER_NO = #{feedNo}
   </select>
   <insert id="addFollow">
     INSERT INTO FOLLOWER (`USER_NO`,`FOLLOW_NO`) VALUES(#{userNo},#{toUserNo})

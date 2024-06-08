@@ -18,6 +18,8 @@ public interface UserMapper {
   public int getUserNo(String userId);
   public List<UserVO> getFollowerList(int userNo);
   public List<UserVO> getFollowingList(int userNo);
+  public List<UserVO> getFollowerList2(@Param("feedNo")int feedNo,@Param("userNo")int userNo);
+  public List<UserVO> getFollowingList2(@Param("feedNo")int feedNo,@Param("userNo")int userNo);
   public int addFollow(@Param("userNo") int userNo, @Param("toUserNo") int toUserNo);
   public int cancelFollow(@Param("userNo") int userNo, @Param("toUserNo") int toUserNo);
 }

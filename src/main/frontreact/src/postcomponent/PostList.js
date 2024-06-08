@@ -6,7 +6,7 @@ import "./postgrid.css";
 import { useLoading } from "../context/LoadingContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-const PostList = ({type}) => {
+const PostList = ({type,userNo}) => {
   const {userData ,setUserData} = useUser();
   const {userId} = userData;
   const [recommendPosts, setRecommendPosts] = useState([]);
@@ -17,8 +17,14 @@ const PostList = ({type}) => {
       if(type === 'recommend') {
         try {
           showLoading();
-          const response = await axios.get(`/book/post/getRcmPostMyPage?id=${userId}&type=list`);
-          setRecommendPosts(response.data);
+          if(userNo!=null){
+            const response = await axios.get(`/book/post/getRcmPostMyPage?id=${userNo}&type=list`);
+            setRecommendPosts(response.data);
+          }else{
+            const response = await axios.get(`/book/post/getRcmPostMyPage?id=${userId}&type=list`);
+            setRecommendPosts(response.data);
+          }
+          
           hideLoading();
         } catch(error) {
           console.error("추천글 가져오는 중 오류 발생", error);
@@ -27,8 +33,13 @@ const PostList = ({type}) => {
       } else {
         try {
           showLoading();
-          const response = await axios.get(`/book/post/getRvPostMyPage?id=${userId}&type=list`);
-          setReviewPosts(response.data);
+          if(userNo!=null){
+            const response = await axios.get(`/book/post/getRvPostMyPage?id=${userNo}&type=list`);
+            setReviewPosts(response.data);
+          }else{
+            const response = await axios.get(`/book/post/getRvPostMyPage?id=${userId}&type=list`);
+            setReviewPosts(response.data);
+          }
           hideLoading();
         } catch(error) {
           console.error("리뷰글 가져오는 중 오류 발생", error);

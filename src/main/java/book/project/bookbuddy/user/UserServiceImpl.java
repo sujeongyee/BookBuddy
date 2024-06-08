@@ -39,6 +39,12 @@ public class UserServiceImpl implements UserService{
   public List<UserVO> getFollowingList(int userNo){
     return userMapper.getFollowingList(userNo);
   }
+  public List<UserVO> getFollowerList2(int feedNo,int userNo){
+    return userMapper.getFollowerList2(feedNo, userNo);
+  }
+  public List<UserVO> getFollowingList2(int feedNo,int userNo){
+    return userMapper.getFollowingList2(feedNo, userNo);
+  }
 
   public int addFollow(int userNo, int toUserNo){
     return userMapper.addFollow(userNo, toUserNo);
