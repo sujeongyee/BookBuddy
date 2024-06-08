@@ -8,6 +8,7 @@ import { useLoading } from "../context/LoadingContext";
 import PostGrid from "../postcomponent/PostGrid";
 import PostList from "../postcomponent/PostList";
 import FollowModal from './FollowModal';
+import './mybook.css';
 
 const UserFeed = () => {
   const { userNo } = useParams();
@@ -31,18 +32,24 @@ const UserFeed = () => {
   const [loading, setLoading] = useState(true);
   const [feedNick,setFeedNick] = useState('');
   const [profileImg,setProfileImg] = useState('');
+  const [followCheck,setFollowCheck] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
         showLoading();
         const response = await axios.get(`/book/user/myPage?id=${userNo}`);
+        const response2 = await axios.get(`/book/user/checkFollow?id=${userId}&toUserNo=${userNo}`);
+        if(response2.data){
+          setFollowCheck(true);
+        }
+        
         const vo = response.data.vo;
         setProfileImg(vo.profile_URL);
         setFeedNick(vo.user_NICK);
         setFollowerCount(response.data.follower);
         setFollowingCount(response.data.following);
         setVo(vo);
-        hideLoading();
+        hideLoading(); 
         setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -78,6 +85,38 @@ const UserFeed = () => {
     setFollowModalIsOpen(true);
   }
 
+  const doFollow = async () => {
+    const isConfirmed = window.confirm('팔로우 하시겠습니까?');
+    if (isConfirmed) {
+      try {
+        const no = await axios.get(`/book/user/getUserNo?id=${userNo}`);
+        const noUser = no.data;
+        const response = await axios.get(`/book/user/addFollow?id=${userId}&toUserNo=${noUser}`);
+        if (response.data == 1) {
+          setFollowCheck(true);
+        }
+      } catch (error) {
+        console.error('팔로우 하는 도중 오류 발생:', error);
+      }
+    }
+  }
+
+  const resetFollow = async () => {
+    const isConfirmed = window.confirm('팔로우 취소하시겠습니까?');
+    if (isConfirmed) {
+      try {
+        const no = await axios.get(`/book/user/getUserNo?id=${userNo}`);
+        const noUser = no.data;
+        const response = await axios.get(`/book/user/cancelFollow?id=${userId}&toUserNo=${noUser}`);
+        if (response.data == 1) {
+          setFollowCheck(false);
+        }
+      } catch (error) {
+        console.error('팔로우 취소 하는 도중 오류 발생', error);
+      }
+    }
+  }
+
   return(
     <div className="mainContainer">
       <div className="side">
@@ -85,6 +124,7 @@ const UserFeed = () => {
       </div>
       <div className="mainContent2">
         <Header/>
+        {!loading && (
         <div className="mainSection">
           <div className="user-profile">
             <div className="user-photo">
@@ -107,11 +147,12 @@ const UserFeed = () => {
             </div>
             <div className="stat">
               <span className="count">{postCount}</span>
-              <span className="label">게시글</span>
+              <span className="label">게시글</span> 
             </div>           
           </div>
           <div className="action-buttons">
-            
+            <button className='edit-profile-button'>버디톡보내기</button>
+            {followCheck?(<button className='cancelFollow' onClick={() => resetFollow()}>팔로우취소하기</button>):(<button className='doFollow' onClick={() => doFollow()}>팔로우하기</button>)}
           </div>
           <div className="feed-container">
             <div className="feed-tabs">
@@ -160,7 +201,7 @@ const UserFeed = () => {
             </div>
           
           </div>
-        </div>  
+        </div> )} 
       </div>
     </div>
   )

@@ -83,4 +83,7 @@
   <delete id="cancelFollow">
     DELETE FROM FOLLOWER WHERE USER_NO= #{userNo} AND FOLLOW_NO = #{toUserNo}
   </delete>
+  <select id="checkFollow">
+    SELECT COUNT(*) FROM FOLLOWER WHERE USER_NO=#{userId} AND FOLLOW_NO= #{toUserNo}
+  </select>
 </mapper>
