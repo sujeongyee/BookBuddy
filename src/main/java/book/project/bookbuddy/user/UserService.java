@@ -17,4 +17,5 @@ public interface UserService {
   public List<UserVO> getFollowingList2(int feedNo,int userNo);
   public int addFollow(int userNo, int toUserNo);
   public int cancelFollow(int userNo, int toUserNo);
+  public int checkFollow(int userId,int toUserNo);
 }

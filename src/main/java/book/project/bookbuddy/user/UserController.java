@@ -33,6 +33,12 @@ public class UserController {
   @Qualifier("mainService")
   private MainService mainService;
 
+  @GetMapping("/getUserNo")
+  public int getUserNo(@RequestParam("id") String id) {
+    return userService.getUserNo(id);
+  }
+  
+
   @GetMapping("/myPage")
   public Map<String,Object> getMyPage(@RequestParam("id") String id) {
       UserVO vo =  mainService.getVO(id);
@@ -66,9 +72,6 @@ public class UserController {
   @GetMapping("/getFollowList") 
   public List<UserVO> getFollowList(@RequestParam("id") String userId , @RequestParam("mode") String mode , @RequestParam(value = "userNo", required = false) String feedId) {
     int userNo = userService.getUserNo(userId);
-    System.out.println("-----------------------------------------------");
-    System.out.println("-------------------------"+feedId);
-    System.out.println("-------------------------------");
     if(mode.equals("follower")){
       if(feedId!=null){
         System.out.println("------------notnull------------------");
@@ -104,6 +107,16 @@ public class UserController {
     int userNo = userService.getUserNo(userId);
     return userService.cancelFollow(userNo, toUserNo);
   }
+
+  @GetMapping("/checkFollow")
+  public boolean checkFollow(@RequestParam("id") String userId , @RequestParam("toUserNo") String toUserNo) {
+    int userNo = userService.getUserNo(userId);
+    int userNo2 = userService.getUserNo(toUserNo);
+    int check = userService.checkFollow(userNo,userNo2);
+    if(check>0) return true;
+    else return false;
+  }
+  
   
   
   

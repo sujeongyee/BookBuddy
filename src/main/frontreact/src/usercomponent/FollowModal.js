@@ -92,9 +92,13 @@ const FollowModal = ({ isOpen, onRequestClose, mode,userNo }) => {
     }
   }
   const navigate = useNavigate();
-  const toUserFeed = async (userId) =>{
+  const toUserFeed = async (feedId) =>{
+    if(userId==feedId){
+      navigate(`/myBook`);
+    }else{
+      navigate(`/userFeed/${feedId}`);
+    }
     
-    navigate(`/userFeed/${userId}`);
   }
 
   // 모달 css

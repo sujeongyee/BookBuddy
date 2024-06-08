@@ -22,4 +22,5 @@ public interface UserMapper {
   public List<UserVO> getFollowingList2(@Param("feedNo")int feedNo,@Param("userNo")int userNo);
   public int addFollow(@Param("userNo") int userNo, @Param("toUserNo") int toUserNo);
   public int cancelFollow(@Param("userNo") int userNo, @Param("toUserNo") int toUserNo);
+  public int checkFollow(@Param("userId")int userId,@Param("toUserNo") int toUserNo);
 }

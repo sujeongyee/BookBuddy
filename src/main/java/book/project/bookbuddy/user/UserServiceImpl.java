@@ -52,4 +52,7 @@ public class UserServiceImpl implements UserService{
   public int cancelFollow(int userNo, int toUserNo){
     return userMapper.cancelFollow(userNo, toUserNo);
   }
+  public int checkFollow(int userId,int toUserNo){
+    return userMapper.checkFollow(userId, toUserNo);
+  }
 }
