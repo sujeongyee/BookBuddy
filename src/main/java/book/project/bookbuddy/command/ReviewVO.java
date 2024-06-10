@@ -18,7 +18,9 @@ public class ReviewVO { // 리뷰게시글 vo
   private String review_CONTENT;
   private Timestamp review_TIME;
   private String review_CATEGORY;
+  private String review_CATEGORY2;
   private String review_KEYWORD;
+  private String review_KEYWORD2;
   private int review_LIKE;
   private int user_NO;
   private String review_BOOKTITLE;
