@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import book.project.bookbuddy.command.GridVO;
 import book.project.bookbuddy.command.ListVO;
+import book.project.bookbuddy.command.PostVO;
 import book.project.bookbuddy.command.RecommendVO;
 import book.project.bookbuddy.command.ReviewVO;
+import book.project.bookbuddy.file.S3FileSerivce;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +31,11 @@ public class PostController {
   @Autowired
   @Qualifier("postService")
   private PostService postService;
+
+  @Autowired
+  @Qualifier("s3fileService")
+  private S3FileSerivce s3FileSerivce;
+
   // 비로그인 유저의 메인페이지 게시글 불러오기
   @GetMapping("/getNotLogin")
   public Map<String,Object> getNotLogin(@RequestParam("reviewPage") int reviewPage,
@@ -89,6 +96,24 @@ public class PostController {
     }
     
   }
+
+  @GetMapping("/postDetail")
+  public PostVO postDetail(@RequestParam("type") String type, @RequestParam("postNo") int postNo) {
+    // 해당 포스트의 vo , 댓글 리스트, 댓글 수 , 좋아요 리스트, 좋아요 수
+    PostVO vo= postService.getCnt(postNo, type);
+
+    if(type.equals("recommend")) {
+      vo.setRecommendVO(postService.getPostRecommend(postNo));
+    }else {
+      vo.setReviewVO(postService.getPostReview(postNo));
+    }
+    vo.setFileList(s3FileSerivce.getPostImgs(type, postNo));
+    vo.setCmtList(postService.getCmtList(postNo, type));
+    vo.setLikeList(postService.getLikeList(postNo, type));
+    System.out.println(vo.toString());
+    return vo;
+  }
+  
   
   
   

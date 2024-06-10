@@ -7,11 +7,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import book.project.bookbuddy.command.FileVO;
 
 @Service("s3fileService")
 public class S3FileSerivceImpl implements S3FileSerivce {
@@ -28,6 +31,10 @@ public class S3FileSerivceImpl implements S3FileSerivce {
   }
   public int insertReviewImg(String rv_no,String url){
     return s3FileMapper.insertReviewImg(rv_no, url);
+  }
+
+  public List<FileVO> getPostImgs(String type,int postNo){
+    return s3FileMapper.getPostImgs(type, postNo);
   }
   
   public MultipartFile linkToFile(String imgUrl){

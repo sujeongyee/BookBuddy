@@ -19,5 +19,9 @@
         VALUES (#{url},'review',#{rv_no})
     </insert>
 
+    <select id="getPostImgs">
+        SELECT * FROM FILE WHERE ${type}_NO= ${postNo} AND FILE_CATEGORY='${type}'
+    </select>
+
 
 </mapper>

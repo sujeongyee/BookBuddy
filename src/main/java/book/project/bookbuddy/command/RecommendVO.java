@@ -16,8 +16,11 @@ public class RecommendVO { // 추천게시글 vo
   private String recommend_CONTENT;
   private Timestamp recommend_TIME;
   private String recommend_CATEGORY;
+  private String recommend_CATEGORY2;
   private String recommend_KEYWORD;
+  private String recommend_KEYWORD2;
   private int recommend_LIKE;
   private int user_NO;
   private String recommend_BOOKTITLE;
+
 }
