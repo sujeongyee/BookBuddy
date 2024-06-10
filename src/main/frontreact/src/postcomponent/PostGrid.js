@@ -4,7 +4,7 @@ import axios from "axios";
 import { useUser } from "../context/UserContext";
 import "./postgrid.css";
 import { useLoading } from "../context/LoadingContext";
-const PostGrid = ({type,userNo}) => {
+const PostGrid = ({type,userNo,writePostCheck}) => {
   const {userData ,setUserData} = useUser();
   const {userId,userNick,profileURL} = userData;
   const [rcmPosts,setRcmPosts] = useState([]);
@@ -12,7 +12,6 @@ const PostGrid = ({type,userNo}) => {
   const {showLoading,hideLoading} = useLoading();
 
   useEffect(() => {
-    console.log(userNo);
     const fetchData = async () => {
       if(type === 'recommend') {
         try {
@@ -51,7 +50,7 @@ const PostGrid = ({type,userNo}) => {
     };
     fetchData(); 
 
-  }, [userId, type]); 
+  }, [userId, type, writePostCheck]); 
 
 
   return( 

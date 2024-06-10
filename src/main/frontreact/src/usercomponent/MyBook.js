@@ -32,7 +32,24 @@ function MyBook() {
   const [followmodalIsOpen,setFollowModalIsOpen] = useState(false); // 팔로우,팔로잉 모달
   const [mode, setMode] = useState(null);
   const [loading, setLoading] = useState(true);
- 
+  const [writePostCheck,setWritePostCheck] = useState(false);
+
+  useEffect(()=>{
+    const fetchPost = async () => {
+      try {
+        const response = await axios.get(`/book/user/getPosts?id=${userId}`);
+        const rcmCnt2 = response.data.recommendPostCount;
+        const rvCnt2 = response.data.reviewPostCount;
+        setPostCount(rcmCnt2+rvCnt2);
+        setRcmCnt(rcmCnt2);
+        setRvCnt(rvCnt2);
+      } catch (error) {
+        console.error('게시글 가져오기 오류',error);
+      }    
+    }
+    fetchPost();
+    setWritePostCheck(false);
+  },[userId,userNick,profileURL,writePostCheck])
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -49,21 +66,6 @@ function MyBook() {
         setLoading(false);
       }
     };
-    const fetchPost = async () => {
-        try {
-          const response = await axios.get(`/book/user/getPosts?id=${userId}`);
-          const rcmCnt2 = response.data.recommendPostCount;
-          const rvCnt2 = response.data.reviewPostCount;
-          setPostCount(rcmCnt2+rvCnt2);
-          setRcmCnt(rcmCnt2);
-          setRvCnt(rvCnt2);
-        } catch (error) {
-          console.error('게시글 가져오기 오류',error);
-        }
-      
-      
-    }
-    fetchPost();
     fetchData();
     
   }, [userId,userNick,profileURL]);
@@ -119,7 +121,7 @@ function MyBook() {
             <button className="edit-profile-button" onClick={()=>{setProfileModalIsOpen(true)}}>프로필 수정</button>
             <ProfileModal isOpen={profilemodalIsOpen} onRequestClose={()=>{setProfileModalIsOpen(false)}} vo={vo} />
             <button className="write-post-button" onClick={()=>{setWriteModalIsOpen(true)}}>글 작성하기</button>
-            <WritePost isOpen={writemodalIsOpen} onRequestClose={()=>{setWriteModalIsOpen(false)}} vo={vo} onRequestShowMsg={()=>{setShowToast(true)}} onRequestShowMsg2={()=>{setShowToast2(true)}}></WritePost>
+            <WritePost isOpen={writemodalIsOpen} onRequestClose={()=>{setWriteModalIsOpen(false)}} vo={vo} onRequestShowMsg={()=>{setShowToast(true)}} onRequestShowMsg2={()=>{setShowToast2(true)}} onRequestWrite={()=>{setWritePostCheck(true)}}></WritePost>
           </div>
           <div className="feed-container">
             <div className="feed-tabs">
@@ -146,7 +148,7 @@ function MyBook() {
                 {showReviews ? (
                   rvCnt > 0 ? (
                     <div>
-                      {activeTab=='grid'?(<PostGrid type='review'/>):(<PostList type='review'/>)}
+                      {activeTab=='grid'?(<PostGrid type='review' writePostCheck={writePostCheck}/>):(<PostList type='review' writePostCheck={writePostCheck}/>)}
                     </div>
                   ) : (
                     <div className="no-post">
@@ -156,7 +158,7 @@ function MyBook() {
                 ) : (
                   rcmCnt> 0 ? (
                   <div>
-                    {activeTab=='grid'?(<PostGrid type='recommend'/>):(<PostList type='recommend'/>)}
+                    {activeTab=='grid'?(<PostGrid type='recommend' writePostCheck={writePostCheck}/>):(<PostList type='recommend' writePostCheck={writePostCheck}/>)}
                   </div>
                   ) : (
                   <div className="no-post">

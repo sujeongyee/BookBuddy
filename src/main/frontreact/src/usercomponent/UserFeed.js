@@ -94,6 +94,7 @@ const UserFeed = () => {
         const response = await axios.get(`/book/user/addFollow?id=${userId}&toUserNo=${noUser}`);
         if (response.data == 1) {
           setFollowCheck(true);
+          setFollowerCount(followerCount+1);
         }
       } catch (error) {
         console.error('팔로우 하는 도중 오류 발생:', error);
@@ -110,6 +111,7 @@ const UserFeed = () => {
         const response = await axios.get(`/book/user/cancelFollow?id=${userId}&toUserNo=${noUser}`);
         if (response.data == 1) {
           setFollowCheck(false);
+          setFollowerCount(followerCount-1);
         }
       } catch (error) {
         console.error('팔로우 취소 하는 도중 오류 발생', error);
