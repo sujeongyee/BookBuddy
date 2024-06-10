@@ -9,7 +9,7 @@ import SelectKeyword from "../component/SelectKeyword";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ToastMsg from "../main/ToastMsg";
-const WritePost = ({ isOpen, onRequestClose, vo, onRequestShowMsg, onRequestShowMsg2}) => {
+const WritePost = ({ isOpen, onRequestClose, vo, onRequestShowMsg, onRequestShowMsg2, onRequestWrite}) => {
   const { userData } = useUser();
   const { userId } = userData;
   const navigate = useNavigate();
@@ -26,6 +26,7 @@ const WritePost = ({ isOpen, onRequestClose, vo, onRequestShowMsg, onRequestShow
   const [selectedKeywords, setSelectedKeywords] = useState([]);
   const [componentMsg,setComponentMsg] = ('이 책의 ');
   const [updatedVo,setUpdatedVo] = useState(null);
+
   // 모달 css
   const customModalStyles = {
     overlay: {
@@ -136,8 +137,20 @@ const WritePost = ({ isOpen, onRequestClose, vo, onRequestShowMsg, onRequestShow
             }
             const responseImg = await axios.post('/book/file/rcmImgUrlToFile', formData);
             if(responseImg.data==='success'){
+              
               onRequestShowMsg();
               onRequestClose();
+              setPostTitle("");
+              setPostType("");
+              setBookTitle("");
+              setPostContent("");
+              setRating(0);
+              setBookImages([]);
+              setSelectedImage("");
+              setUploadFiles([]);
+              setSelectedCategories([]);
+              setSelectedKeywords([]);
+              onRequestWrite();
             }
             // 업로드 성공 시 Success 컴포넌트 반환
           } catch (error) {
@@ -186,6 +199,17 @@ const WritePost = ({ isOpen, onRequestClose, vo, onRequestShowMsg, onRequestShow
             if(responseImg.data==='success'){
               onRequestShowMsg2();
               onRequestClose();
+              setPostTitle("");
+              setPostType("");
+              setBookTitle("");
+              setPostContent("");
+              setRating(0);
+              setBookImages([]);
+              setSelectedImage("");
+              setUploadFiles([]);
+              setSelectedCategories([]);
+              setSelectedKeywords([]);
+              onRequestWrite();
             }
           } catch (error) {
             console.error('Error posting recommended images:', error);

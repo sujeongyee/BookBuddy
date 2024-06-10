@@ -6,7 +6,7 @@ import "./postgrid.css";
 import { useLoading } from "../context/LoadingContext";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-const PostList = ({type,userNo}) => {
+const PostList = ({type,userNo,writePostCheck}) => {
   const {userData ,setUserData} = useUser();
   const {userId} = userData;
   const [recommendPosts, setRecommendPosts] = useState([]);
@@ -49,7 +49,7 @@ const PostList = ({type,userNo}) => {
     };
     fetchData(); 
 
-  }, [userId, type]); 
+  }, [userId, type,writePostCheck]); 
 
   function formatDate(dateString) {
     const date = new Date(dateString);
