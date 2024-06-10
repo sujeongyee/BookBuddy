@@ -5,11 +5,13 @@ import Header from '../main/Header';
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
+import { useLoading } from "../context/LoadingContext";
 
 const PostDetail = ({}) => {
   const { type, postNo } = useParams();
   const { userData } = useUser();
   const { userId, userNick, profileURL } = userData;
+  const {showLoading,hideLoading} = useLoading();
   const [cmtCnt, setCmtCnt] = useState(0);
   const [likeCnt, setLikeCnt] = useState(0);
   const [cmtList, setCmtList] = useState([]);
@@ -19,10 +21,13 @@ const PostDetail = ({}) => {
   const [newComment, setNewComment] = useState("");
   const [fileList,setFileList] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    
     const fetchPostDetail = async () => {
       try {
+        showLoading();
         const response = await axios.get(`/book/post/postDetail?type=${type}&postNo=${postNo}`);
         console.log(response);
 
@@ -36,8 +41,11 @@ const PostDetail = ({}) => {
         } else {
           setReviewVO(response.data.reviewVO);
         }
+        setLoading(false);
+        hideLoading();
       } catch (error) {
-        console.error("Error fetching post details:", error);
+        hideLoading();
+        console.error("글 내용 불러오는 도중 오류 발생", error);
       }
     };
 
@@ -91,6 +99,7 @@ const PostDetail = ({}) => {
       </div>
       <div className="mainContent2">
         <Header />
+        {!loading && (
         <div className="mainSection">
           <div className="postDetailContainer">
             <h1>{post ? post.recommend_TITLE || post.review_TITLE : ''}</h1>
@@ -111,7 +120,7 @@ const PostDetail = ({}) => {
             </p>
 
             {/* <p><strong>Keywords:</strong> {post ? post.recommend_KEYWORD || post.review_KEYWORD : ''}</p> */}
-            <p><strong>Book Title:</strong> {post ? post.recommend_BOOKTITLE || post.review_BOOKTITLE : ''}</p>
+            <p><strong>책 이름 : </strong> {post ? post.recommend_BOOKTITLE || post.review_BOOKTITLE : ''}</p>
             {fileList.length > 0 && (
             <div className="postImageSlider">
               <button onClick={prevImage}>{`<--`}</button>
@@ -121,7 +130,10 @@ const PostDetail = ({}) => {
               <button onClick={nextImage}>{`-->`}</button>
             </div>
             )}
-            <p><strong>Content:</strong> {post ? post.recommend_CONTENT || post.review_CONTENT : ''}</p>
+            <div className='postDetailContentWrapper'>
+              <p className='postDetailContent'>{post ? post.recommend_CONTENT || post.review_CONTENT : ''}</p>
+            </div>
+            
             {reviewVO && <p><strong>Rating:</strong> {reviewVO.review_RATING}</p>}
             
             <div className="postStats">
@@ -149,7 +161,7 @@ const PostDetail = ({}) => {
               <button type="submit">Submit</button>
             </form>
           </div>
-        </div>
+        </div>)}
       </div>
     </div>
   )
