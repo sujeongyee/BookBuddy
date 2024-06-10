@@ -1,0 +1,183 @@
+
+.postDetailContainer {
+  margin-bottom: 20px;
+}
+
+.postDetailContainer h1 {
+  font-size: 28px;
+  color: #4c4c4d;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #f3f3f3;
+  padding-bottom: 17px;
+}
+
+.postDetailContainer p {
+  font-size: 16px;
+  color: #7f8c8d;
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+.postDetailContainer p strong {
+  color: #34495e;
+}
+
+.postStats {
+  display: flex;
+  gap: 20px;
+  margin-top: 15px;
+  font-size: 18px;
+  color: #3498db;
+  cursor: pointer;
+}
+
+.postStats span:hover {
+  color: #2980b9;
+}
+
+.commentsSection {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.commentsSection h2 {
+  margin-bottom: 20px;
+  color: #34495e;
+  border-bottom: 2px solid #bdc3c7;
+  padding-bottom: 10px;
+}
+
+.comment {
+  padding: 10px;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.comment:last-child {
+  border-bottom: none;
+}
+
+.comment p {
+  margin: 5px 0;
+  color: #3c5773;
+}
+
+.comment p strong {
+  color: #2980b9;
+}
+
+.comment p small {
+  color: #7f8c8d;
+}
+
+.commentForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.commentForm textarea {
+  padding: 10px;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  resize: none;
+  min-height: 80px;
+}
+
+.commentForm button {
+  align-self: flex-start;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.commentForm button:hover {
+  background-color: #2980b9;
+}
+
+.PostcategoryTag {
+  display: inline-block;
+  padding: 6px 12px;
+  margin: 0 4px;
+  border: 1px solid #9cb5ed; 
+  border-radius: 20px;
+  background-color: #f9fbff; 
+  color: #9cb5ed;
+  font-size: 14px;
+  font-weight: bold; 
+}
+
+.PostKeywordTag {
+  display: inline-block;
+  padding: 6px 12px;
+  margin: 0 4px;
+  border: 1px solid #9cb5ed; 
+  border-radius: 20px;
+  background-color: #f9fbff; 
+  color: #9cb5ed; 
+  font-size: 14px;
+  font-weight: bold; /* 텍스트를 굵게 */
+}
+
+
+
+/* .postDetailImg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto; 
+  max-height: 400px; 
+} */
+
+.postImageSlider {
+  position: relative;
+  width: 100%;
+  max-width: 400px; 
+  height: 430px;
+  margin: 0 auto;
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+}
+
+.postImageSlider img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  display: block;
+}
+
+.postImageSlider button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.postImageSlider button:first-child {
+  left: -115px;
+}
+
+.postImageSlider button:last-child {
+  right: -115px;
+}
+
+.postImageSlider button:focus {
+  outline: none;
+}
+
+@media (max-width: 768px) {
+  .postImageSlider {
+    max-width: 400px; /* 작은 화면에서 이미지 크기 조정 */
+  }
+}

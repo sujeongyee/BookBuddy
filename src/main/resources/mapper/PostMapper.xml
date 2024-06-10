@@ -72,4 +72,28 @@
         ORDER BY ${type}_TIME DESC;
     </select>
 
+    <select id="getPostRecommend">
+        SELECT *,
+        (SELECT GROUP_CONCAT(C.CATEGORY_NAME) AS RECOMMEND_CATEGORY2 FROM CATEGORY C WHERE EXISTS (SELECT 1 FROM RECOMMEND WHERE RECOMMEND_NO = ${postNo} AND INSTR(RECOMMEND_CATEGORY, C.CATEGORY_NO) > 0)) AS RECOMMEND_CATEGORY2,
+        (SELECT GROUP_CONCAT(K.KEYWORD_NAME) AS RECOMMEND_KEYWORD2 FROM KEYWORD K WHERE EXISTS (SELECT 1 FROM RECOMMEND WHERE RECOMMEND_NO = ${postNo} AND INSTR(RECOMMEND_KEYWORD, K.KEYWORD_NO) > 0)) AS RECOMMEND_KEYWORD2
+        FROM RECOMMEND WHERE RECOMMEND_NO=${postNo};
+    </select>
+
+    <select id="getPostReview"> 
+        SELECT * FROM REVIEW WHERE REVIEW_NO=${postNo}
+    </select>
+
+    <select id="getCnt">
+        SELECT (SELECT COUNT(*) FROM LIKES WHERE LIKE_POSTNO = ${postNo} AND LIKE_TYPE='${type}') AS likeCnt,
+        (SELECT COUNT(*) FROM COMMENT WHERE ${type}_NO=${postNo} ) AS cmtCnt
+    </select>
+
+    <select id="getLikeList">
+        SELECT * FROM LIKES WHERE LIKE_POSTNO = ${postNo} AND LIKE_TYPE='${type}'
+    </select>
+
+    <select id="getCmtList">
+        SELECT * FROM COMMENT WHERE ${type}_NO=${postNo}
+    </select>
+
 </mapper>

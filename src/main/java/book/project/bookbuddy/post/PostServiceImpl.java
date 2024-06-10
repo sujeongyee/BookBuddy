@@ -6,8 +6,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import book.project.bookbuddy.command.CmtVO;
 import book.project.bookbuddy.command.GridVO;
+import book.project.bookbuddy.command.LikesVO;
 import book.project.bookbuddy.command.ListVO;
+import book.project.bookbuddy.command.PostVO;
 import book.project.bookbuddy.command.RecommendVO;
 import book.project.bookbuddy.command.ReviewVO;
 
@@ -53,5 +56,22 @@ public class PostServiceImpl implements PostService{
   }
   public List<ListVO> getMyPageList(String userId,String type){
     return postMapper.getMyPageList(userId, type);
+  }
+
+  public RecommendVO getPostRecommend(int postNo){
+    return postMapper.getPostRecommend(postNo);
+  }
+  public ReviewVO getPostReview(int postNo){
+    return postMapper.getPostReview(postNo);
+  }
+  public PostVO getCnt(int postNo,String type){
+    return postMapper.getCnt(postNo,type);
+  }
+
+  public List<LikesVO> getLikeList(int postNo,String type){
+    return postMapper.getLikeList(postNo, type);
+  }
+  public List<CmtVO> getCmtList(int postNo,String type){
+    return postMapper.getCmtList(postNo, type);
   }
 }

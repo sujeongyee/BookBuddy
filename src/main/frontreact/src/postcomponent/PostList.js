@@ -65,7 +65,7 @@ const PostList = ({type,userNo,writePostCheck}) => {
     <div className="post-list-container">
       {posts.map(post => (
         <div className="post-list-item" key={post[type === 'recommend' ? 'recommend_NO' : 'review_NO']}>
-          <a href={`/${type === 'recommend' ? 'recommendPost' : 'reviewPost'}/${post[type === 'recommend' ? 'recommend_NO' : 'review_NO']}`} className="post-list-link">
+          <a href={`post/${type === 'recommend' ? 'recommend' : 'review'}/${post[type === 'recommend' ? 'recommend_NO' : 'review_NO']}`} className="post-list-link">
             <div className="post-list-content">
               <img src={post.fileUrl} alt={post[type === 'recommend' ? 'recommend_BOOKTITLE' : 'review_BOOKTITLE']} className="post-list-img" />         
               <div className="post-list-header">
