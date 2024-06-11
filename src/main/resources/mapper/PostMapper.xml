@@ -86,7 +86,9 @@
         FROM REVIEW WHERE REVIEW_NO=${postNo};
     </select>
 
-
+    <select id="likeCheck">
+        SELECT COUNT(*) FROM LIKES WHERE LIKE_TYPE='${type}' AND LIKE_POSTNO = ${postNo} AND LIKE_USER='${userNo}'
+    </select>
 
     <select id="getCnt">
         SELECT (SELECT COUNT(*) FROM LIKES WHERE LIKE_POSTNO = ${postNo} AND LIKE_TYPE='${type}') AS likeCnt,

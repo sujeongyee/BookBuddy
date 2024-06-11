@@ -32,4 +32,5 @@ public interface PostMapper {
   public PostVO getCnt(@Param("postNo")int postNo,@Param("type")String type);
   public List<LikesVO> getLikeList(@Param("postNo")int postNo,@Param("type")String type);
   public List<CmtVO> getCmtList(@Param("postNo")int postNo,@Param("type")String type);
+  public int likeCheck (@Param("postNo")int postNo,@Param("userNo") int userNo,@Param("type")String type);
 }

@@ -74,4 +74,7 @@ public class PostServiceImpl implements PostService{
   public List<CmtVO> getCmtList(int postNo,String type){
     return postMapper.getCmtList(postNo, type);
   }
+  public int likeCheck (int postNo,int userNo,String type) {
+    return postMapper.likeCheck(postNo, userNo,type);
+  }
 }

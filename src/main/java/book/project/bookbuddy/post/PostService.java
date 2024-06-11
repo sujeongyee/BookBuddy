@@ -29,4 +29,5 @@ public interface PostService {
   public PostVO getCnt(int postNo,String type);
   public List<LikesVO> getLikeList(int postNo,String type);
   public List<CmtVO> getCmtList(int postNo,String type);
+  public int likeCheck (int postNo,int userNo,String type);
 }

@@ -10,7 +10,7 @@ import { useLoading } from "../context/LoadingContext";
 const PostDetail = ({}) => {
   const { type, postNo } = useParams();
   const { userData } = useUser();
-  const { userId, userNick, profileURL } = userData;
+  const { userId, userNo } = userData;
   const {showLoading,hideLoading} = useLoading();
   const [cmtCnt, setCmtCnt] = useState(0);
   const [likeCnt, setLikeCnt] = useState(0);
@@ -22,15 +22,31 @@ const PostDetail = ({}) => {
   const [fileList,setFileList] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [likeCheck,setLikeCheck] = useState(false);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        
+        const response2 = await axios.get(`/book/post/likeCheck?postNo=${postNo}&userNo=${userNo}&type=${type}`);
+        setLikeCheck(response2.data);
+        
+      } catch (error) {
+        console.error("좋아요 여부 불러오는 도중 오류 발생", error);
+      }
+      
+    }
+    if(userNo){
+      fetchData();
+    }
     
+  },[userNo])
+
+  useEffect(() => {
     const fetchPostDetail = async () => {
       try {
         showLoading();
         const response = await axios.get(`/book/post/postDetail?type=${type}&postNo=${postNo}`);
-        console.log(response);
-
         setCmtCnt(response.data.cmtCnt);
         setLikeCnt(response.data.likeCnt);
         setLikeList(response.data.likeList);
@@ -123,11 +139,13 @@ const PostDetail = ({}) => {
             <p><strong>책 이름 : </strong> {post ? post.recommend_BOOKTITLE || post.review_BOOKTITLE : ''}</p>
             {fileList.length > 0 && (
             <div className="postImageSlider">
-              <button onClick={prevImage}>{`<--`}</button>
-              
+              {fileList.length > 1 && (
+                <button onClick={prevImage}>{`<--`}</button>
+              )}
               <img className="postDetailImg" src={fileList[currentImageIndex].file_url} alt={`Image ${currentImageIndex + 1}`} />
-              
-              <button onClick={nextImage}>{`-->`}</button>
+              {fileList.length > 1 && (
+                <button onClick={nextImage}>{`-->`}</button>
+              )}
             </div>
             )}
             <div className='postDetailContentWrapper'>
@@ -137,14 +155,26 @@ const PostDetail = ({}) => {
             {reviewVO && <p><strong>Rating:</strong> {reviewVO.review_RATING}</p>}
             
             <div className="postStats">
-              <span onClick={likeList.includes(userId) ? handleUnlike : handleLike}>
-                {likeList.includes(userId) ? "👎" : "👍"} {likeCnt}
+              <span>
+                이 게시글에 공감해요 
+                {likeCheck ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ff9797" className="bi bi-heart-fill postHeart" viewBox="0 0 16 16">
+                    <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                  </svg>
+                ) : <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-heart postHeart" viewBox="0 0 16 16">
+                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+              </svg>}
+                
+                
               </span>
-              <span>💬 {cmtCnt}</span>
+              <span className='postStatsSpan'>{likeCnt}</span>
+              {/* <span onClick={likeList.includes(userId) ? handleUnlike : handleLike}>
+                {likeList.includes(userId) ? "👎" : "👍"} {likeCnt}
+              </span> */}
             </div>
           </div>
           <div className="commentsSection">
-            <h2>Comments</h2>
+            <h2>댓글 ({cmtCnt})</h2>
             {cmtList.map(comment => (
               <div key={comment.comment_no} className="comment">
                 <p><strong>User {comment.user_no}:</strong> {comment.comment_content}</p>
@@ -154,11 +184,12 @@ const PostDetail = ({}) => {
             <form onSubmit={handleCommentSubmit} className="commentForm">
               <textarea
                 value={newComment}
+                className='postDetailCommentText'
                 onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Add a comment..."
+                placeholder="댓글 내용을 작성해주세요."
                 required
               />
-              <button type="submit">Submit</button>
+              <button type="submit">작성하기</button>
             </form>
           </div>
         </div>)}

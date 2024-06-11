@@ -113,6 +113,13 @@ public class PostController {
     System.out.println(vo.toString());
     return vo;
   }
+
+  @GetMapping("/likeCheck")
+  public boolean likeCheck(@RequestParam("postNo") int postNo, @RequestParam("userNo") int userNo, @RequestParam("type") String type) {
+    int n = postService.likeCheck(postNo, userNo, type);
+    return n>0?true:false; 
+  }
+  
   
   
   
