@@ -87,7 +87,7 @@
     </select>
 
     <select id="likeCheck">
-        SELECT COUNT(*) FROM LIKES WHERE LIKE_TYPE='${type}' AND LIKE_POSTNO = ${postNo} AND LIKE_USER='${userNo}'
+        SELECT COUNT(*) FROM LIKES WHERE LIKE_TYPE='${type}' AND LIKE_POSTNO = ${postNo} AND LIKE_USER=${userNo}
     </select>
 
     <select id="getCnt">
@@ -102,5 +102,13 @@
     <select id="getCmtList">
         SELECT * FROM COMMENT WHERE ${type}_NO=${postNo}
     </select>
+
+    <insert id="doLike">
+        INSERT INTO LIKES (LIKE_TYPE,LIKE_POSTNO,LIKE_USER) VALUES ('${type}',${postNo},${userNo})
+    </insert>
+    
+    <delete id="cancelLike">
+        DELETE FROM LIKES WHERE LIKE_TYPE='${type}' AND LIKE_POSTNO = ${postNo} AND LIKE_USER=${userNo}
+    </delete>
 
 </mapper>

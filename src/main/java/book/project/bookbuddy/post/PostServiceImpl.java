@@ -77,4 +77,11 @@ public class PostServiceImpl implements PostService{
   public int likeCheck (int postNo,int userNo,String type) {
     return postMapper.likeCheck(postNo, userNo,type);
   }
+  public int doLike(int postNo,int userNo,String type){
+    return postMapper.doLike(postNo, userNo, type);
+  }
+  public int cancelLike(int postNo,int userNo,String type){
+    return postMapper.cancelLike(postNo, userNo, type);
+  }
+
 }

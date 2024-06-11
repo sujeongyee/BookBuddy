@@ -30,4 +30,6 @@ public interface PostService {
   public List<LikesVO> getLikeList(int postNo,String type);
   public List<CmtVO> getCmtList(int postNo,String type);
   public int likeCheck (int postNo,int userNo,String type);
+  public int doLike(int postNo,int userNo,String type);
+  public int cancelLike(int postNo,int userNo,String type);
 }
