@@ -32,4 +32,6 @@ public interface PostService {
   public int likeCheck (int postNo,int userNo,String type);
   public int doLike(int postNo,int userNo,String type);
   public int cancelLike(int postNo,int userNo,String type);
+  public void comment(int postNo, int userNo, String type, String comment);
+  public CmtVO geCmtVO();
 }

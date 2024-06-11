@@ -100,7 +100,7 @@
     </select>
 
     <select id="getCmtList">
-        SELECT * FROM COMMENT WHERE ${type}_NO=${postNo}
+        SELECT C.*,U.PROFILE_URL AS PROFILE_URL,U.USER_NICK AS USER_NICK,U.USER_ID AS USER_ID FROM COMMENT C LEFT JOIN USER U ON C.USER_NO = U.USER_NO WHERE C.${type}_NO=${postNo}
     </select>
 
     <insert id="doLike">
@@ -110,5 +110,14 @@
     <delete id="cancelLike">
         DELETE FROM LIKES WHERE LIKE_TYPE='${type}' AND LIKE_POSTNO = ${postNo} AND LIKE_USER=${userNo}
     </delete>
+
+    <insert id="comment">
+        INSERT INTO COMMENT (COMMENT_CONTENT,USER_NO,${type}_NO)
+        VALUES ('${comment}',${userNo},${postNo})
+    </insert>
+    
+    <select id="getCmtVO">
+        SELECT C.*,U.PROFILE_URL AS PROFILE_URL,U.USER_NICK AS USER_NICK,U.USER_ID AS USER_ID FROM COMMENT C LEFT JOIN USER U ON C.USER_NO = U.USER_NO ORDER BY C.COMMENT_DATE DESC LIMIT 1
+    </select>
 
 </mapper>

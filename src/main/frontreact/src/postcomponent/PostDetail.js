@@ -6,6 +6,8 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
 import { useLoading } from "../context/LoadingContext";
+import ToastMsg from '../main/ToastMsg';
+import { useNavigate } from 'react-router-dom';
 
 const PostDetail = ({}) => {
   const { type, postNo } = useParams();
@@ -23,6 +25,10 @@ const PostDetail = ({}) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [likeCheck,setLikeCheck] = useState(false);
+  const [writer,setWriter] = useState('');
+  const [showToast,setShowToast] = useState(false);
+  const [showToast2,setShowToast2] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,8 +60,10 @@ const PostDetail = ({}) => {
         setFileList(response.data.fileList);
         if (response.data.recommendVO !== null) {
           setRecommendVO(response.data.recommendVO);
+          setWriter(response.data.recommendVO.user_NO);
         } else {
           setReviewVO(response.data.reviewVO);
+          setWriter(response.data.reviewVO.user_NO);
         }
         setLoading(false);
         hideLoading();
@@ -69,6 +77,13 @@ const PostDetail = ({}) => {
   }, [type, postNo]);
 
   const handleLike = async () => {
+    if(writer==userNo){
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 2000);
+      return;
+    }
     try {
       const response = await axios.post(`/book/post/doLike`, { postNo, userNo, type});
       if(response.data>0) {
@@ -94,15 +109,22 @@ const PostDetail = ({}) => {
   };
 
   const handleCommentSubmit = async (e) => {
-    e.preventDefault();
+    if(window.confirm("댓글을 작성하시겠습니까?")){
+      e.preventDefault();
     try {
-      const response = await axios.post(`/book/post/comment`, { postNo, userId, comment: newComment });
-      setCmtList([...cmtList, response.data.comment]);
+      const response = await axios.post(`/book/post/comment`, { postNo, userNo, type, comment: newComment });
+      setShowToast2(true);
+      setTimeout(() => {
+        setShowToast2(false);
+      }, 2000);
+      setCmtList([...cmtList, response.data]);
       setCmtCnt(cmtCnt + 1);
       setNewComment("");
     } catch (error) {
-      console.error("Error submitting comment:", error);
+      console.error("댓글 작성 중 오류 발생", error);
     }
+    }
+    
   };
 
   const nextImage = () => {
@@ -113,6 +135,10 @@ const PostDetail = ({}) => {
     setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? fileList.length - 1 : prevIndex - 1));
   };
 
+  const toUserFeed = (user_id) =>{
+    navigate(`/userFeed/${user_id}`);
+  }
+
   const post = recommendVO || reviewVO;
 
   return (
@@ -122,6 +148,8 @@ const PostDetail = ({}) => {
       </div>
       <div className="mainContent2">
         <Header />
+        {showToast && <ToastMsg prop="myPostLike" />}
+        {showToast2 && <ToastMsg prop="doComment" />}
         {!loading && (
         <div className="mainSection">
           <div className="postDetailContainer">
@@ -170,23 +198,31 @@ const PostDetail = ({}) => {
                   </svg>
                 ) : <svg onClick={handleLike} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-heart postHeart" viewBox="0 0 16 16">
                 <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
-              </svg>}
-                
-                
+                </svg>}                
               </span>
               <span className='postStatsSpan'>{likeCnt}</span>
-              {/* <span onClick={likeList.includes(userId) ? handleUnlike : handleLike}>
-                {likeList.includes(userId) ? "👎" : "👍"} {likeCnt}
-              </span> */}
             </div>
+            {writer==userNo && (
+              <div className='post-work'><span>수정하기</span><span>삭제하기</span></div>
+            )}
           </div>
           <div className="commentsSection">
             <h2>댓글 ({cmtCnt})</h2>
             {cmtList.map(comment => (
               <div key={comment.comment_no} className="comment">
-                <p><strong>User {comment.user_no}:</strong> {comment.comment_content}</p>
+                <div className='commentHeader2'>
+                  <div className="commentHeader"onClick={()=>toUserFeed(comment.user_id)} >
+                    {comment.profile_url && <img src={comment.profile_url} alt="Profile" className="profileImg" />}
+                    <p><strong>{comment.user_nick} </strong> </p>
+                  </div>
+                  <p className='comment-content'> {comment.comment_content}</p>
+                </div>
                 <p><small>{new Date(comment.comment_date).toLocaleString()}</small></p>
+                {comment.user_id === userId && (
+                    <div className='comment-work'><span>수정하기</span>|<span>삭제하기</span></div>
+                )}
               </div>
+              
             ))}
             <form onSubmit={handleCommentSubmit} className="commentForm">
               <textarea

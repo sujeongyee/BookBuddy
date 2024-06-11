@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import book.project.bookbuddy.command.CmtVO;
 import book.project.bookbuddy.command.GridVO;
 import book.project.bookbuddy.command.ListVO;
 import book.project.bookbuddy.command.PostVO;
@@ -128,6 +130,14 @@ public class PostController {
   public int cancelLike(@RequestBody Map<String,String> map) {
     return postService.cancelLike(Integer.parseInt(map.get("postNo")) , Integer.parseInt(map.get("userNo")) , map.get("type"));
   }
+
+  @PostMapping("/comment")
+  public CmtVO comment(@RequestBody Map<String,String> map) {
+    postService.comment(Integer.parseInt(map.get("postNo")), Integer.parseInt(map.get("userNo")), map.get("type"), map.get("comment"));
+    CmtVO vo = postService.geCmtVO();
+    return vo;
+  }
+  
   
   
   

@@ -95,8 +95,10 @@ const FollowModal = ({ isOpen, onRequestClose, mode,userNo }) => {
   const toUserFeed = async (feedId) =>{
     if(userId==feedId){
       navigate(`/myBook`);
+      onRequestClose();
     }else{
       navigate(`/userFeed/${feedId}`);
+      onRequestClose();
     }
     
   }
