@@ -119,6 +119,17 @@ public class PostController {
     int n = postService.likeCheck(postNo, userNo, type);
     return n>0?true:false; 
   }
+
+  @PostMapping("/doLike")
+  public int doLike(@RequestBody Map<String,String> map) {
+    return postService.doLike(Integer.parseInt(map.get("postNo")) , Integer.parseInt(map.get("userNo")) , map.get("type"));
+  }
+  @PostMapping("/cancelLike")
+  public int cancelLike(@RequestBody Map<String,String> map) {
+    return postService.cancelLike(Integer.parseInt(map.get("postNo")) , Integer.parseInt(map.get("userNo")) , map.get("type"));
+  }
+  
+  
   
   
   

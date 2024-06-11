@@ -49,7 +49,7 @@ function UserRegist() {
         setIdMsg('');
     }
 
-    const checkId = async (e) => {
+    const checkId = async (e) => { 
         e.preventDefault();
         const id = document.querySelector(".regist-id").value;
         const response = await axios.post('/book/checkDuplicateId', {id});
