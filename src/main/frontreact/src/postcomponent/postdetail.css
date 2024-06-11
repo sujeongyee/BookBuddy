@@ -29,16 +29,25 @@
 }
 
 .postStats {
-  display: flex;
-  gap: 20px;
+  width: 150px;
+  position: relative;
+  background-color: #f3e2df;
+  padding: 10px;
+  color: #434343;
+  border-radius: 10px;
   margin-top: 15px;
-  font-size: 18px;
-  color: #3498db;
+  font-size: 13px;
   cursor: pointer;
 }
 
-.postStats span:hover {
-  color: #2980b9;
+.postHeart {
+  position: absolute;
+  top: 11px;
+  margin-left: 10px;
+}
+.postStatsSpan{
+  margin-left: 32px;
+  font-weight: bold;
 }
 
 .commentsSection {
@@ -90,6 +99,7 @@
   border-radius: 4px;
   resize: none;
   min-height: 80px;
+  font-size: 15px;
 }
 
 .commentForm button {
@@ -205,4 +215,9 @@
   font-size: 18px; /* 폰트 크기 조정 */
   line-height: 1.6; /* 줄 간격 조정 */
   color: #333; /* 글자색 */
+}
+
+.postDetailCommentText {
+  outline: none;
+  
 }
