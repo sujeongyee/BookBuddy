@@ -35,4 +35,6 @@ public interface PostMapper {
   public int likeCheck (@Param("postNo")int postNo,@Param("userNo") int userNo,@Param("type")String type);
   public int doLike(@Param("postNo")int postNo,@Param("userNo") int userNo,@Param("type")String type);
   public int cancelLike(@Param("postNo")int postNo,@Param("userNo") int userNo,@Param("type")String type);
+  public void comment(@Param("postNo")int postNo,@Param("userNo") int userNo,@Param("type")String type,@Param("comment") String comment);
+  public CmtVO getCmtVO();
 }

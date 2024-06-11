@@ -84,4 +84,12 @@ public class PostServiceImpl implements PostService{
     return postMapper.cancelLike(postNo, userNo, type);
   }
 
+  public void comment(int postNo, int userNo, String type, String comment){
+    postMapper.comment(postNo, userNo, type, comment);
+  }
+
+  public CmtVO geCmtVO(){
+    return postMapper.getCmtVO();
+  }
+
 }

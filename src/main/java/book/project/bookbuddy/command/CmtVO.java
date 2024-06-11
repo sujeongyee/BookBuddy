@@ -18,5 +18,7 @@ public class CmtVO {
   private int user_no;
   private int recommend_no;
   private int review_no;
-
+  private String user_id;
+  private String user_nick;
+  private String profile_url;
 }
