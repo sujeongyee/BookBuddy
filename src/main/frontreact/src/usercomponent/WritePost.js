@@ -226,6 +226,8 @@ const WritePost = ({ isOpen, onRequestClose, type, rcmVO, rvVO, onRequestShowMsg
     }
   };
 
+ 
+
 
   return(
     
@@ -335,7 +337,8 @@ const WritePost = ({ isOpen, onRequestClose, type, rcmVO, rvVO, onRequestShowMsg
           </table>
         <div>
         {/* 업로드된 파일들의 이름과 미리보기 */}
-        <div style={{ display: "flex" ,width:"90%",}}>
+        <div style={{ display: "flex" ,width:"90%",alignItems: "center",gap:"10px" }}>
+          <label>첨부 파일</label>
           {uploadFiles.map((file, index) => (
             <div key={index} style={{ position: "relative", marginRight: "15px" }}>
               {/* 삭제 아이콘 */}
@@ -356,8 +359,8 @@ const WritePost = ({ isOpen, onRequestClose, type, rcmVO, rvVO, onRequestShowMsg
         </div>
           {selectedImage && (
             <div className="modalWrite-selectImg">
-              <label className="modalWrite-label" style={{marginRight:'15px'}}>선택된 이미지</label>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" style={{ position: "absolute", top: "5px", left: "200px", zIndex: "1", cursor:"pointer"}} className="bi bi-x-circle-fill" viewBox="0 0 16 16">
+              <label className="modalWrite-label" style={{marginRight:'15px'}}>대표 이미지</label>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" style={{ position: "absolute", top: "5px", left: "190px", zIndex: "1", cursor:"pointer"}} className="bi bi-x-circle-fill" viewBox="0 0 16 16">
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"
                 onClick={() => setSelectedImage('')}/>
               </svg>

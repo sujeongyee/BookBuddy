@@ -63,6 +63,7 @@ public class MainController { // 로그인과 회원가입 등의 기능
     // 가입하기
     @PostMapping("/join")
     public boolean joinMember(@RequestBody UserVO vo){
+        System.out.println(vo.toString());
         int n = mainService.joinBuddy(vo);
         if(n==1) return true;
         else return false;

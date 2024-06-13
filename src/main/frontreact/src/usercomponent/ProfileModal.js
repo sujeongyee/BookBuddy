@@ -214,7 +214,13 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
     let ImgUrl;
     try {
       if(profileImg!=profileURL){
+        //porfileURL aws에서 지워주는 작업
         const formData = new FormData();
+        const deleteImg = await axios.delete(`/book/file/profileDelete`, {
+          params: {
+            profileURL: profileURL
+          }
+        });
         formData.append('profileImage', profileImg);
         const fileResponse = await axios.post('/book/file/profile', formData, {
           headers: {
