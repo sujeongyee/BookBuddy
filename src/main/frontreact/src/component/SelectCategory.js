@@ -1,11 +1,10 @@
-import {useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
-function SelectCategory({ setSelectedCategories,msg }){
-
+function SelectCategory({ setSelectedCategories, msg, cate }) {
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategoriesLocal] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     async function fetchCategories() {
       try {
         const response = await fetch("/book/getAllCategories");
@@ -20,7 +19,18 @@ function SelectCategory({ setSelectedCategories,msg }){
     }
 
     fetchCategories();
-  },[]);
+  }, []);
+
+  useEffect(() => {
+    if (cate) {
+      const categoriesArray = cate.split(',');
+      setSelectedCategoriesLocal(categoriesArray);
+    }
+  }, [cate]);
+
+  useEffect(() => {
+    setSelectedCategories(selectedCategories);
+  }, [selectedCategories, setSelectedCategories]);
 
   const handleClick = (category) => {
     if (selectedCategories.includes(category)) {
@@ -30,30 +40,28 @@ function SelectCategory({ setSelectedCategories,msg }){
     }
   };
 
-  useEffect(() => {
-    setSelectedCategories(selectedCategories);
-  }, [selectedCategories, setSelectedCategories]);
 
-
-  return(
+  return (
     <>
       <div className='regist-cate'>
-        
-        {msg? <p className="regist-cate-p">이 책의 카테고리</p>:<p className="regist-cate-p">선호하는 카테고리</p>}
+        {msg ? <p className="regist-cate-p">이 책의 카테고리</p> : <p className="regist-cate-p">선호하는 카테고리</p>}
         <p className="regist-cate-p2">{`${selectedCategories.length}개 선택됨`}</p>
       </div>
       <div className="regist-category-select">
         <ul>
           {categories.map((category) => (
             <li
-            key={category.category_NO}
-            className={selectedCategories.includes(category.category_NO) ? "active" : ""}
-            onClick={() => handleClick(category.category_NO)}
-          >{category.category_NAME}</li>
+              key={category.category_NO}
+              className={selectedCategories.includes(category.category_NO) ? "active" : ""}
+              onClick={() => handleClick(category.category_NO)}
+            >
+              {category.category_NAME}
+            </li>
           ))}
         </ul>
       </div>
-    </>                    
+    </>
   );
 }
-export default SelectCategory
+
+export default SelectCategory;
