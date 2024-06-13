@@ -33,17 +33,17 @@ function UserRegist() {
     const navigate = useNavigate();
 
     const [form, setForm] = useState({
-        USER_ID: '',
-        USER_PWD: '',
-        USER_NICK: '',
-        USER_PHONE: '',
-        USER_BIRTH:'',
-        CATEGORY_NO:[],
-        KEYWORD_NO: [],
-        USER_EMAIL:''
+        user_ID: '',
+        user_PWD: '',
+        user_NICK: '',
+        user_PHONE: '',
+        user_BIRTH:'',
+        category_NO:[],
+        keyword_NO: [],
+        user_EMAIL:''
     })
     const changeId = (e) => {
-        const copy = { ...form, ['USER_ID']: e.target.value };
+        const copy = { ...form, ['user_ID']: e.target.value };
         setForm(copy);
         setIdCheck(false);
         setIdMsg('');
@@ -83,7 +83,7 @@ function UserRegist() {
         const pw = e.target.value;
         if (pwd === pw) {
             setPwCheckMsg('비밀번호가 동일합니다. 확인 완료');
-            const copy = { ...form, ['USER_PWD']: e.target.value };
+            const copy = { ...form, ['user_PWD']: e.target.value };
             setForm(copy);
         } else {
             setPwCheckMsg('비밀번호가 다릅니다.');
@@ -97,7 +97,7 @@ function UserRegist() {
         if (response.data) {
             setNickMsg('사용 가능한 닉네임입니다.');
             setNickCheck(true);
-            const copy = { ...form, ['USER_NICK']: nick};
+            const copy = { ...form, ['user_NICK']: nick};
             setForm(copy);
         } else {
             setNickMsg('중복된 닉네임입니다.');
@@ -120,7 +120,7 @@ function UserRegist() {
         const id = document.querySelector(".regist-mail").value;
         const email = id + '@' + selectedDomain;
         setEmail(email);
-        const copy = { ...form, ['USER_EMAIL']: email};
+        const copy = { ...form, ['user_EMAIL']: email};
         setForm(copy);
         const response = await axios.post('/book/regist/sendMail', {email});
         setCode(response.data);
@@ -191,15 +191,14 @@ function UserRegist() {
                             'Content-Type': 'multipart/form-data'
                         }
                     }); 
-
                     // 파일 업로드가 성공한 경우, 업로드된 파일의 URL을 PROFILE_URL에 할당
                     copy = {
                         ...form,
-                        'PROFILE_URL': fileResponse.data,
-                        'USER_PHONE': phoneNo,
-                        'USER_BIRTH': birth,
-                        'CATEGORY_NO': selectedCategories.join(','),
-                        'KEYWORD_NO': selectedKeywords.join(',')
+                        'profile_URL': fileResponse.data,
+                        'user_PHONE': phoneNo,
+                        'user_BIRTH': birth,
+                        'category_NO': selectedCategories.join(','),
+                        'keyword_NO': selectedKeywords.join(',')
                     };
                     
                 } catch (error) {
@@ -208,11 +207,11 @@ function UserRegist() {
             }else{
                 copy = {
                     ...form,
-                    'PROFILE_URL': 'https://bookbuddytoy-bucket.s3.ap-northeast-2.amazonaws.com/no-profile.jpg',
-                    'USER_PHONE': phoneNo,
-                    'USER_BIRTH': birth,
-                    'CATEGORY_NO': selectedCategories.join(','),
-                    'KEYWORD_NO': selectedKeywords.join(',')
+                    'profile_URL': 'https://bookbuddytoy-bucket.s3.ap-northeast-2.amazonaws.com/no-profile.jpg',
+                    'user_PHONE': phoneNo,
+                    'user_BIRTH': birth,
+                    'category_NO': selectedCategories.join(','),
+                    'keyword_NO': selectedKeywords.join(',')
                 };
             }
             

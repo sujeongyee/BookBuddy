@@ -2,11 +2,15 @@ package book.project.bookbuddy.file;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
@@ -24,11 +28,23 @@ public class S3FileController {
   @Qualifier("s3Service")
   private S3Service s3Service;
 
-  // 프로필 이미지 업로드
   @PostMapping("/profile")
-  public String uploadProfileImage(@RequestParam("profileImage") MultipartFile file) {
-      String profileImage = s3Service.upload(file);
-      return profileImage;
+  public ResponseEntity<String> uploadProfileImage(@RequestParam("profileImage") MultipartFile file) {
+      try {
+          System.out.println("프로필 업로드 들립니다!");
+          String profileImage = s3Service.upload(file);
+          return ResponseEntity.ok(profileImage); // 업로드된 파일의 경로나 정보를 반환
+      } catch (Exception e) {
+          e.printStackTrace();
+          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("프로필 이미지 업로드 실패");
+      }
+  }
+  // 프로필 이미지 삭제
+  @DeleteMapping("/profileDelete")
+  public ResponseEntity<String> profileDelete(@RequestParam("profileURL") String profileURL) {
+      System.out.println("Profile URL: " + profileURL);
+      s3Service.deleteImageFromS3(profileURL);
+      return ResponseEntity.ok("프로필 이미지 삭제 성공");
   }
   // 프로필 이미지 url get
   @GetMapping("/getProfileUrl")
