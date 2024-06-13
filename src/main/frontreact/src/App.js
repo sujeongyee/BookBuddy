@@ -7,6 +7,7 @@ import Loading from "./main/Loading";
 import { LoadingProvider } from "./context/LoadingContext";
 import UserFeed from "./usercomponent/UserFeed";
 import PostDetail from "./postcomponent/PostDetail";
+import ModifyPostForm from "./postcomponent/ModifyPostForm ";
 
 function App() {
 
@@ -21,7 +22,8 @@ function App() {
                     <Route path="/myBook" element={<MyBook/>}/>
                     <Route path="/userFeed/:userNo" element={<UserFeed/>} />
                     <Route path="/post/:type/:postNo" element={<PostDetail/>} />
-                    <Route path="//userFeed/post/:type/:postNo" element={<PostDetail/>}/>
+                    <Route path="/userFeed/post/:type/:postNo" element={<PostDetail/>}/>
+                    <Route path="/modifyPost/:type/:postNo" element={<ModifyPostForm/>}/>
                 </Routes>
             </LoadingProvider>
         </UserProvider>

@@ -1,6 +1,6 @@
 import {useState, useEffect } from "react";
 
-function SelectKeyword({ setSelectedKeywords,msg }){
+function SelectKeyword({ setSelectedKeywords,msg,kwd }){
 
   const [keywords, setKeywords] = useState([]);
   const [selectedKeywords, setSelectedKeywordsLocal] = useState([]);
@@ -23,19 +23,23 @@ function SelectKeyword({ setSelectedKeywords,msg }){
   },[]);
 
   const handleClick = (keywords) => {
-     // 이미 선택된 키워드를 클릭한 경우 제거
     if (selectedKeywords.includes(keywords)) {
       setSelectedKeywordsLocal(selectedKeywords.filter((c) => c !== keywords));
     } else {
-      // 선택되지 않은 키워드를 클릭한 경우 추가
       setSelectedKeywordsLocal([...selectedKeywords, keywords]);
     }
   };
 
   useEffect(() => {
-    // 부모 컴포넌트로 선택된 카테고리 리스트 업데이트
     setSelectedKeywords(selectedKeywords);
   }, [selectedKeywords, setSelectedKeywords]);
+
+  useEffect(()=>{
+    if (kwd) {
+      const categoriesArray = kwd.split(',');
+      setSelectedKeywordsLocal(categoriesArray);
+    }
+  },[kwd])
 
   return(
     <div className="reigst-k">

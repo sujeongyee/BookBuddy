@@ -8,6 +8,7 @@ import { useUser } from "../context/UserContext";
 import { useLoading } from "../context/LoadingContext";
 import ToastMsg from '../main/ToastMsg';
 import { useNavigate } from 'react-router-dom';
+import WritePost from '../usercomponent/WritePost';
 
 const PostDetail = ({}) => {
   const { type, postNo } = useParams();
@@ -29,7 +30,8 @@ const PostDetail = ({}) => {
   const [showToast,setShowToast] = useState(false);
   const [showToast2,setShowToast2] = useState(false);
   const navigate = useNavigate();
-
+  const [modifyModal,setModifyModal] = useState(false);
+  const [modifyModalIsOpen,setModifyModalIsOpen] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -139,6 +141,13 @@ const PostDetail = ({}) => {
     navigate(`/userFeed/${user_id}`);
   }
 
+  const modifyPost = () =>{
+    setModifyModalIsOpen(true);
+  }
+  const deletePost = () =>{
+
+  }
+
   const post = recommendVO || reviewVO;
 
   return (
@@ -203,8 +212,9 @@ const PostDetail = ({}) => {
               <span className='postStatsSpan'>{likeCnt}</span>
             </div>
             {writer==userNo && (
-              <div className='post-work'><span>수정하기</span><span>삭제하기</span></div>
+              <div className='post-work'><span onClick={()=>modifyPost()}>수정하기</span><span onClick={()=>deletePost()}>삭제하기</span></div>
             )}
+            <WritePost isOpen={modifyModalIsOpen} onRequestClose={()=>{setModifyModalIsOpen(false)}} type={type} rcmVO={recommendVO} rvVO = {reviewVO}></WritePost>
           </div>
           <div className="commentsSection">
             <h2>댓글 ({cmtCnt})</h2>
@@ -213,7 +223,7 @@ const PostDetail = ({}) => {
                 <div className='commentHeader2'>
                   <div className="commentHeader"onClick={()=>toUserFeed(comment.user_id)} >
                     {comment.profile_url && <img src={comment.profile_url} alt="Profile" className="profileImg" />}
-                    <p><strong>{comment.user_nick} </strong> </p>
+                    <p><strong>{comment.user_nick}  {comment.user_id === userId &&(('(글쓴이)'))}</strong> </p>
                   </div>
                   <p className='comment-content'> {comment.comment_content}</p>
                 </div>

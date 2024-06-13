@@ -9,23 +9,25 @@ import SelectKeyword from "../component/SelectKeyword";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ToastMsg from "../main/ToastMsg";
-const WritePost = ({ isOpen, onRequestClose, vo, onRequestShowMsg, onRequestShowMsg2, onRequestWrite}) => {
+
+const WritePost = ({ isOpen, onRequestClose, type, rcmVO, rvVO, onRequestShowMsg, onRequestShowMsg2, onRequestWrite }) => {
   const { userData } = useUser();
   const { userId } = userData;
   const navigate = useNavigate();
   
-  const [postTitle, setPostTitle] = useState(""); // 게시글제목
-  const [postType, setPostType] = useState(""); // 게시글유형
-  const [bookTitle,setBookTitle] = useState(""); // 책 제목
-  const [postContent, setPostContent] = useState(""); // 게시글내용
-  const [rating, setRating] = useState(0); // 리뷰라면? 별점
-  const [bookImages, setBookImages] = useState([]); // 추천대표이미지
-  const [selectedImage, setSelectedImage] = useState(""); // 추천이미지 중 선택
-  const [uploadFiles, setUploadFiles] = useState([]); // 직접 올린 이미지
+  const [postTitle, setPostTitle] = useState(""); 
+  const [postType, setPostType] = useState(""); 
+  const [bookTitle, setBookTitle] = useState(""); 
+  const [postContent, setPostContent] = useState(""); 
+  const [rating, setRating] = useState(0); 
+  const [bookImages, setBookImages] = useState([]); 
+  const [selectedImage, setSelectedImage] = useState(""); 
+  const [uploadFiles, setUploadFiles] = useState([]); 
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedKeywords, setSelectedKeywords] = useState([]);
-  const [componentMsg,setComponentMsg] = ('이 책의 ');
-  const [updatedVo,setUpdatedVo] = useState(null);
+  const [componentMsg, setComponentMsg] = useState('이 책의 ');
+  const [isEditing, setIsEditing] = useState(false);
+  const [postId, setPostId] = useState(null);
 
   // 모달 css
   const customModalStyles = {
@@ -43,7 +45,7 @@ const WritePost = ({ isOpen, onRequestClose, vo, onRequestShowMsg, onRequestShow
       bottom: "auto",
       maxWidth: "1000px",
       width: "765px",
-      maxHeight:"626px",
+      maxHeight: "626px",
       padding: "0px",
       border: "none",
       borderRadius: "12px",
@@ -54,19 +56,51 @@ const WritePost = ({ isOpen, onRequestClose, vo, onRequestShowMsg, onRequestShow
   };
 
   useEffect(() => {
-    if(vo){
-      setUpdatedVo(vo);
+    if (type === 'recommend' && rcmVO) {
+      setIsEditing(true);
+      setPostType('recommendation');
+      setPostId(rcmVO.recommend_NO);
+      setPostTitle(rcmVO.recommend_TITLE);
+      setBookTitle(rcmVO.recommend_BOOKTITLE);
+      setPostContent(rcmVO.recommend_CONTENT);
+      setSelectedCategories(rcmVO.recommend_CATEGORY.split(','));
+      setSelectedKeywords(rcmVO.recommend_KEYWORD.split(','));
+    } else if (type === 'review' && rvVO) {
+      setIsEditing(true);
+      setPostType('review');
+      setPostId(rvVO.review_NO);
+      setPostTitle(rvVO.review_TITLE);
+      setBookTitle(rvVO.review_BOOKTITLE);
+      setPostContent(rvVO.review_CONTENT);
+      setRating(rvVO.review_RATING);
+      setSelectedCategories(rvVO.review_CATEGORY.split(','));
+      setSelectedKeywords(rvVO.review_KEYWORD.split(','));
+    } else {
+      setIsEditing(false);
+      resetForm();
     }
-  }, [vo]);
+  }, [type, rcmVO, rvVO]);
 
-  // 추천 대표 이미지
+  const resetForm = () => {
+    setPostTitle("");
+    setPostType("");
+    setBookTitle("");
+    setPostContent("");
+    setRating(0);
+    setBookImages([]);
+    setSelectedImage("");
+    setUploadFiles([]);
+    setSelectedCategories([]);
+    setSelectedKeywords([]);
+  };
+
   const handleSearchImages = async () => {
-    if(bookTitle===''){
+    if (bookTitle === '') {
       alert('책 이름을 입력해주세요');
       return;
     }
     try {
-      const search = '책 '+bookTitle;
+      const search = '책 ' + bookTitle;
       const API_KEY = process.env.REACT_APP_API_KEY;
       const CX = process.env.REACT_APP_ENGINE_ID;
       const encodedBookTitle = encodeURIComponent(search);
@@ -74,194 +108,124 @@ const WritePost = ({ isOpen, onRequestClose, vo, onRequestShowMsg, onRequestShow
 
       const response = await axios.get(searchUrl);
       const items = response.data.items || [];
-      if(items.length>=4){
+      if (items.length >= 4) {
         setBookImages(items.slice(0, 4).map(item => item.link));
-      }else{
+      } else {
         setBookImages(items.map(item => item.link));
       }
-      
     } catch (error) {
       console.error('Error searching for book images:', error);
     }
   };
-  // 게시글 작성 submit
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(postType===''){
+    if (postType === '') {
       alert('게시글의 유형을 선택해주세요');
-    }else if(postTitle===''){
-      alert('게시글 제목을 입력해주세요.')
-    }else if(bookTitle===''){
-      alert('책 제목을 입력해주세요.')
-    }else if(postContent.length<10){
-      alert('게시글 내용을 10자 이상 입력해주세요.')
-    }else if(uploadFiles.length===0&&selectedImage===0){
+      return;
+    } else if (postTitle === '') {
+      alert('게시글 제목을 입력해주세요.');
+      return;
+    } else if (bookTitle === '') {
+      alert('책 제목을 입력해주세요.');
+      return;
+    } else if (postContent.length < 10) {
+      alert('게시글 내용을 10자 이상 입력해주세요.');
+      return;
+    } else if (uploadFiles.length === 0 && selectedImage === '') {
       alert('대표 이미지 사진이 필요합니다. 추천 이미지 중 선택해주세요.');
       handleSearchImages();
       return;
-    }else if(selectedCategories.length===0){
+    } else if (selectedCategories.length === 0) {
       alert('카테고리를 하나 이상 선택해주세요');
-    }else if(selectedKeywords.length===0){
+      return;
+    } else if (selectedKeywords.length === 0) {
       alert('키워드를 하나 이상 선택해주세요');
-    }else{
-      if(postType==='recommendation'){//추천글이라면
-        const form = {
-          recommend_TITLE:postTitle,
-          recommend_BOOKTITLE:bookTitle,
-          recommend_CONTENT:postContent,
-          recommend_CATEGORY:selectedCategories.join(','),
-          recommend_KEYWORD:selectedKeywords.join(','),
-          user_NO:updatedVo.user_NO
-        };
-        const response = await axios.post('/book/post/writeRecommendPost', form, {
-          headers: {
-              'Content-Type': 'application/json'
-          }
-        });
-        if(response.data>=0){
-          try {
-            const formData = new FormData();
-            formData.append('rcmNo', response.data); // 방금 올린 게시글의 pk값
-            if(selectedImage){
-              formData.append('imgUrl',selectedImage); // api 결과로 선택된 이미지링크 추가
-            }else{
-              formData.append('imgUrl',"");
-            }
-            
-            if(uploadFiles){
-              uploadFiles.forEach((file) => {
-                formData.append('uploadFiles', file); // 파일들 추가
-              }); 
-            }else{
-              formData.append('uploadFiles',[]);
-            }
-            const responseImg = await axios.post('/book/file/rcmImgUrlToFile', formData);
-            if(responseImg.data==='success'){
-              
-              onRequestShowMsg();
-              onRequestClose();
-              setPostTitle("");
-              setPostType("");
-              setBookTitle("");
-              setPostContent("");
-              setRating(0);
-              setBookImages([]);
-              setSelectedImage("");
-              setUploadFiles([]);
-              setSelectedCategories([]);
-              setSelectedKeywords([]);
-              onRequestWrite();
-            }
-            // 업로드 성공 시 Success 컴포넌트 반환
-          } catch (error) {
-            console.error('Error posting recommended images:', error);
-          }
-        } else{
-          alert('글을 등록하는 중 오류가 발생했습니다. 다시 시도해주세요.');
-        }
+      return;
+    }
 
-      }else{//리뷰글이라면
-        const form = {
-          review_TITLE:postTitle,
-          review_BOOKTITLE:bookTitle,
-          review_CONTENT:postContent,
-          review_CATEGORY:selectedCategories.join(','),
-          review_KEYWORD:selectedKeywords.join(','),
-          user_NO:updatedVo.user_NO,
-          recommend_BOOKTITLE:bookTitle,
-          review_RATING:rating
-        };
-        
-        const response = await axios.post('/book/post/writeReviewPost', form, {
-          headers: {
-              'Content-Type': 'application/json'
-          }
-        });
-        if(response.data>=0){
-          console.log('이미지');
-          try {
-            const formData = new FormData();
-            formData.append('rvNo', response.data);
-            if(selectedImage){
-              formData.append('imgUrl',selectedImage); // api 결과로 선택된 이미지링크 추가
-            }else{
-              formData.append('imgUrl',"");
-            }
-            
-            if(uploadFiles){
-              uploadFiles.forEach((file) => {
-                formData.append('uploadFiles', file); // 파일들 추가
-              }); 
-            }else{
-              formData.append('uploadFiles',[]);
-            }
-            const responseImg= await axios.post('/book/file/rvImgUrlToFile', formData);
-            if(responseImg.data==='success'){
-              onRequestShowMsg2();
-              onRequestClose();
-              setPostTitle("");
-              setPostType("");
-              setBookTitle("");
-              setPostContent("");
-              setRating(0);
-              setBookImages([]);
-              setSelectedImage("");
-              setUploadFiles([]);
-              setSelectedCategories([]);
-              setSelectedKeywords([]);
-              onRequestWrite();
-            }
-          } catch (error) {
-            console.error('Error posting recommended images:', error);
-          }
-        } else{
-          alert('글을 등록하는 중 오류가 발생했습니다. 다시 시도해주세요.');
-        }
+    const form = {
+      title: postTitle,
+      bookTitle: bookTitle,
+      content: postContent,
+      categories: selectedCategories.join(','),
+      keywords: selectedKeywords.join(','),
+      userNo: userId
+    };
+
+    let response;
+    if (postType === 'recommendation') {
+      if (isEditing) {
+        form.recommendNo = postId;
+        response = await axios.put('/book/post/updateRecommendPost', form);
+      } else {
+        response = await axios.post('/book/post/writeRecommendPost', form);
+      }
+    } else if (postType === 'review') {
+      form.rating = rating;
+      if (isEditing) {
+        form.reviewNo = postId;
+        response = await axios.put('/book/post/updateReviewPost', form);
+      } else {
+        response = await axios.post('/book/post/writeReviewPost', form);
       }
     }
-    
-    
+
+    if (response.data >= 0) {
+      const formData = new FormData();
+      formData.append(postType === 'recommendation' ? 'rcmNo' : 'rvNo', response.data);
+      formData.append('imgUrl', selectedImage);
+
+      if (uploadFiles) {
+        uploadFiles.forEach((file) => {
+          formData.append('uploadFiles', file);
+        });
+      }
+
+      const responseImg = await axios.post(`/book/file/${postType}ImgUrlToFile`, formData);
+      if (responseImg.data === 'success') {
+        onRequestClose();
+        resetForm();
+        if (postType === 'recommendation') {
+          onRequestShowMsg();
+        } else {
+          onRequestShowMsg2();
+        }
+        onRequestWrite();
+      }
+    } else {
+      alert('글을 등록하는 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
     navigate('/myBook');
   };
 
-  // 별점 매기기
   const handleRating = (selectedRating) => {
     setRating(selectedRating);
   };
 
-  // 파일 업로드 및 정보 저장 (직접 업로드한 파일)
   const handleImageUpload = (files) => {
-    if(files.length>4){
-      alert("최대 4개의 이미지만 선택할 수 있습니다.");
-      return;
-    }
-    if (uploadFiles.length>=4) {
+    if (files.length > 4 || uploadFiles.length >= 4) {
       alert("최대 4개의 이미지만 선택할 수 있습니다.");
       return;
     }
     const uploadedFiles = Array.from(files);
-    if(uploadFiles.length>=4){
-      alert("최대 4개의 이미지만 선택할 수 있습니다.");
-    }else{
-      setUploadFiles([...uploadFiles, ...uploadedFiles]);
-    }
-    
+    setUploadFiles([...uploadFiles, ...uploadedFiles]);
   };
-  // 직접 업로드 파일 중 x 버튼으로 취소
+
   const handleDeleteFile = (index) => {
     const newFiles = [...uploadFiles];
-    newFiles.splice(index, 1); // 배열에서 해당 인덱스의 이미지를 제거
+    newFiles.splice(index, 1);
     setUploadFiles(newFiles);
   };
-  
+
   const changeContent = (e) => {
-    if(e.target.value.length>1000){
+    if (e.target.value.length > 1000) {
       alert('게시글 내용은 1000자 이내로 작성해주세요.');
-      return;
-    }else{
+    } else {
       setPostContent(e.target.value);
     }
-  }
+  };
+
 
   return(
     
@@ -323,7 +287,7 @@ const WritePost = ({ isOpen, onRequestClose, vo, onRequestShowMsg, onRequestShow
                     className="modalWrite-input modalWrite-textarea"
                     placeholder="게시글 내용을 입력하세요."
                   />
-                  <span className="modalWrite-characterCount">{postContent.length}/1000</span>
+                  <span className="modalWrite-characterCount">{postContent ? postContent.length : 0}/1000</span>
                 </td>
               </tr>
              
@@ -401,10 +365,19 @@ const WritePost = ({ isOpen, onRequestClose, vo, onRequestShowMsg, onRequestShow
             </div>)}
         </div>      
         <div>
-          <SelectCategory setSelectedCategories={setSelectedCategories} msg={componentMsg}/>    
-          <SelectKeyword setSelectedKeywords={setSelectedKeywords} msg={componentMsg}/>             
+        <SelectCategory 
+          setSelectedCategories={setSelectedCategories} 
+          msg={componentMsg} 
+          cate={(rcmVO?.recommend_CATEGORY || rvVO?.review_CATEGORY) || ''}
+        />    
+        <SelectKeyword 
+          setSelectedKeywords={setSelectedKeywords} 
+          msg={componentMsg} 
+          kwd={(rcmVO?.recommend_KEYWORD || rvVO?.review_KEYWORD) || ''}
+        />
         </div>
-        <button type="submit" className="modalWrite-submitButton">작성하기</button>
+        {type ? (<button type="submit" className="modalWrite-submitButton">수정하기</button>):(<button type="submit" className="modalWrite-submitButton">작성하기</button>)}
+        
       </form>               
     </div>
   </Modal>

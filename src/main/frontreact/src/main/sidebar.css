@@ -295,7 +295,7 @@ body, html {
     background-color: #e5ecfc;
 }
 
-.logout-btn:hover {
+.logout-btn:hover,.my-feed:hover {
     background-color: #dbe4f6;
 }
 
