@@ -25,4 +25,6 @@ public class ReviewVO { // 리뷰게시글 vo
   private int user_NO;
   private String review_BOOKTITLE;
   private int review_RATING;
+  private String book_ISBN;
+  private String book_THUMBNAIL;
 }

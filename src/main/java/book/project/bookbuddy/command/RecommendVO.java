@@ -22,5 +22,6 @@ public class RecommendVO { // 추천게시글 vo
   private int recommend_LIKE;
   private int user_NO;
   private String recommend_BOOKTITLE;
-
+  private String book_ISBN;
+  private String book_THUMBNAIL;
 }

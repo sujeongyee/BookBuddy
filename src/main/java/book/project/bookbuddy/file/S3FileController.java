@@ -53,17 +53,17 @@ public class S3FileController {
   }
   // 추천 게시글 이미지 업로드
   @PostMapping("/rcmImgUrlToFile")
-  public String rcmImgUrlToFile(@RequestParam("rcmNo") String rcmNo, @RequestParam("imgUrl") String imgUrl,
+  public String rcmImgUrlToFile(@RequestParam("rcmNo") String rcmNo, 
                                 @RequestParam(value = "uploadFiles", required = false) MultipartFile[] uploadFiles) {
-    if (imgUrl == null && uploadFiles == null) {
+    if (uploadFiles == null) {
         return "false";
     }
-    // google search로 검색한 이미지 파일화-> s3업로드 -> FILE 테이블에 정보 저장
-    if (!imgUrl.equals("") && imgUrl != null) { 
-        MultipartFile multipartFile = s3FileSerivce.linkToFile(imgUrl);
-        String s3Url = s3Service.upload(multipartFile);
-        s3FileSerivce.insertRecommendImg(rcmNo, s3Url);
-    }
+    // // google search로 검색한 이미지 파일화-> s3업로드 -> FILE 테이블에 정보 저장
+    // if (!imgUrl.equals("") && imgUrl != null) { 
+    //     MultipartFile multipartFile = s3FileSerivce.linkToFile(imgUrl);
+    //     String s3Url = s3Service.upload(multipartFile);
+    //     s3FileSerivce.insertRecommendImg(rcmNo, s3Url);
+    // }
     // 유저가 첨부한 이미지 s3업로드 후 FILE 테이블에 정보 저장
     if (uploadFiles!=null) { 
         for (MultipartFile file : uploadFiles) {
@@ -75,18 +75,18 @@ public class S3FileController {
   }
   //리뷰 게시글 이미지 업로드
   @PostMapping("/rvImgUrlToFile")
-  public String rvImgUrlToFile(@RequestParam("rvNo") String rvNo,@RequestParam("imgUrl") String imgUrl,
+  public String rvImgUrlToFile(@RequestParam("rvNo") String rvNo,
                                @RequestParam(value = "uploadFiles", required = false) MultipartFile[] uploadFiles){
 
-    if (imgUrl == null && uploadFiles == null) {
+    if ( uploadFiles == null) {
       return "false";
     }
     // google search로 검색한 이미지 파일화-> s3업로드 -> file 테이블에 정보 저장
-    if(!imgUrl.equals("")&&imgUrl!=null){ 
-        MultipartFile multipartFile = s3FileSerivce.linkToFile(imgUrl);
-        String s3Url = s3Service.upload(multipartFile);
-        s3FileSerivce.insertReviewImg(rvNo, s3Url);
-    }
+    // if(!imgUrl.equals("")&&imgUrl!=null){ 
+    //     MultipartFile multipartFile = s3FileSerivce.linkToFile(imgUrl);
+    //     String s3Url = s3Service.upload(multipartFile);
+    //     s3FileSerivce.insertReviewImg(rvNo, s3Url);
+    // }
     // 유저가 첨부한 이미지 s3업로드
     if(uploadFiles != null){
         for (MultipartFile file : uploadFiles) {
