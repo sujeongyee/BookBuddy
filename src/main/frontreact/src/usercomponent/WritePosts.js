@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import Modal from 'react-modal';
 import axios from "axios";
 import './mybook.css';
 import { useUser } from "../context/UserContext";
@@ -11,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ToastMsg from "../main/ToastMsg";
 import Header from "../main/Header";
 import Sidebar from "../main/Sidebar";
+import SearchBook from "./SearchBook.js";
 
 const WritePosts = ({ type, rcmVO, rvVO, onRequestShowMsg, onRequestShowMsg2, onRequestWrite }) => {
   const { userData } = useUser();
@@ -30,32 +30,11 @@ const WritePosts = ({ type, rcmVO, rvVO, onRequestShowMsg, onRequestShowMsg2, on
   const [componentMsg, setComponentMsg] = useState('이 책의 ');
   const [isEditing, setIsEditing] = useState(false);
   const [postId, setPostId] = useState(null);
+  const [searchModalIsOpen,setSearchModalIsOpen] = useState(false);
+  const [modalStatus,setModalStatus] = useState('off');
+  const [selectBook,setSelectBook] = useState([]);
 
-  // 모달 css
-  const customModalStyles = {
-    overlay: {
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    content: {
-      position: "relative",
-      top: "auto",
-      left: "auto",
-      right: "auto",
-      bottom: "auto",
-      maxWidth: "1000px",
-      width: "765px",
-      maxHeight: "626px",
-      padding: "0px",
-      border: "none",
-      borderRadius: "12px",
-      backgroundColor: "#f3f7ff",
-      boxShadow: "0 0 15px rgba(0, 0, 0, 0.2)",
-      height: "auto",
-    },
-  };
+  
 
   useEffect(() => {
     if (type === 'recommend' && rcmVO) {
@@ -96,49 +75,7 @@ const WritePosts = ({ type, rcmVO, rvVO, onRequestShowMsg, onRequestShowMsg2, on
     setSelectedKeywords([]);
   };
 
-  const handleSearchImages = async () => {
-    if (bookTitle === '') {
-      alert('책 이름을 입력해주세요');
-      return;
-    }
-    try {
-      // const search = '책 ' + bookTitle;
-      // const API_KEY = process.env.REACT_APP_API_KEY;
-      // const CX = process.env.REACT_APP_ENGINE_ID;
-      // const encodedBookTitle = encodeURIComponent(search);
-      // const searchUrl = `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${CX}&q=${encodedBookTitle}&searchType=image`;
-
-      // const response = await axios.get(searchUrl);
-      // const items = response.data.items || [];
-      // if (items.length >= 4) {
-      //   setBookImages(items.slice(0, 4).map(item => item.link));
-      // } else {
-      //   setBookImages(items.map(item => item.link));
-      // }
-
-      const KAKAO_KEY = process.env.KAKAO_APP_API_KEY;
-      const Kakao = axios.create({
-        baseURL:"https://dapi.kakao.com",
-        headers : {
-          Authorization: "KakaoAK "+KAKAO_KEY
-        }
-      });
-      const kakaoSearch = params => {
-        return Kakao.get("/v3/search/book", {params})
-      }
-      const params = {
-        query:bookTitle,
-        size: 10,
-        target:"title"
-      };
-      const result = await kakaoSearch(params);
-      console.log(result);
-      console.log(result.data);
-      console.log(result.data.documents);
-    } catch (error) {
-      console.error('Error searching for book images:', error);
-    }
-  };
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -156,7 +93,7 @@ const WritePosts = ({ type, rcmVO, rvVO, onRequestShowMsg, onRequestShowMsg2, on
       return;
     } else if (uploadFiles.length === 0 && selectedImage === '') {
       alert('대표 이미지 사진이 필요합니다. 추천 이미지 중 선택해주세요.');
-      handleSearchImages();
+      //handleSearchImages();
       return;
     } else if (selectedCategories.length === 0) {
       alert('카테고리를 하나 이상 선택해주세요');
@@ -247,6 +184,12 @@ const WritePosts = ({ type, rcmVO, rvVO, onRequestShowMsg, onRequestShowMsg2, on
     }
   };
 
+  const searchBook = (e) => {
+    e.preventDefault();
+    setModalStatus('on');
+    setSearchModalIsOpen(true);
+  }
+
  
 
 
@@ -277,7 +220,7 @@ const WritePosts = ({ type, rcmVO, rvVO, onRequestShowMsg, onRequestShowMsg2, on
                         추천
                       </label>
                       <label className={`radio-button ${postType === 'review' ? 'selected' : ''}`}>
-                        <input type="radio"value="review" checked={postType === 'review'} onChange={(e) => setPostType(e.target.value)}/>
+                        <input type="radio" value="review" checked={postType === 'review'} onChange={(e) => setPostType(e.target.value)}/>
                         리뷰
                       </label>
                     </div>
@@ -296,17 +239,18 @@ const WritePosts = ({ type, rcmVO, rvVO, onRequestShowMsg, onRequestShowMsg2, on
                     <label htmlFor="postBookTitle" className="modalWrite-label">책 제목</label>
                   </td>
                   <td>
-                    <div className="modalWrite-searchContainer">
-                      <input type="text" id="postBookTitle" value={bookTitle} onChange={(e) => setBookTitle(e.target.value)} className="modalWrite-input modalWrite-inputTitle"placeholder="책 제목을 입력하세요."/>
+                    <div className="modalWrite-searchContainer" style={{display: 'flex', flexDirection: 'row'}}>
+                      <input type="text" style={{width: '75%'}} id="postBookTitle" value={bookTitle} onChange={(e) => setBookTitle(e.target.value)} className="modalWrite-input modalWrite-inputTitle" placeholder="책 제목을 입력하세요."/>
+                      <button className="book-searchBtn" onClick={(e) => searchBook(e)}>검색하기</button>
+                      <SearchBook isOpen={searchModalIsOpen} onRequestClose={() => { setSearchModalIsOpen(false); setModalStatus('off') ;}} bookTitle={bookTitle} status={modalStatus} bookSelect = {(e)=>setSelectBook(e)} />
                     </div>
                   </td>
                 </tr>
-              
                 <tr className="modalWrite-row">
                   <td>
                     <label htmlFor="postContent" className="modalWrite-label">내용</label>
                   </td>
-                  <td style={{position:'relative',display:'flex',flexDirection:'column'}}>
+                  <td style={{ position: 'relative', display: 'flex', flexDirection: 'column' }}>
                     <textarea
                       id="postContent"
                       value={postContent}
@@ -317,7 +261,7 @@ const WritePosts = ({ type, rcmVO, rvVO, onRequestShowMsg, onRequestShowMsg2, on
                     <span className="modalWrite-characterCount2">{postContent ? postContent.length : 0}/1000</span>
                   </td>
                 </tr>
-                
+                {/* 리뷰일 경우 별점 입력 */}
                 {/* 리뷰일 경우 별점 입력 */}
                 {postType === 'review' && (
                   <tr className="modalWrite-row">
@@ -349,11 +293,11 @@ const WritePosts = ({ type, rcmVO, rvVO, onRequestShowMsg, onRequestShowMsg2, on
                       </svg>
                     </label>
                     <input type="file" id="img-btn" style={{ display: "none" }} multiple onChange={(e) => handleImageUpload(e.target.files)} accept="image/*"/>    
-                    <label className="label-img" onClick={handleSearchImages}>
+                    {/* <label className="label-img" onClick={handleSearchImages}>
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-search imgSearch" viewBox="0 0 16 16">
                         <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
                       </svg>
-                    </label>
+                    </label> */}
                     
                   </td>
                 </tr>
@@ -367,7 +311,7 @@ const WritePosts = ({ type, rcmVO, rvVO, onRequestShowMsg, onRequestShowMsg2, on
               {uploadFiles.map((file, index) => (
                 <div key={index} style={{ position: "relative", marginRight: "15px" }}>
                   {/* 삭제 아이콘 */}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" style={{ position: "absolute", top: "-2", right: "-4", zIndex: "1", cursor:"pointer"}} className="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" style={{ position: "absolute", top: "-2", right: "-4", zIndex: "1", cursor:"pointer"}} className="bi bi-x-circle-fill" viewBox="0 0 16 16">
                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"
                     onClick={() => handleDeleteFile(index)}/>
                   </svg>
