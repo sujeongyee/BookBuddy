@@ -100,19 +100,39 @@ const WritePost = ({ isOpen, onRequestClose, type, rcmVO, rvVO, onRequestShowMsg
       return;
     }
     try {
-      const search = '책 ' + bookTitle;
-      const API_KEY = process.env.REACT_APP_API_KEY;
-      const CX = process.env.REACT_APP_ENGINE_ID;
-      const encodedBookTitle = encodeURIComponent(search);
-      const searchUrl = `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${CX}&q=${encodedBookTitle}&searchType=image`;
+      // const search = '책 ' + bookTitle;
+      // const API_KEY = process.env.REACT_APP_API_KEY;
+      // const CX = process.env.REACT_APP_ENGINE_ID;
+      // const encodedBookTitle = encodeURIComponent(search);
+      // const searchUrl = `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${CX}&q=${encodedBookTitle}&searchType=image`;
 
-      const response = await axios.get(searchUrl);
-      const items = response.data.items || [];
-      if (items.length >= 4) {
-        setBookImages(items.slice(0, 4).map(item => item.link));
-      } else {
-        setBookImages(items.map(item => item.link));
+      // const response = await axios.get(searchUrl);
+      // const items = response.data.items || [];
+      // if (items.length >= 4) {
+      //   setBookImages(items.slice(0, 4).map(item => item.link));
+      // } else {
+      //   setBookImages(items.map(item => item.link));
+      // }
+
+      const KAKAO_KEY = process.env.KAKAO_APP_API_KEY;
+      const Kakao = axios.create({
+        baseURL:"https://dapi.kakao.com",
+        headers : {
+          Authorization: "KakaoAK "+KAKAO_KEY
+        }
+      });
+      const kakaoSearch = params => {
+        return Kakao.get("/v3/search/book", {params})
       }
+      const params = {
+        query:bookTitle,
+        size: 10,
+        target:"title"
+      };
+      const result = await kakaoSearch(params);
+      console.log(result);
+      console.log(result.data);
+      console.log(result.data.documents);
     } catch (error) {
       console.error('Error searching for book images:', error);
     }

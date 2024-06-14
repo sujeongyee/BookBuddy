@@ -8,6 +8,7 @@ import { LoadingProvider } from "./context/LoadingContext";
 import UserFeed from "./usercomponent/UserFeed";
 import PostDetail from "./postcomponent/PostDetail";
 import ModifyPostForm from "./postcomponent/ModifyPostForm ";
+import WritePosts from "./usercomponent/WritePosts";
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
                     <Route path="/post/:type/:postNo" element={<PostDetail/>} />
                     <Route path="/userFeed/post/:type/:postNo" element={<PostDetail/>}/>
                     <Route path="/modifyPost/:type/:postNo" element={<ModifyPostForm/>}/>
+                    <Route path="/writePost" element={<WritePosts/>}/>
                 </Routes>
             </LoadingProvider>
         </UserProvider>
