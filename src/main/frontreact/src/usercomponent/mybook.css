@@ -658,3 +658,43 @@ input:-webkit-autofill:active {
  .follow-item:hover {
   background-color: #f1e4e5;
  }
+
+ #postContent {
+  position:relative;
+}
+.modalWrite-characterCount2 {
+  position: absolute;
+  bottom: 10px; 
+  right: 50px;
+  color: #838383;
+  font-size: 12px;
+}
+.write-container {
+  width: 68%;
+  min-height: 1200px;
+}
+
+.write-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 15px; 
+}
+ 
+ .write-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 수직 가운데 정렬 */
+  justify-content: space-between; /* 공간을 균등하게 배분 */
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd; /* 하단에 선 추가 */
+  margin-bottom: 20px; /* 헤더 아래 여백 */
+  margin-top: 20px;
+}
+
+.write-title {
+  margin-top: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333; /* 글자 색상 */
+  margin: 10px; /* 기본 여백 제거 */
+}
