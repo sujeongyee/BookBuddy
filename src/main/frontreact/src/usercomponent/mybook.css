@@ -683,11 +683,11 @@ input:-webkit-autofill:active {
  .write-header {
   display: flex;
   flex-direction: column;
-  align-items: center; /* 수직 가운데 정렬 */
-  justify-content: space-between; /* 공간을 균등하게 배분 */
+  align-items: center; 
+  justify-content: space-between; 
   padding-bottom: 10px;
-  border-bottom: 1px solid #ddd; /* 하단에 선 추가 */
-  margin-bottom: 20px; /* 헤더 아래 여백 */
+  border-bottom: 1px solid #ddd; 
+  margin-bottom: 20px; 
   margin-top: 20px;
 }
 
@@ -695,6 +695,15 @@ input:-webkit-autofill:active {
   margin-top: 20px;
   font-size: 24px;
   font-weight: bold;
-  color: #333; /* 글자 색상 */
-  margin: 10px; /* 기본 여백 제거 */
+  color: #333; 
+  margin: 10px; 
+}
+
+.book-searchBtn {
+  padding: 10px 15px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
 }
