@@ -3,7 +3,7 @@ import axios from "axios";
 import Modal from "react-modal";
 import "./searchbook.css";
 
-const SearchBook = ({ isOpen, onRequestClose, bookTitle, status, bookSelect }) => {
+const SearchBook = ({ isOpen, onRequestClose, bookTitle, status, bookSelect , bookCheck}) => {
   const [bookList, setBookList] = useState([]);
   const [localBookSelect, setLocalBookSelect] = useState(null);
 
@@ -35,6 +35,7 @@ const SearchBook = ({ isOpen, onRequestClose, bookTitle, status, bookSelect }) =
   const handleComplete = () => {
     if (localBookSelect) {
       bookSelect(localBookSelect);
+      bookCheck(true);
       onRequestClose();
     }
   };

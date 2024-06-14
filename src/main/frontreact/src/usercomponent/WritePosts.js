@@ -12,14 +12,15 @@ import Header from "../main/Header";
 import Sidebar from "../main/Sidebar";
 import SearchBook from "./SearchBook.js";
 
-const WritePosts = ({ type, rcmVO, rvVO, onRequestShowMsg, onRequestShowMsg2, onRequestWrite }) => {
+const WritePosts = ({ type, rcmVO, rvVO,}) => {
   const { userData } = useUser();
-  const { userId } = userData;
+  const { userId ,userNo} = userData;
   const navigate = useNavigate();
   
   const [postTitle, setPostTitle] = useState(""); 
   const [postType, setPostType] = useState(""); 
   const [bookTitle, setBookTitle] = useState(""); 
+  const [bookTitleCheck,setBookTitleCheck] = useState(false);
   const [postContent, setPostContent] = useState(""); 
   const [rating, setRating] = useState(0); 
   const [bookImages, setBookImages] = useState([]); 
@@ -33,8 +34,11 @@ const WritePosts = ({ type, rcmVO, rvVO, onRequestShowMsg, onRequestShowMsg2, on
   const [searchModalIsOpen,setSearchModalIsOpen] = useState(false);
   const [modalStatus,setModalStatus] = useState('off');
   const [selectBook,setSelectBook] = useState([]);
-
-  
+  const [showToast, setShowToast] = useState(false);
+  const [showToast2, setShowToast2] = useState(false);
+  useEffect(()=>{
+    console.log(selectBook);
+  },[selectBook])
 
   useEffect(() => {
     if (type === 'recommend' && rcmVO) {
@@ -75,87 +79,111 @@ const WritePosts = ({ type, rcmVO, rvVO, onRequestShowMsg, onRequestShowMsg2, on
     setSelectedKeywords([]);
   };
 
- 
-
+  ///////////////// 게시글 등록
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // 필수 입력 항목 검사
     if (postType === '') {
       alert('게시글의 유형을 선택해주세요');
       return;
-    } else if (postTitle === '') {
+    }
+    if (postTitle === '') {
       alert('게시글 제목을 입력해주세요.');
       return;
-    } else if (bookTitle === '') {
+    }
+    if (bookTitle === '') {
       alert('책 제목을 입력해주세요.');
       return;
-    } else if (postContent.length < 10) {
+    }
+    if (postContent.length < 10) {
       alert('게시글 내용을 10자 이상 입력해주세요.');
       return;
-    } else if (uploadFiles.length === 0 && selectedImage === '') {
-      alert('대표 이미지 사진이 필요합니다. 추천 이미지 중 선택해주세요.');
-      //handleSearchImages();
-      return;
-    } else if (selectedCategories.length === 0) {
+    }
+    if (selectedCategories.length === 0) {
       alert('카테고리를 하나 이상 선택해주세요');
       return;
-    } else if (selectedKeywords.length === 0) {
+    }
+    if (selectedKeywords.length === 0) {
       alert('키워드를 하나 이상 선택해주세요');
       return;
     }
-
-    const form = {
-      title: postTitle,
-      bookTitle: bookTitle,
-      content: postContent,
-      categories: selectedCategories.join(','),
-      keywords: selectedKeywords.join(','),
-      userNo: userId
-    };
-
-    let response;
+  
+    // FormData 초기화
+    const formData = new FormData();
+    let endpoint;
+    formData.append('book_ISBN',selectBook.isbn);
+    formData.append('book_THUMBNAIL',selectBook.thumbnail);
     if (postType === 'recommendation') {
-      if (isEditing) {
-        form.recommendNo = postId;
-        response = await axios.put('/book/post/updateRecommendPost', form);
-      } else {
-        response = await axios.post('/book/post/writeRecommendPost', form);
-      }
-    } else if (postType === 'review') {
-      form.rating = rating;
-      if (isEditing) {
-        form.reviewNo = postId;
-        response = await axios.put('/book/post/updateReviewPost', form);
-      } else {
-        response = await axios.post('/book/post/writeReviewPost', form);
-      }
+      formData.append('recommend_TITLE', postTitle);
+      formData.append('recommend_BOOKTITLE', bookTitle);
+      formData.append('recommend_CONTENT', postContent);
+      formData.append('recommend_CATEGORY', selectedCategories.join(','));
+      formData.append('recommend_KEYWORD', selectedKeywords.join(','));
+      formData.append('user_NO', userNo);
+      endpoint = '/book/post/writeRecommendPost';
+    } else { // postType === 'review'
+      formData.append('review_TITLE', postTitle);
+      formData.append('review_BOOKTITLE', bookTitle);
+      formData.append('review_CONTENT', postContent);
+      formData.append('review_CATEGORY', selectedCategories.join(','));
+      formData.append('review_KEYWORD', selectedKeywords.join(','));
+      formData.append('user_NO', userNo);
+      formData.append('review_RATING', rating);
+      endpoint = '/book/post/writeReviewPost';
     }
-
-    if (response.data >= 0) {
-      const formData = new FormData();
-      formData.append(postType === 'recommendation' ? 'rcmNo' : 'rvNo', response.data);
-      formData.append('imgUrl', selectedImage);
-
-      if (uploadFiles) {
-        uploadFiles.forEach((file) => {
-          formData.append('uploadFiles', file);
-        });
-      }
-
-      const responseImg = await axios.post(`/book/file/${postType}ImgUrlToFile`, formData);
-      if (responseImg.data === 'success') {
-        resetForm();
-        if (postType === 'recommendation') {
-          onRequestShowMsg();
-        } else {
-          onRequestShowMsg2();
+  
+    try {
+      // 게시글 등록 요청
+      const response = await axios.post(endpoint, formData, {
+        headers: {
+          'Content-Type': 'application/json'
         }
-        onRequestWrite();
+      });
+  
+      if (response.data >= 0) {
+        // 이미지 업로드
+        const formDataImg = new FormData();
+        let imgEndpoint = '/book/file/';
+        console.log(response.data);
+        if (postType === 'recommendation') {
+          imgEndpoint += 'rcmImgUrlToFile';
+          formDataImg.append('rcmNo', response.data);
+        } else {
+          imgEndpoint += 'rvImgUrlToFile';
+          formDataImg.append('rvNo', response.data);
+        }
+  
+        if (uploadFiles.length > 0) {
+          uploadFiles.forEach((file) => {
+            formDataImg.append('uploadFiles', file); // 파일들 추가
+          });
+        } else {
+          formDataImg.append('uploadFiles', []);
+        }
+  
+        // 이미지 업로드 요청
+        const responseImg = await axios.post(imgEndpoint, formDataImg);
+  
+        if (responseImg.data === 'success') {
+
+          if (postType === 'recommendation') setShowToast(true);
+          else setShowToast2(true);
+        }
+      } else {
+        alert('글을 등록하는 중 오류가 발생했습니다. 다시 시도해주세요.');
       }
-    } else {
+    } catch (error) {
+      console.error('Error posting recommended images:', error);
       alert('글을 등록하는 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
+  
+    // 페이지 이동
     navigate('/myBook');
   };
+  
+
+  
 
   const handleRating = (selectedRating) => {
     setRating(selectedRating);
@@ -200,7 +228,8 @@ const WritePosts = ({ type, rcmVO, rvVO, onRequestShowMsg, onRequestShowMsg2, on
       </div>
       <div className="mainContent2">
         <Header/>  
-    
+        {showToast && <ToastMsg prop="success" />}
+        {showToast2 && <ToastMsg prop="success2" />}
         <div className="write-container">
           <div className="write-header">
             <h3 className="write-title">게시글 작성</h3>
@@ -240,9 +269,9 @@ const WritePosts = ({ type, rcmVO, rvVO, onRequestShowMsg, onRequestShowMsg2, on
                   </td>
                   <td>
                     <div className="modalWrite-searchContainer" style={{display: 'flex', flexDirection: 'row'}}>
-                      <input type="text" style={{width: '75%'}} id="postBookTitle" value={bookTitle} onChange={(e) => setBookTitle(e.target.value)} className="modalWrite-input modalWrite-inputTitle" placeholder="책 제목을 입력하세요."/>
+                      <input type="text" style={{width: '75%'}} id="postBookTitle" value={bookTitle} onChange={(e) => {setBookTitle(e.target.value); setBookTitleCheck(false) }} className="modalWrite-input modalWrite-inputTitle" placeholder="책 제목을 입력하세요."/>
                       <button className="book-searchBtn" onClick={(e) => searchBook(e)}>검색하기</button>
-                      <SearchBook isOpen={searchModalIsOpen} onRequestClose={() => { setSearchModalIsOpen(false); setModalStatus('off') ;}} bookTitle={bookTitle} status={modalStatus} bookSelect = {(e)=>setSelectBook(e)} />
+                      <SearchBook isOpen={searchModalIsOpen} onRequestClose={() => { setSearchModalIsOpen(false); setModalStatus('off') ;}} bookTitle={bookTitle} status={modalStatus} bookSelect = {(e)=>setSelectBook(e)} bookCheck={()=>{setBookTitleCheck(true)}} />
                     </div>
                   </td>
                 </tr>
