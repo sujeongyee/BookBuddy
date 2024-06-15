@@ -440,10 +440,12 @@
 .modalWrite-row {
   border-bottom: 1px solid #eee;
 }
-
+.write-label {
+  color:#7e92c4;
+}
 .modalWrite-label {
   font-size: 16px;
-  color: #333;
+  color: #7e92c4;
 }
 
 .radio-buttons {
@@ -511,7 +513,7 @@
 .modalWrite-submitButton {
   width: 100%;
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #95a7d4;
   border: none;
   border-radius: 5px;
   color: #fff;
@@ -519,7 +521,7 @@
 }
 
 .modalWrite-submitButton:hover {
-  background-color: #0056b3;
+  background-color: #8291b9;
 }
 .label-img{
   width: 20px;
@@ -539,7 +541,7 @@
 }
 .star-rating{
   padding: 1px;
-  color: #f07070;
+  color: #aab8dd;
 }
 
 .modalWrite-selectImg{
@@ -695,13 +697,13 @@ input:-webkit-autofill:active {
   margin-top: 20px;
   font-size: 24px;
   font-weight: bold;
-  color: #333; 
+  color: #7e92c4; 
   margin: 10px; 
 }
 
 .book-searchBtn {
   padding: 10px 15px;
-  background-color: #007bff;
+  background-color: #95a7d4;
   border: none;
   border-radius: 5px;
   color: #fff;

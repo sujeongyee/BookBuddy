@@ -12,6 +12,7 @@ import PostList from "../postcomponent/PostList";
 import ToastMsg from "../main/ToastMsg";
 import { useLoading } from "../context/LoadingContext";
 import FollowModal from "./FollowModal";
+import { useNavigate } from 'react-router-dom';
 function MyBook() { 
 
   const {userData ,setUserData} = useUser();
@@ -33,7 +34,7 @@ function MyBook() {
   const [mode, setMode] = useState(null);
   const [loading, setLoading] = useState(true);
   const [writePostCheck,setWritePostCheck] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(()=>{
     const fetchPost = async () => {
       try {
@@ -120,7 +121,7 @@ function MyBook() {
           <div className="action-buttons">
             <button className="edit-profile-button" onClick={()=>{setProfileModalIsOpen(true)}}>프로필 수정</button>
             <ProfileModal isOpen={profilemodalIsOpen} onRequestClose={()=>{setProfileModalIsOpen(false)}} vo={vo} />
-            <button className="write-post-button" onClick={()=>{setWriteModalIsOpen(true)}}>글 작성하기</button>
+            <button className="write-post-button" onClick={()=>{navigate('/writePost');}}>글 작성하기</button>
             <WritePost isOpen={writemodalIsOpen} onRequestClose={()=>{setWriteModalIsOpen(false)}} vo={vo} onRequestShowMsg={()=>{setShowToast(true)}} onRequestShowMsg2={()=>{setShowToast2(true)}} onRequestWrite={()=>{setWritePostCheck(true)}}></WritePost>
           </div>
           <div className="feed-container">
