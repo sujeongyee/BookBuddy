@@ -37,7 +37,7 @@ const WritePosts = ({ type, rcmVO, rvVO,}) => {
   const [showToast, setShowToast] = useState(false);
   const [showToast2, setShowToast2] = useState(false);
   useEffect(()=>{
-    console.log(selectBook);
+    // console.log(selectBook);
   },[selectBook])
 
   useEffect(() => {
@@ -313,7 +313,7 @@ const WritePosts = ({ type, rcmVO, rvVO,}) => {
                 )}
                 <tr className="modalWrite-row">
                   <td>
-                    <label  className="modalWrite-file">이미지첨부</label>
+                    <label  className="modalWrite-file modalWrite-label">이미지첨부</label>
                   </td>
                   <td>
                     <label htmlFor="img-btn" className="label-img">
@@ -336,7 +336,7 @@ const WritePosts = ({ type, rcmVO, rvVO,}) => {
             <div>
             {/* 업로드된 파일들의 이름과 미리보기 */}
             <div style={{ display: "flex" ,width:"90%",alignItems: "center",gap:"10px" }}>
-              <label>첨부 파일</label>
+              <label className="modalWrite-label">첨부 파일</label>
               {uploadFiles.map((file, index) => (
                 <div key={index} style={{ position: "relative", marginRight: "15px" }}>
                   {/* 삭제 아이콘 */}
