@@ -126,6 +126,9 @@ const WritePosts = () => {
       alert('키워드를 하나 이상 선택해주세요');
       return;
     }
+    if(!bookTitleCheck){
+      alert('책을 검색해서 해당 되는 책을 선택해주세요');
+    }
   
     // FormData 초기화
     const formData = new FormData();
