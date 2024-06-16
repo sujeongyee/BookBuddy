@@ -50,10 +50,8 @@ const WritePosts = () => {
   useEffect(() => {
     if(type) {
       setFileLists(fileList);
-      console.log(fileList);
     }
     if (type === 'review') {
-      console.log(reviewVO);
       setPostTitle(reviewVO.review_TITLE);
       setPostType('review');
       setBookTitle(reviewVO.review_BOOKTITLE);
@@ -62,7 +60,6 @@ const WritePosts = () => {
       setSelectedCategories(reviewVO.review_CATEGORY.split(','));
       setSelectedKeywords(reviewVO.review_KEYWORD.split(','));
     } else if (type === 'recommend') {
-      console.log(recommendVO);
       setPostTitle(recommendVO.recommend_TITLE);
       setPostType('recommend');
       setBookTitle(recommendVO.recommend_BOOKTITLE);
@@ -219,10 +216,17 @@ const WritePosts = () => {
     setUploadFiles([...uploadFiles, ...uploadedFiles]);
   };
 
-  const handleDeleteFile = (url,no,index) => {
-    const newFiles = [...fileLists];
-    newFiles.splice(index, 1);
-    setFileLists(newFiles);
+  const handleDeleteFile = (index,type,url,no) => {
+    if(type==='origin'){
+      const newFiles = [...fileLists];
+      newFiles.splice(index, 1);
+      setFileLists(newFiles);
+    }else{
+      const newFiles = [...uploadFiles];
+      newFiles.splice(index, 1);
+      setUploadFiles(newFiles);
+    }
+    
   };
 
   const changeContent = (e) => {
@@ -357,13 +361,13 @@ const WritePosts = () => {
             <div>
             {/* 업로드된 파일들의 이름과 미리보기 */}
             <div style={{ display: "flex" ,width:"90%",alignItems: "center",gap:"10px" }}>
-              <label className="modalWrite-label">첨부 파일</label>
+              <label className="modalWrite-label" style={{marginRight:'110px'}}>첨부 파일</label>
               {fileLists && fileLists.map((file, index) => (
                 <div key={index} style={{ position: "relative", marginRight: "15px" }}>
                 {/* 삭제 아이콘 */}
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" style={{ position: "absolute", top: "-2", right: "-4", zIndex: "1", cursor:"pointer"}} className="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="gray" style={{ position: "absolute", top: "-2", right: "-4", zIndex: "1", cursor:"pointer"}} className="bi bi-x-circle-fill" viewBox="0 0 16 16">
                   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"
-                  onClick={() => handleDeleteFile(file.file_url,file.file_no,index)}/>
+                  onClick={() => handleDeleteFile(index,'origin',file.file_url,file.file_no)}/>
                 </svg>
                 {/* 파일 미리보기 */}
                 <img src={file.file_url} alt={`Preview ${index}`} style={{ width: "90px", height: "90px" }}/>
@@ -372,9 +376,9 @@ const WritePosts = () => {
               {uploadFiles && uploadFiles.map((file, index) => (
                 <div key={index} style={{ position: "relative", marginRight: "15px" }}>
                   {/* 삭제 아이콘 */}
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" style={{ position: "absolute", top: "-2", right: "-4", zIndex: "1", cursor:"pointer"}} className="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="gray" style={{ position: "absolute", top: "-2", right: "-4", zIndex: "1", cursor:"pointer"}} className="bi bi-x-circle-fill" viewBox="0 0 16 16">
                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"
-                    onClick={() => handleDeleteFile(index)}/>
+                    onClick={() => handleDeleteFile(index,'new')}/>
                   </svg>
                   {/* 파일 미리보기 */}
                   <img src={URL.createObjectURL(file)} alt={`Preview ${index}`} style={{ width: "90px", height: "90px" }}/>
