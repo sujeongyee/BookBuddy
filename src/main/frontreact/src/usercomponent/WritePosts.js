@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from "axios";
 import './mybook.css';
 import { useUser } from "../context/UserContext";
@@ -11,12 +12,14 @@ import ToastMsg from "../main/ToastMsg";
 import Header from "../main/Header";
 import Sidebar from "../main/Sidebar";
 import SearchBook from "./SearchBook.js";
+import { useLocation } from 'react-router-dom';
 
-const WritePosts = ({ type, rcmVO, rvVO,}) => {
+const WritePosts = () => {
+
+  const navigate = useNavigate();
   const { userData } = useUser();
   const { userId ,userNo} = userData;
-  const navigate = useNavigate();
-  
+  // const { postNo, type } = useParams();
   const [postTitle, setPostTitle] = useState(""); 
   const [postType, setPostType] = useState(""); 
   const [bookTitle, setBookTitle] = useState(""); 
@@ -36,35 +39,53 @@ const WritePosts = ({ type, rcmVO, rvVO,}) => {
   const [selectBook,setSelectBook] = useState([]);
   const [showToast, setShowToast] = useState(false);
   const [showToast2, setShowToast2] = useState(false);
+  const location = useLocation();
+  const postData = location.state || {};
+  const { type,recommendVO,reviewVO,fileList } = postData;
+  const [fileLists,setFileLists] = useState([]);
   useEffect(()=>{
     // console.log(selectBook);
   },[selectBook])
 
   useEffect(() => {
-    if (type === 'recommend' && rcmVO) {
-      setIsEditing(true);
-      setPostType('recommendation');
-      setPostId(rcmVO.recommend_NO);
-      setPostTitle(rcmVO.recommend_TITLE);
-      setBookTitle(rcmVO.recommend_BOOKTITLE);
-      setPostContent(rcmVO.recommend_CONTENT);
-      setSelectedCategories(rcmVO.recommend_CATEGORY.split(','));
-      setSelectedKeywords(rcmVO.recommend_KEYWORD.split(','));
-    } else if (type === 'review' && rvVO) {
-      setIsEditing(true);
-      setPostType('review');
-      setPostId(rvVO.review_NO);
-      setPostTitle(rvVO.review_TITLE);
-      setBookTitle(rvVO.review_BOOKTITLE);
-      setPostContent(rvVO.review_CONTENT);
-      setRating(rvVO.review_RATING);
-      setSelectedCategories(rvVO.review_CATEGORY.split(','));
-      setSelectedKeywords(rvVO.review_KEYWORD.split(','));
-    } else {
-      setIsEditing(false);
-      resetForm();
+    if(type) {
+      setFileLists(fileList);
+      console.log(fileList);
     }
-  }, [type, rcmVO, rvVO]);
+    if (type === 'review') {
+      console.log(reviewVO);
+      setPostTitle(reviewVO.review_TITLE);
+      setPostType('review');
+      setBookTitle(reviewVO.review_BOOKTITLE);
+      setPostContent(reviewVO.review_CONTENT);
+      setRating(reviewVO.review_RATING);
+      setSelectedCategories(reviewVO.review_CATEGORY.split(','));
+      setSelectedKeywords(reviewVO.review_KEYWORD.split(','));
+    } else if (type === 'recommend') {
+      console.log(recommendVO);
+      setPostTitle(recommendVO.recommend_TITLE);
+      setPostType('recommend');
+      setBookTitle(recommendVO.recommend_BOOKTITLE);
+      setPostContent(recommendVO.recommend_CONTENT);
+      setSelectedCategories(recommendVO.recommend_CATEGORY.split(','));
+      setSelectedKeywords(recommendVO.recommend_KEYWORD.split(','));
+    }
+  }, [postType, postData]);
+
+  useEffect(()=>{
+    const fetchPostData = async () =>{
+      try {
+        let endpoint = '/book/post/';
+        endpoint += (type==='recommend')
+        const response = ``;
+      } catch (error) {
+        console.error("게시글 정보 가져오는 도중 오류 발생", error)
+      }
+    }
+    if(type) {
+      fetchPostData();
+    }
+  },[type])
 
   const resetForm = () => {
     setPostTitle("");
@@ -198,10 +219,10 @@ const WritePosts = ({ type, rcmVO, rvVO,}) => {
     setUploadFiles([...uploadFiles, ...uploadedFiles]);
   };
 
-  const handleDeleteFile = (index) => {
-    const newFiles = [...uploadFiles];
+  const handleDeleteFile = (url,no,index) => {
+    const newFiles = [...fileLists];
     newFiles.splice(index, 1);
-    setUploadFiles(newFiles);
+    setFileLists(newFiles);
   };
 
   const changeContent = (e) => {
@@ -232,7 +253,7 @@ const WritePosts = ({ type, rcmVO, rvVO,}) => {
         {showToast2 && <ToastMsg prop="success2" />}
         <div className="write-container">
           <div className="write-header">
-            <h3 className="write-title">게시글 작성</h3>
+            <h3 className="write-title">{type ? ('게시글 수정'):('게시글 작성')}</h3>
           </div>
           
           <form onSubmit={handleSubmit} className="write-form">
@@ -337,7 +358,18 @@ const WritePosts = ({ type, rcmVO, rvVO,}) => {
             {/* 업로드된 파일들의 이름과 미리보기 */}
             <div style={{ display: "flex" ,width:"90%",alignItems: "center",gap:"10px" }}>
               <label className="modalWrite-label">첨부 파일</label>
-              {uploadFiles.map((file, index) => (
+              {fileLists && fileLists.map((file, index) => (
+                <div key={index} style={{ position: "relative", marginRight: "15px" }}>
+                {/* 삭제 아이콘 */}
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" style={{ position: "absolute", top: "-2", right: "-4", zIndex: "1", cursor:"pointer"}} className="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"
+                  onClick={() => handleDeleteFile(file.file_url,file.file_no,index)}/>
+                </svg>
+                {/* 파일 미리보기 */}
+                <img src={file.file_url} alt={`Preview ${index}`} style={{ width: "90px", height: "90px" }}/>
+              </div>
+              ))}
+              {uploadFiles && uploadFiles.map((file, index) => (
                 <div key={index} style={{ position: "relative", marginRight: "15px" }}>
                   {/* 삭제 아이콘 */}
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" style={{ position: "absolute", top: "-2", right: "-4", zIndex: "1", cursor:"pointer"}} className="bi bi-x-circle-fill" viewBox="0 0 16 16">
@@ -369,12 +401,12 @@ const WritePosts = ({ type, rcmVO, rvVO,}) => {
             <SelectCategory 
               setSelectedCategories={setSelectedCategories} 
               msg={componentMsg} 
-              cate={(rcmVO?.recommend_CATEGORY || rvVO?.review_CATEGORY) || ''}
+              cate={(type==='review'? reviewVO.review_CATEGORY : recommendVO.recommend_CATEGORY) || ''}
             />    
             <SelectKeyword 
               setSelectedKeywords={setSelectedKeywords} 
               msg={componentMsg} 
-              kwd={(rcmVO?.recommend_KEYWORD || rvVO?.review_KEYWORD) || ''}
+              kwd={(type==='review'? reviewVO.review_KEYWORD : recommendVO.recommend_KEYWORD) || ''}
             />
             </div>
             {type ? (<button type="submit" className="modalWrite-submitButton">수정하기</button>):(<button type="submit" style={{marginTop: '20px'}}className="modalWrite-submitButton">작성하기</button>)}
