@@ -1,5 +1,5 @@
 import './postdetail.css';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory} from 'react-router-dom';
 import Sidebar from '../main/Sidebar';
 import Header from '../main/Header';
 import axios from "axios";
@@ -11,10 +11,13 @@ import { useNavigate } from 'react-router-dom';
 import WritePost from '../usercomponent/WritePost';
 
 const PostDetail = ({}) => {
+
   const { type, postNo } = useParams();
   const { userData } = useUser();
   const { userId, userNo } = userData;
   const {showLoading,hideLoading} = useLoading();
+  const navigate = useNavigate();
+
   const [cmtCnt, setCmtCnt] = useState(0);
   const [likeCnt, setLikeCnt] = useState(0);
   const [cmtList, setCmtList] = useState([]);
@@ -29,7 +32,6 @@ const PostDetail = ({}) => {
   const [writer,setWriter] = useState('');
   const [showToast,setShowToast] = useState(false);
   const [showToast2,setShowToast2] = useState(false);
-  const navigate = useNavigate();
   const [modifyModal,setModifyModal] = useState(false);
   const [modifyModalIsOpen,setModifyModalIsOpen] = useState(false);
   useEffect(() => {
@@ -142,7 +144,12 @@ const PostDetail = ({}) => {
   }
 
   const modifyPost = () =>{
-    setModifyModalIsOpen(true);
+    if(type==='review'){
+      navigate('/modifyPost',{ state:{reviewVO,type,fileList}});
+    }else{
+      navigate('/modifyPost', { state:{recommendVO,type,fileList}});
+    }
+    
   }
   const deletePost = () =>{
 

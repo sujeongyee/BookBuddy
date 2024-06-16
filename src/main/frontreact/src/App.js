@@ -24,7 +24,7 @@ function App() {
                     <Route path="/userFeed/:userNo" element={<UserFeed/>} />
                     <Route path="/post/:type/:postNo" element={<PostDetail/>} />
                     <Route path="/userFeed/post/:type/:postNo" element={<PostDetail/>}/>
-                    <Route path="/modifyPost/:type/:postNo" element={<ModifyPostForm/>}/>
+                    <Route path="/modifyPost" element={<WritePosts/>}/>
                     <Route path="/writePost" element={<WritePosts/>}/>
                 </Routes>
             </LoadingProvider>
