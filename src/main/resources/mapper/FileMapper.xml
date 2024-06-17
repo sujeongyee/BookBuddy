@@ -23,5 +23,9 @@
         SELECT * FROM FILE WHERE ${type}_NO= ${postNo} AND FILE_CATEGORY='${type}'
     </select>
 
+    <delete id="deleteFile">
+        DELETE FROM FILE WHERE FILE_NO = #{fileNo}
+    </delete>
+
 
 </mapper>

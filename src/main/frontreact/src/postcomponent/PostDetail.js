@@ -64,6 +64,7 @@ const PostDetail = ({}) => {
         setFileList(response.data.fileList);
         if (response.data.recommendVO !== null) {
           setRecommendVO(response.data.recommendVO);
+          console.log(response.data.recommendVO);
           setWriter(response.data.recommendVO.user_NO);
         } else {
           setReviewVO(response.data.reviewVO);
@@ -89,7 +90,7 @@ const PostDetail = ({}) => {
       return;
     }
     try {
-      const response = await axios.post(`/book/post/doLike`, { postNo, userNo, type});
+      const response = await axios.post(`/book/post/doLike`, { postNo, userNo, type}); 
       if(response.data>0) {
         setLikeCnt(likeCnt+1);
         setLikeCheck(true);
@@ -188,16 +189,25 @@ const PostDetail = ({}) => {
 
             {/* <p><strong>Keywords:</strong> {post ? post.recommend_KEYWORD || post.review_KEYWORD : ''}</p> */}
             <p><strong>책 이름 : </strong> {post ? post.recommend_BOOKTITLE || post.review_BOOKTITLE : ''}</p>
-            {fileList.length > 0 && (
-            <div className="postImageSlider">
-              {fileList.length > 1 && (
-                <button onClick={prevImage}>{`<--`}</button>
-              )}
-              <img className="postDetailImg" src={fileList[currentImageIndex].file_url} alt={`Image ${currentImageIndex + 1}`} />
-              {fileList.length > 1 && (
-                <button onClick={nextImage}>{`-->`}</button>
-              )}
-            </div>
+            {fileList.length > 0 ? (
+              <div className="postImageSlider">
+                {fileList.length > 1 && (
+                  <button onClick={prevImage}>{`<--`}</button>
+                )}
+                <img className="postDetailImg" src={fileList[currentImageIndex].file_url} alt={`Image ${currentImageIndex + 1}`} />
+                {fileList.length > 1 && (
+                  <button onClick={nextImage}>{`-->`}</button>
+                )}
+              </div>
+            ):(
+              <div>
+                {post.book_THUMBNAIL && (
+                  <div className="postImageSlider">
+                    <img className="postDetailImg" src={post.book_THUMBNAIL} alt={`Image ${post.book_ISBN}`} />
+                  </div>
+                )}
+              </div>
+              
             )}
             <div className='postDetailContentWrapper'>
               <p className='postDetailContent'>{post ? post.recommend_CONTENT || post.review_CONTENT : ''}</p>

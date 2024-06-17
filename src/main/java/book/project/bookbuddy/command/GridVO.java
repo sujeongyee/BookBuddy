@@ -22,6 +22,7 @@ public class GridVO { // 그리드 형식으로 게시글 불러올 때 필요�
   private String recommend_booktitle;
   private Integer file_no;
   private String file_url;
+  private String book_thumbnail;
   private Integer review_no;
   private String review_title;
   private String review_content;

@@ -78,9 +78,11 @@ public class PostServiceImpl implements PostService{
     return postMapper.likeCheck(postNo, userNo,type);
   }
   public int doLike(int postNo,int userNo,String type){
+    postMapper.upLike(postNo, type);
     return postMapper.doLike(postNo, userNo, type);
   }
   public int cancelLike(int postNo,int userNo,String type){
+    postMapper.downLike(postNo, type);
     return postMapper.cancelLike(postNo, userNo, type);
   }
 
@@ -90,6 +92,12 @@ public class PostServiceImpl implements PostService{
 
   public CmtVO geCmtVO(){
     return postMapper.getCmtVO();
+  }
+  public int modifyRecommendPost(RecommendVO vo){
+    return postMapper.modifyRecommendPost(vo);
+  }
+  public int modifyReviewPost(ReviewVO vo){
+    return postMapper.modifyReviewPost(vo);
   }
 
 }

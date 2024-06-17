@@ -48,6 +48,7 @@ const WritePosts = () => {
   useEffect(() => {
     if(type) {
       setFileLists(fileList);
+      console.log(fileList);
     }
     if (type === 'review') {
       setPostTitle(reviewVO.review_TITLE);
@@ -86,7 +87,6 @@ const WritePosts = () => {
   ///////////////// 게시글 등록
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
     // 필수 입력 항목 검사
     if (postType === '') {
       alert('게시글의 유형을 선택해주세요');
@@ -122,7 +122,7 @@ const WritePosts = () => {
     let endpoint;
     formData.append('book_ISBN',selectBook.isbn);
     formData.append('book_THUMBNAIL',selectBook.thumbnail);
-    if (postType === 'recommendation') {
+    if (postType === 'recommend') {
       formData.append('recommend_TITLE', postTitle);
       formData.append('recommend_BOOKTITLE', bookTitle);
       formData.append('recommend_CONTENT', postContent);
@@ -153,8 +153,7 @@ const WritePosts = () => {
         // 이미지 업로드
         const formDataImg = new FormData();
         let imgEndpoint = '/book/file/';
-        console.log(response.data);
-        if (postType === 'recommendation') {
+        if (postType === 'recommend') {
           imgEndpoint += 'rcmImgUrlToFile';
           formDataImg.append('rcmNo', response.data);
         } else {
@@ -175,7 +174,7 @@ const WritePosts = () => {
   
         if (responseImg.data === 'success') {
 
-          if (postType === 'recommendation') setShowToast(true);
+          if (postType === 'recommend') setShowToast(true);
           else setShowToast2(true);
         }
       } else {
@@ -226,6 +225,8 @@ const WritePosts = () => {
     // 추가된 이미지는 insert 작업 해줘야해
     // 
 
+
+
     const originalData = {
       book_ISBN: vo.book_ISBN,
       book_THUMBNAIL: vo.book_THUMBNAIL,
@@ -252,8 +253,99 @@ const WritePosts = () => {
       alert('수정 사항이 없습니다.');
       return;
     }
-    console.log('게시글 수정 : '+isModified);
-    console.log('파일 수정 : ' + isModified2);
+    //게시글 수정
+    if(isModified){
+      const formData = new FormData();
+      let endpoint;
+      
+      if(originalData.bookTitle!==bookTitle){
+        formData.append('book_ISBN', selectBook.isbn);
+        formData.append('book_THUMBNAIL', selectBook.thumbnail);
+        
+      }else{
+        formData.append('book_ISBN', vo.isbn);
+        formData.append('book_THUMBNAIL', vo.thumbnail);
+      }
+      if (postType === 'recommend') {
+        formData.append('recommend_NO',vo.recommend_NO);
+        formData.append('recommend_TITLE', postTitle);
+        formData.append('recommend_BOOKTITLE', bookTitle);
+        formData.append('recommend_CONTENT', postContent);
+        formData.append('recommend_CATEGORY', selectedCategories.join(','));
+        formData.append('recommend_KEYWORD', selectedKeywords.join(','));
+        formData.append('user_NO', userNo);
+        
+        endpoint = '/book/post/modifyRecommendPost';
+      } else { // postType === 'review'
+        formData.append('review_NO',vo.review_NO);
+        formData.append('review_TITLE', postTitle);
+        formData.append('review_BOOKTITLE', bookTitle);
+        formData.append('review_CONTENT', postContent);
+        formData.append('review_CATEGORY', selectedCategories.join(','));
+        formData.append('review_KEYWORD', selectedKeywords.join(','));
+        formData.append('user_NO', userNo);
+        formData.append('review_RATING', rating);
+        endpoint = '/book/post/modifyReviewPost';
+      }
+
+      try {
+        const response = await axios.post(endpoint, formData, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if(response.data>0){
+          console.log("수정 성공");
+        }
+       
+      } catch (error) {
+        console.error('수정 과정 중 오류 발생',error);
+      }
+
+    }
+    //파일 수정
+    if(isModified2){
+
+      const formDataImg = new FormData();
+      let imgEndpoint = '/book/file/';
+      let postNo = type=='review'? vo.review_NO : vo.recommend_NO;
+      if (postType === 'recommend') {
+        imgEndpoint += 'rcmImgUrlToFile';
+        formDataImg.append('rcmNo', postNo);
+      } else {
+        imgEndpoint += 'rvImgUrlToFile';
+        formDataImg.append('rvNo', postNo);
+      }
+
+      // 삭제된 이미지 처리
+      const deletedFiles = fileList.filter(file => !fileLists.includes(file));
+      for (const file of deletedFiles) {
+        await axios.delete(`/book/file/postImgDelete`, {
+          data: {
+            fileNo: file.file_no,
+            url: file.file_url
+          }
+        });
+      }
+
+      // 추가된 이미지 업로드 요청
+      if (uploadFiles.length > 0) {
+        uploadFiles.forEach((file) => {
+          formDataImg.append('uploadFiles', file);
+        });
+
+        const responseImg = await axios.post(imgEndpoint, formDataImg);
+        if (responseImg.data === 'success') {
+          if (postType === 'recommend') setShowToast(true);
+          else setShowToast2(true);
+        } else {
+          alert('이미지 업로드 중 오류가 발생했습니다. 다시 시도해주세요.');
+        }
+      }
+
+    }
+
 
 
 
@@ -372,7 +464,7 @@ const WritePosts = () => {
                     <div className="modalWrite-searchContainer" style={{display: 'flex', flexDirection: 'row'}}>
                       <input type="text" style={{width: '75%'}} id="postBookTitle" value={bookTitle} onChange={(e) => {setBookTitle(e.target.value); setBookTitleCheck(false) }} className="modalWrite-input modalWrite-inputTitle" placeholder="책 제목을 입력하세요."/>
                       <button className="book-searchBtn" onClick={(e) => searchBook(e)}>검색하기</button>
-                      <SearchBook isOpen={searchModalIsOpen} onRequestClose={() => { setSearchModalIsOpen(false); setModalStatus('off') ;}} bookTitle={bookTitle} status={modalStatus} bookSelect = {(e)=>setSelectBook(e)} bookCheck={()=>{setBookTitleCheck(true)}} />
+                      <SearchBook isOpen={searchModalIsOpen} onRequestClose={() => { setSearchModalIsOpen(false); setModalStatus('off') ;}} bookTitle={bookTitle} setBook= {(e)=>setBookTitle(e)}status={modalStatus} bookSelect = {(e)=>setSelectBook(e)} bookCheck={()=>setBookTitleCheck(true)} />
                     </div>
                   </td>
                 </tr>

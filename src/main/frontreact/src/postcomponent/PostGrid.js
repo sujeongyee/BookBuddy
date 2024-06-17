@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useUser } from "../context/UserContext";
 import "./postgrid.css";
-import { useLoading } from "../context/LoadingContext";
+import { useLoading } from "../context/LoadingContext"; 
 const PostGrid = ({type,userNo,writePostCheck}) => {
   const {userData ,setUserData} = useUser();
   const {userId,userNick,profileURL} = userData;
@@ -52,18 +52,18 @@ const PostGrid = ({type,userNo,writePostCheck}) => {
 
   }, [userId, type, writePostCheck]); 
 
-
+  const placeholderImage = process.env.PUBLIC_URL + '/imgs/img-notExist.png';
   return( 
     <div className="post-grid-container">
       {type==='recommend' && rcmPosts && rcmPosts.map((post) => (
         <a href={`post/recommend/${post.recommend_no}`}  className="post-img-container" key={post.recommend_no}>
-          <img src={post.file_url} alt={post.recommend_booktitle} className="post-img" />
+          <img src={post.file_url? post.file_url : post.book_thumbnail} alt={post.recommend_booktitle} className="post-img" />
           <div className="post-title">{post.recommend_title}</div>
       </a>
       ))}
       {type==='review' && rvPosts && rvPosts.map((post) => (
         <a href={`post/review/${post.review_no}`}  className="post-img-container" key={post.review_no}>
-          <img src={post.file_url} alt={post.review_booktitle} className="post-img" />
+          <img src={post.file_url? post.file_url : post.book_thumbnail} alt={post.review_booktitle} className="post-img" />
           <div className="post-title">{post.review_title}</div>
       </a>
       ))}
