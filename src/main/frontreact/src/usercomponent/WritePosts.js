@@ -6,8 +6,6 @@ import './mybook.css';
 import { useUser } from "../context/UserContext";
 import SelectCategory from "../component/SelectCategory";
 import SelectKeyword from "../component/SelectKeyword";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import ToastMsg from "../main/ToastMsg";
 import Header from "../main/Header";
 import Sidebar from "../main/Sidebar";
@@ -38,6 +36,8 @@ const WritePosts = () => {
   const [selectBook,setSelectBook] = useState([]);
   const [showToast, setShowToast] = useState(false);
   const [showToast2, setShowToast2] = useState(false);
+  const [showToast3, setShowToast3] = useState(false);
+  const [showToast4, setShowToast4] = useState(false);
   
   const postData = location.state || {};
   const { type,recommendVO,reviewVO,fileList } = postData;
@@ -48,7 +48,6 @@ const WritePosts = () => {
   useEffect(() => {
     if(type) {
       setFileLists(fileList);
-      console.log(fileList);
     }
     if (type === 'review') {
       setPostTitle(reviewVO.review_TITLE);
@@ -70,19 +69,6 @@ const WritePosts = () => {
     }
   }, [postData]);
 
-
-  // const resetForm = () => {
-  //   setPostTitle("");
-  //   setPostType("");
-  //   setBookTitle("");
-  //   setPostContent("");
-  //   setRating(0);
-  //   setBookImages([]);
-  //   setSelectedImage("");
-  //   setUploadFiles([]);
-  //   setSelectedCategories([]);
-  //   setSelectedKeywords([]);
-  // };
 
   ///////////////// 게시글 등록
   const handleSubmit = async (e) => {
@@ -172,11 +158,6 @@ const WritePosts = () => {
         // 이미지 업로드 요청
         const responseImg = await axios.post(imgEndpoint, formDataImg);
   
-        if (responseImg.data === 'success') {
-
-          if (postType === 'recommend') setShowToast(true);
-          else setShowToast2(true);
-        }
       } else {
         alert('글을 등록하는 중 오류가 발생했습니다. 다시 시도해주세요.');
       }
@@ -184,9 +165,22 @@ const WritePosts = () => {
       console.error('Error posting recommended images:', error);
       alert('글을 등록하는 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
+    if (postType === 'recommend'){
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+        navigate('/myBook');
+      }, 1000);
+    } else {
+      setShowToast2(true);
+      setTimeout(() => {
+        setShowToast2(false);
+        navigate('/myBook');
+      }, 1000);
+    }
   
     // 페이지 이동
-    navigate('/myBook');
+    
   };
 
   const handleModify = async(e) => {
@@ -224,7 +218,7 @@ const WritePosts = () => {
     // 이미지는 원래 있다가 없어진 이미지는 url delete 작업
     // 추가된 이미지는 insert 작업 해줘야해
     // 
-
+    const postNo = type=='review'? vo.review_NO : vo.recommend_NO;
 
 
     const originalData = {
@@ -259,12 +253,13 @@ const WritePosts = () => {
       let endpoint;
       
       if(originalData.bookTitle!==bookTitle){
+
         formData.append('book_ISBN', selectBook.isbn);
         formData.append('book_THUMBNAIL', selectBook.thumbnail);
         
       }else{
-        formData.append('book_ISBN', vo.isbn);
-        formData.append('book_THUMBNAIL', vo.thumbnail);
+        formData.append('book_ISBN', vo.book_ISBN);
+        formData.append('book_THUMBNAIL', vo.book_THUMBNAIL);
       }
       if (postType === 'recommend') {
         formData.append('recommend_NO',vo.recommend_NO);
@@ -295,12 +290,13 @@ const WritePosts = () => {
           }
         });
 
-        if(response.data>0){
-          console.log("수정 성공");
-        }
+        // if(response.data>0){
+        // }
        
       } catch (error) {
         console.error('수정 과정 중 오류 발생',error);
+        alert('수정 중 오류 발생');
+        return;
       }
 
     }
@@ -309,7 +305,7 @@ const WritePosts = () => {
 
       const formDataImg = new FormData();
       let imgEndpoint = '/book/file/';
-      let postNo = type=='review'? vo.review_NO : vo.recommend_NO;
+      
       if (postType === 'recommend') {
         imgEndpoint += 'rcmImgUrlToFile';
         formDataImg.append('rcmNo', postNo);
@@ -319,48 +315,48 @@ const WritePosts = () => {
       }
 
       // 삭제된 이미지 처리
-      const deletedFiles = fileList.filter(file => !fileLists.includes(file));
-      for (const file of deletedFiles) {
-        await axios.delete(`/book/file/postImgDelete`, {
-          data: {
-            fileNo: file.file_no,
-            url: file.file_url
-          }
-        });
-      }
-
-      // 추가된 이미지 업로드 요청
-      if (uploadFiles.length > 0) {
-        uploadFiles.forEach((file) => {
-          formDataImg.append('uploadFiles', file);
-        });
-
-        const responseImg = await axios.post(imgEndpoint, formDataImg);
-        if (responseImg.data === 'success') {
-          if (postType === 'recommend') setShowToast(true);
-          else setShowToast2(true);
-        } else {
-          alert('이미지 업로드 중 오류가 발생했습니다. 다시 시도해주세요.');
+      try {
+        const deletedFiles = fileList.filter(file => !fileLists.includes(file));
+        for (const file of deletedFiles) {
+          await axios.delete(`/book/file/postImgDelete`, {
+            data: {
+              fileNo: file.file_no,
+              url: file.file_url
+            }
+          });
         }
+
+        if (uploadFiles.length > 0) {
+          uploadFiles.forEach((file) => {
+            formDataImg.append('uploadFiles', file);
+          });
+  
+          const responseImg = await axios.post(imgEndpoint, formDataImg);
+        }
+      } catch (error) {
+        console.error('이미지 처리 중 오류 발생',error);
+        alert('수정 중 오류 발생');
+        return;
       }
+      
+      
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    if (postType === 'recommend'){
+      setShowToast3(true);
+      setTimeout(() => {
+        setShowToast3(false);
+        navigate(`/post/${postType}/${postNo}`);
+      }, 1000);
+    } else{
+      setShowToast4(true);
+      setTimeout(() => {
+        setShowToast4(false);
+        navigate(`/post/${postType}/${postNo}`);
+      }, 1000);
+    }
+    
   }
   
 
@@ -423,6 +419,8 @@ const WritePosts = () => {
         <Header/>  
         {showToast && <ToastMsg prop="success" />}
         {showToast2 && <ToastMsg prop="success2" />}
+        {showToast3 && <ToastMsg prop="modifyRcm" />}
+        {showToast4 && <ToastMsg prop="modifyRv" />}
         <div className="write-container">
           <div className="write-header">
             <h3 className="write-title">{type ? ('게시글 수정'):('게시글 작성')}</h3>

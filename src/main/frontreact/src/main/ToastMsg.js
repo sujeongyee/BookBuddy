@@ -5,7 +5,7 @@ const ToastMsg = ({ prop }) => {
   const [prevProp, setPrevProp] = useState(null);
 
   useEffect(() => {
-    if (prop) {
+    if (prop !== prevProp) {
       toast.remove();
       if (prop === 'success') {
         toast.success('추천 게시글 작성 완료');
@@ -21,7 +21,12 @@ const ToastMsg = ({ prop }) => {
         toast.error('내 게시글은 추천할 수 없습니다.');
       } else if (prop === 'doComment'){
         toast.success('댓글 작성 완료!');
+      } else if (prop === 'modifyRcm'){
+        toast.success('추천글 수정 완료!')
+      } else if (prop === 'modifyRv'){
+        toast.success('리뷰글 수정 완료!')
       }
+      setPrevProp(prop); // 현재 prop을 prevProp으로 설정
     }
   }, [prop, prevProp]);
 
