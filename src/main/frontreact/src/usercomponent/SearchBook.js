@@ -3,7 +3,7 @@ import axios from "axios";
 import Modal from "react-modal";
 import "./searchbook.css";
 
-const SearchBook = ({ isOpen, onRequestClose, bookTitle, status, bookSelect, bookCheck }) => {
+const SearchBook = ({ isOpen, onRequestClose, bookTitle,setBook, status, bookSelect, bookCheck }) => {
   const [bookList, setBookList] = useState([]);
   const [localBookSelect, setLocalBookSelect] = useState(null);
 
@@ -23,8 +23,6 @@ const SearchBook = ({ isOpen, onRequestClose, bookTitle, status, bookSelect, boo
           target: "title"
         };
         const result = await Kakao.get("/v3/search/book", { params });
-        console.log(status);
-        console.log(result.data.documents.length);
         if (result.data.documents.length === 0) {
           alert('책 검색 정보가 없습니다.');
           handleComplete();
@@ -47,6 +45,7 @@ const SearchBook = ({ isOpen, onRequestClose, bookTitle, status, bookSelect, boo
     if (localBookSelect) {
       bookSelect(localBookSelect);
       bookCheck(true);
+      setBook(localBookSelect.title);
       setBookList([]);
       onRequestClose();
     } else {

@@ -46,6 +46,37 @@ public class S3FileController {
       s3Service.deleteImageFromS3(profileURL);
       return ResponseEntity.ok("프로필 이미지 삭제 성공");
   }
+  public static class FileDeleteRequest {
+    private Integer fileNo;
+    private String url;
+
+    // 게터와 세터
+    public Integer getFileNo() {
+        return fileNo;
+    }
+
+    public void setFileNo(Integer fileNo) {
+        this.fileNo = fileNo;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+  }
+  // 게시글 첨부 이미지 삭제
+  @DeleteMapping("/postImgDelete")
+  public ResponseEntity<String> postImgDelete(@RequestBody FileDeleteRequest deleteRequest) {
+    Integer fileNo = deleteRequest.getFileNo();
+    String url = deleteRequest.getUrl();
+
+    s3FileSerivce.deleteFile(fileNo);  
+    s3Service.deleteImageFromS3(url);
+    return ResponseEntity.ok("프로필 이미지 삭제 성공");
+  }
   // 프로필 이미지 url get
   @GetMapping("/getProfileUrl")
   public String getProfileUrl(@RequestParam("userId") String id) {

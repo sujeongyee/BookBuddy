@@ -37,14 +37,23 @@
     </select>
 
     <select id="getRcmPostGrid">
-        SELECT r.recommend_no, r.recommend_title,r.recommend_content,
-        r.recommend_time,r.recommend_booktitle,f.file_no,f.file_url   
-        FROM 
-        RECOMMEND R LEFT JOIN FILE F 
-        ON R.RECOMMEND_NO = F.RECOMMEND_NO 
-        WHERE R.USER_NO = (SELECT USER_NO FROM USER WHERE USER_ID = #{userId}) AND 
-        FILE_NO = (SELECT FILE_NO FROM FILE WHERE RECOMMEND_NO=R.RECOMMEND_NO ORDER BY FILE_DATE LIMIT 1)
-        ORDER BY R.RECOMMEND_TIME DESC
+        SELECT 
+            r.recommend_no, 
+            r.recommend_title,
+            r.recommend_content,
+            r.recommend_time,
+            r.recommend_booktitle,
+            r.book_thumbnail,
+            COALESCE(f.file_no, '') as file_no,
+            COALESCE(f.file_url, '') as file_url
+        FROM
+            RECOMMEND r
+        LEFT JOIN
+            FILE f ON r.RECOMMEND_NO = f.RECOMMEND_NO
+            AND f.file_no = (SELECT MIN(file_no) FROM FILE WHERE RECOMMEND_NO = r.RECOMMEND_NO)
+        WHERE
+            r.USER_NO = (SELECT USER_NO FROM USER WHERE USER_ID = #{userId})
+        ORDER BY r.RECOMMEND_TIME DESC
     </select>
 
     <select id="getRvPostMyPage">
@@ -52,18 +61,28 @@
     </select>
 
     <select id="getRvPostGrid">
-        SELECT r.review_no, r.review_title,r.review_content,
-        r.review_time,r.review_booktitle,f.file_no,f.file_url   
-        FROM 
-        REVIEW R LEFT JOIN FILE F 
-        ON R.REVIEW_NO = F.REVIEW_NO 
-        WHERE R.USER_NO = (SELECT USER_NO FROM USER WHERE USER_ID = #{userId}) AND 
-        FILE_NO = (SELECT FILE_NO FROM FILE WHERE REVIEW_NO=R.REVIEW_NO ORDER BY FILE_DATE LIMIT 1)
-        ORDER BY R.REVIEW_TIME DESC
+        SELECT 
+            r.review_no, 
+            r.review_title,
+            r.review_content,
+            r.review_time,
+            r.review_booktitle,
+            r.book_thumbnail,
+            COALESCE(f.file_no, '') as file_no,
+            COALESCE(f.file_url, '') as file_url
+        FROM
+            REVIEW r
+        LEFT JOIN
+            FILE f ON r.review_NO = f.review_NO
+            AND f.file_no = (SELECT MIN(file_no) FROM FILE WHERE REVIEW_NO = r.REVIEW_NO)
+        WHERE
+            r.USER_NO = (SELECT USER_NO FROM USER WHERE USER_ID = #{userId})
+        ORDER BY r.REVIEW_TIME DESC
+        
     </select>
 
     <select id="getMyPageList">
-        SELECT ${type}_TITLE, ${type}_BOOKTITLE, ${type}_NO,${type}_TIME,${type}_CONTENT,
+        SELECT ${type}_TITLE, ${type}_BOOKTITLE, ${type}_NO,${type}_TIME,${type}_CONTENT,book_thumbnail,
             (SELECT COUNT(LIKE_NO) FROM likes WHERE likes.LIKE_POSTNO = ${type}.${type}_NO AND LIKE_TYPE = '${type}') AS likeCnt,
             (SELECT COUNT(COMMENT_NO) FROM comment WHERE comment.${type}_NO = ${type}.${type}_NO) AS cmtCnt,
             (SELECT FILE_URL FROM file WHERE file.${type}_NO = ${type}.${type}_NO ORDER BY FILE_DATE LIMIT 1) AS fileUrl
@@ -106,10 +125,18 @@
     <insert id="doLike">
         INSERT INTO LIKES (LIKE_TYPE,LIKE_POSTNO,LIKE_USER) VALUES ('${type}',${postNo},${userNo})
     </insert>
+
+    <update id="upLike">
+        UPDATE ${type} SET ${type}_LIKE = ${type}_LIKE+1 WHERE ${type}_NO = ${postNo}
+    </update>
     
     <delete id="cancelLike">
         DELETE FROM LIKES WHERE LIKE_TYPE='${type}' AND LIKE_POSTNO = ${postNo} AND LIKE_USER=${userNo}
     </delete>
+
+    <update id="downLike">
+        UPDATE ${type} SET ${type}_LIKE = ${type}_LIKE-1 WHERE ${type}_NO = ${postNo}
+    </update>
 
     <insert id="comment">
         INSERT INTO COMMENT (COMMENT_CONTENT,USER_NO,${type}_NO)
@@ -119,5 +146,31 @@
     <select id="getCmtVO">
         SELECT C.*,U.PROFILE_URL AS PROFILE_URL,U.USER_NICK AS USER_NICK,U.USER_ID AS USER_ID FROM COMMENT C LEFT JOIN USER U ON C.USER_NO = U.USER_NO ORDER BY C.COMMENT_DATE DESC LIMIT 1
     </select>
+
+    <update id="modifyRecommendPost">
+        UPDATE RECOMMEND SET 
+        RECOMMEND_TITLE = #{recommend_TITLE},
+        RECOMMEND_CONTENT = #{recommend_CONTENT},
+        RECOMMEND_CATEGORY = #{recommend_CATEGORY},
+        RECOMMEND_KEYWORD = #{recommend_KEYWORD},
+        RECOMMEND_BOOKTITLE = #{recommend_BOOKTITLE},
+        BOOK_ISBN = #{book_ISBN},
+        BOOK_THUMBNAIL = #{book_THUMBNAIL}
+        WHERE RECOMMEND_NO = #{recommend_NO}
+    </update>
+
+    <update id="modifyReviewPost">
+        UPDATE REVIEW SET
+        REVIEW_TITLE = #{review_TITLE},
+        REVIEW_CONTENT = #{review_CONTENT},
+        REVIEW_CATEGORY = #{review_CATEGORY},
+        REVIEW_KEYWORD = #{review_KEYWORD},
+        REVIEW_BOOKTITLE = #{review_BOOKTITLE},
+        REVIEW_RATING = #{review_RATING},
+        BOOK_ISBN = #{book_ISBN},
+        BOOK_THUMBNAIL = #{book_THUMBNAIL}
+        WHERE REVIEW_NO = #{review_NO}
+    </update>
+
 
 </mapper>

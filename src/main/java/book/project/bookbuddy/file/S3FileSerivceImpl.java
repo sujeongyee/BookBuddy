@@ -94,6 +94,11 @@ public class S3FileSerivceImpl implements S3FileSerivce {
         e.printStackTrace();
     }
     return null;
+  
+  }
+
+  public int deleteFile(int fileNo){
+    return s3FileMapper.deleteFile(fileNo);
   }
   
 }

@@ -34,7 +34,11 @@ public interface PostMapper {
   public List<CmtVO> getCmtList(@Param("postNo")int postNo,@Param("type")String type);
   public int likeCheck (@Param("postNo")int postNo,@Param("userNo") int userNo,@Param("type")String type);
   public int doLike(@Param("postNo")int postNo,@Param("userNo") int userNo,@Param("type")String type);
+  public void upLike(@Param("postNo")int postNo,@Param("type")String type);
   public int cancelLike(@Param("postNo")int postNo,@Param("userNo") int userNo,@Param("type")String type);
+  public void downLike(@Param("postNo")int postNo,@Param("type")String type);
   public void comment(@Param("postNo")int postNo,@Param("userNo") int userNo,@Param("type")String type,@Param("comment") String comment);
   public CmtVO getCmtVO();
+  public int modifyRecommendPost(RecommendVO vo);
+  public int modifyReviewPost(ReviewVO vo);
 }

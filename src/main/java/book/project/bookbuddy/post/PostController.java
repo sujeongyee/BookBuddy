@@ -137,6 +137,21 @@ public class PostController {
     CmtVO vo = postService.geCmtVO();
     return vo;
   }
+
+  @PostMapping("/modifyRecommendPost")
+  public boolean modifyRecommendPost(@RequestBody RecommendVO vo) {
+    System.out.println(vo.toString());
+    int n = postService.modifyRecommendPost(vo);
+    return n>0?true:false; 
+  }
+
+  @PostMapping("/modifyReviewPost")
+  public boolean modifyReviewPost(@RequestBody ReviewVO vo) {
+    System.out.println(vo.toString());
+    int n = postService.modifyReviewPost(vo);
+    return n>0?true:false; 
+  }
+  
   
   
   

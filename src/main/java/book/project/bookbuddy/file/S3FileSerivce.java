@@ -13,4 +13,5 @@ public interface S3FileSerivce {
   public MultipartFile linkToFile(String imgUrl);
   public int insertReviewImg(String rv_no,String url);
   public List<FileVO> getPostImgs(String type,int postNo);
+  public int deleteFile(int fileNo);
 }

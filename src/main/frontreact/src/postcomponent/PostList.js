@@ -62,12 +62,12 @@ const PostList = ({type,userNo,writePostCheck}) => {
   const posts = type === 'recommend' ? recommendPosts : reviewPosts;
   const tp = type === 'recommend' ? 'recommend' : 'review';
   return( 
-    <div className="post-list-container">
+    <div className="post-list-container"> 
       {posts.map(post => (
         <div className="post-list-item" key={post[type === 'recommend' ? 'recommend_NO' : 'review_NO']}>
           <a href={`post/${type === 'recommend' ? 'recommend' : 'review'}/${post[type === 'recommend' ? 'recommend_NO' : 'review_NO']}`} className="post-list-link">
             <div className="post-list-content">
-              <img src={post.fileUrl} alt={post[type === 'recommend' ? 'recommend_BOOKTITLE' : 'review_BOOKTITLE']} className="post-list-img" />         
+              <img src={post.fileUrl? post.fileUrl : post.book_thumbnail} alt={post[type === 'recommend' ? 'recommend_BOOKTITLE' : 'review_BOOKTITLE']} className="post-list-img" />         
               <div className="post-list-header">
                 <div className="post-list-title"> {`[ ${post[type === 'recommend' ? 'recommend_TITLE' : 'review_TITLE']} ]`}</div>
                 <span className="post-list-time">작성일 : {formatDate(post[type === 'recommend' ? 'recommend_TIME' : 'review_TIME'])}</span>
