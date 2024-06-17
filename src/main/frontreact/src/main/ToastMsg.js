@@ -22,9 +22,11 @@ const ToastMsg = ({ prop }) => {
       } else if (prop === 'doComment'){
         toast.success('댓글 작성 완료!');
       } else if (prop === 'modifyRcm'){
-        toast.success('추천글 수정 완료!')
+        toast.success('추천글 수정 완료!');
       } else if (prop === 'modifyRv'){
-        toast.success('리뷰글 수정 완료!')
+        toast.success('리뷰글 수정 완료!');
+      } else if (prop === 'deletePost'){
+        toast.success('게시글을 삭제했습니다.');
       }
       setPrevProp(prop); // 현재 prop을 prevProp으로 설정
     }

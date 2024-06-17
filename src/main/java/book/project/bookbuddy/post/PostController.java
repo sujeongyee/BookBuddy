@@ -158,6 +158,15 @@ public class PostController {
     postService.deleteComment(postNo, type);
     postService.deletePost(postNo, type);
   }
+
+  @PostMapping("/modifyComment")
+  public void modifyComment(@RequestBody Map<String,String> map) {
+    String commentNo = map.get("commentNo");
+    String editContent = map.get("editContent");
+    postService.modifyComment(commentNo, editContent);
+  }
+  
+
   
   
   
