@@ -32,8 +32,12 @@ const PostDetail = ({}) => {
   const [writer,setWriter] = useState('');
   const [showToast,setShowToast] = useState(false);
   const [showToast2,setShowToast2] = useState(false);
+  const [showToast3,setShowToast3] = useState(false);
   const [modifyModal,setModifyModal] = useState(false);
   const [modifyModalIsOpen,setModifyModalIsOpen] = useState(false);
+  const [editMode, setEditMode] = useState({});
+  const [editContent, setEditContent] = useState({});
+
   
   useEffect(() => {
     const fetchData = async () => {
@@ -166,11 +170,42 @@ const PostDetail = ({}) => {
         await axios.delete('/book/post/deletePost', {
           params: { postNo: postNo,type: type}
         });
+        setShowToast3(true);
+        setTimeout(() => {
+          setShowToast3(false);
+          navigate('/myBook');
+        }, 1000);
       } catch (error) {
         
       }
     }
   }
+  const deleteComment = (commentNo) => {
+    console.log(commentNo);
+  }
+  const modifyComment = async(commentNo,editContent) => {
+    try {
+      const response = await axios.post(`/book/post/modifyComment`, { commentNo, editContent });
+      
+    } catch (error) {
+      console.error("댓글 수정 중 오류 발생", error);
+    }
+  }
+  const handleEditClick = (comment_no, comment_content) => {
+    setEditMode(prev => ({ ...prev, [comment_no]: true }));
+    setEditContent(prev => ({ ...prev, [comment_no]: comment_content }));
+  };
+
+  const handleCancelEdit = (comment_no) => {
+    setEditMode(prev => ({ ...prev, [comment_no]: false }));
+    setEditContent(prev => ({ ...prev, [comment_no]: '' }));
+  };
+
+  const handleSaveEdit = (comment_no) => {
+    modifyComment(comment_no, editContent[comment_no]);
+    setEditMode(prev => ({ ...prev, [comment_no]: false }));
+  };
+    
 
   const post = recommendVO || reviewVO;
 
@@ -183,6 +218,7 @@ const PostDetail = ({}) => {
         <Header />
         {showToast && <ToastMsg prop="myPostLike" />}
         {showToast2 && <ToastMsg prop="doComment" />}
+        {showToast3 && <ToastMsg prop="deletePost"/>}
         {!loading && (
         <div className="mainSection">
           <div className="postDetailContainer">
@@ -254,18 +290,33 @@ const PostDetail = ({}) => {
             {cmtList.map(comment => (
               <div key={comment.comment_no} className="comment">
                 <div className='commentHeader2'>
-                  <div className="commentHeader"onClick={()=>toUserFeed(comment.user_id)} >
+                  <div className="commentHeader" onClick={() => toUserFeed(comment.user_id)}>
                     {comment.profile_url && <img src={comment.profile_url} alt="Profile" className="profileImg" />}
-                    <p><strong>{comment.user_nick}  {comment.user_id === userId &&(('(글쓴이)'))}</strong> </p>
+                    <p><strong>{comment.user_nick} {comment.user_id === userId && ('(글쓴이)')}</strong></p>
                   </div>
-                  <p className='comment-content'> {comment.comment_content}</p>
+                  {editMode[comment.comment_no] ? (
+                    <div>
+                      <textarea value={editContent[comment.comment_no]} className="comment-edit"
+                      onChange={(e) => setEditContent(prev => ({ ...prev, [comment.comment_no]: e.target.value }))}/>
+                      <div className='comment-btn'>
+                        <button onClick={() => handleSaveEdit(comment.comment_no)} className="comment-save" >수정 완료</button>
+                        <button onClick={() => handleCancelEdit(comment.comment_no)}className="comment-cancel">취소</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <p className='comment-content'>{comment.comment_content}</p>
+                    </>
+                  )}
                 </div>
                 <p><small>{new Date(comment.comment_date).toLocaleString()}</small></p>
                 {comment.user_id === userId && (
-                    <div className='comment-work'><span>수정하기</span>|<span>삭제하기</span></div>
+                  <div className='comment-work'>
+                    <span onClick={() => handleEditClick(comment.comment_no, comment.comment_content)}>수정하기</span> |
+                    <span onClick={() => deleteComment(comment.comment_no)}>삭제하기</span>
+                  </div>
                 )}
               </div>
-              
             ))}
             <form onSubmit={handleCommentSubmit} className="commentForm">
               <textarea

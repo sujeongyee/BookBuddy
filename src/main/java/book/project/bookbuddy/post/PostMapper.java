@@ -43,4 +43,5 @@ public interface PostMapper {
   public int modifyReviewPost(ReviewVO vo);
   public void deleteComment(@Param("postNo")int postNo,@Param("type") String type);
   public void deletePost(@Param("postNo")int postNo,@Param("type") String type);
+  public void modifyComment(@Param("commentNo")String commentNo, @Param("editContent")String editContent);
 }
