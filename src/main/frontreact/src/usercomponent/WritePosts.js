@@ -17,35 +17,33 @@ import { useLocation } from 'react-router-dom';
 const WritePosts = () => {
 
   const navigate = useNavigate();
+  const location = useLocation();
   const { userData } = useUser();
   const { userId ,userNo} = userData;
-  // const { postNo, type } = useParams();
+  
   const [postTitle, setPostTitle] = useState(""); 
   const [postType, setPostType] = useState(""); 
   const [bookTitle, setBookTitle] = useState(""); 
   const [bookTitleCheck,setBookTitleCheck] = useState(false);
   const [postContent, setPostContent] = useState(""); 
-  const [rating, setRating] = useState(0); 
+  const [rating, setRating] = useState(0);
   const [bookImages, setBookImages] = useState([]); 
   const [selectedImage, setSelectedImage] = useState(""); 
   const [uploadFiles, setUploadFiles] = useState([]); 
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedKeywords, setSelectedKeywords] = useState([]);
   const [componentMsg, setComponentMsg] = useState('이 책의 ');
-  const [isEditing, setIsEditing] = useState(false);
-  const [postId, setPostId] = useState(null);
   const [searchModalIsOpen,setSearchModalIsOpen] = useState(false);
   const [modalStatus,setModalStatus] = useState('off');
   const [selectBook,setSelectBook] = useState([]);
   const [showToast, setShowToast] = useState(false);
   const [showToast2, setShowToast2] = useState(false);
-  const location = useLocation();
+  
   const postData = location.state || {};
   const { type,recommendVO,reviewVO,fileList } = postData;
   const [fileLists,setFileLists] = useState([]);
-  useEffect(()=>{
-    // console.log(selectBook);
-  },[selectBook])
+  const vo = type=='review'? reviewVO:recommendVO;
+
 
   useEffect(() => {
     if(type) {
@@ -59,6 +57,7 @@ const WritePosts = () => {
       setRating(reviewVO.review_RATING);
       setSelectedCategories(reviewVO.review_CATEGORY.split(','));
       setSelectedKeywords(reviewVO.review_KEYWORD.split(','));
+      setBookTitleCheck(true);
     } else if (type === 'recommend') {
       setPostTitle(recommendVO.recommend_TITLE);
       setPostType('recommend');
@@ -66,36 +65,23 @@ const WritePosts = () => {
       setPostContent(recommendVO.recommend_CONTENT);
       setSelectedCategories(recommendVO.recommend_CATEGORY.split(','));
       setSelectedKeywords(recommendVO.recommend_KEYWORD.split(','));
+      setBookTitleCheck(true);
     }
-  }, [postType, postData]);
+  }, [postData]);
 
-  useEffect(()=>{
-    const fetchPostData = async () =>{
-      try {
-        let endpoint = '/book/post/';
-        endpoint += (type==='recommend')
-        const response = ``;
-      } catch (error) {
-        console.error("게시글 정보 가져오는 도중 오류 발생", error)
-      }
-    }
-    if(type) {
-      fetchPostData();
-    }
-  },[type])
 
-  const resetForm = () => {
-    setPostTitle("");
-    setPostType("");
-    setBookTitle("");
-    setPostContent("");
-    setRating(0);
-    setBookImages([]);
-    setSelectedImage("");
-    setUploadFiles([]);
-    setSelectedCategories([]);
-    setSelectedKeywords([]);
-  };
+  // const resetForm = () => {
+  //   setPostTitle("");
+  //   setPostType("");
+  //   setBookTitle("");
+  //   setPostContent("");
+  //   setRating(0);
+  //   setBookImages([]);
+  //   setSelectedImage("");
+  //   setUploadFiles([]);
+  //   setSelectedCategories([]);
+  //   setSelectedKeywords([]);
+  // };
 
   ///////////////// 게시글 등록
   const handleSubmit = async (e) => {
@@ -114,6 +100,9 @@ const WritePosts = () => {
       alert('책 제목을 입력해주세요.');
       return;
     }
+    if(!bookTitleCheck){
+      alert('책을 검색해서 해당 되는 책을 선택해주세요');
+    }
     if (postContent.length < 10) {
       alert('게시글 내용을 10자 이상 입력해주세요.');
       return;
@@ -126,9 +115,7 @@ const WritePosts = () => {
       alert('키워드를 하나 이상 선택해주세요');
       return;
     }
-    if(!bookTitleCheck){
-      alert('책을 검색해서 해당 되는 책을 선택해주세요');
-    }
+    
   
     // FormData 초기화
     const formData = new FormData();
@@ -202,6 +189,87 @@ const WritePosts = () => {
     // 페이지 이동
     navigate('/myBook');
   };
+
+  const handleModify = async(e) => {
+    e.preventDefault();
+    // 필수 입력 항목 검사
+    if (postType === '') {
+      alert('게시글의 유형을 선택해주세요');
+      return;
+    }
+    if (postTitle === '') {
+      alert('게시글 제목을 입력해주세요.');
+      return;
+    }
+    if (bookTitle === '') {
+      alert('책 제목을 입력해주세요.');
+      return;
+    }
+    if(!bookTitleCheck){
+      alert('책을 검색해서 해당 되는 책을 선택해주세요');
+    }
+    if (postContent.length < 10) {
+      alert('게시글 내용을 10자 이상 입력해주세요.');
+      return;
+    }
+    if (selectedCategories.length === 0) {
+      alert('카테고리를 하나 이상 선택해주세요');
+      return;
+    }
+    if (selectedKeywords.length === 0) {
+      alert('키워드를 하나 이상 선택해주세요');
+      return;
+    }
+    // 여기서 원래 vo 값, 이미지 값이랑 지금 값을 비교를 해서 똑같으면 '변경 사항이 없습니다' 띄워줘야 하고
+    // 변경 사항이 있다면 vo는 update
+    // 이미지는 원래 있다가 없어진 이미지는 url delete 작업
+    // 추가된 이미지는 insert 작업 해줘야해
+    // 
+
+    const originalData = {
+      book_ISBN: vo.book_ISBN,
+      book_THUMBNAIL: vo.book_THUMBNAIL,
+      title: type === 'recommend' ? vo.recommend_TITLE : vo.review_TITLE,
+      bookTitle: type === 'recommend' ? vo.recommend_BOOKTITLE : vo.review_BOOKTITLE,
+      content: type === 'recommend' ? vo.recommend_CONTENT : vo.review_CONTENT,
+      categories: type === 'recommend' ? vo.recommend_CATEGORY.split(',') : vo.review_CATEGORY.split(','),
+      keywords: type === 'recommend' ? vo.recommend_KEYWORD.split(',') : vo.review_KEYWORD.split(','),
+      rating: type === 'review' ? vo.review_RATING : null
+    };
+
+    const isModified = (
+      originalData.title !== postTitle ||
+      originalData.bookTitle !== bookTitle ||
+      originalData.content !== postContent ||
+      JSON.stringify(originalData.categories) !== JSON.stringify(selectedCategories) ||
+      JSON.stringify(originalData.keywords) !== JSON.stringify(selectedKeywords) ||
+      (postType === 'review' && originalData.rating !== rating) 
+    );
+    const isModified2 = (fileList.length !== fileLists.length || 
+      !fileList.every((file, index) => file.file_no === fileLists[index].file_no));
+
+    if (!isModified && !isModified2) {
+      alert('수정 사항이 없습니다.');
+      return;
+    }
+    console.log('게시글 수정 : '+isModified);
+    console.log('파일 수정 : ' + isModified2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }
   
 
   
@@ -242,8 +310,13 @@ const WritePosts = () => {
 
   const searchBook = (e) => {
     e.preventDefault();
-    setModalStatus('on');
-    setSearchModalIsOpen(true);
+    if(bookTitle==''){
+      alert('책 제목을 입력해주세요');
+    }else{
+      setModalStatus('on');
+      setSearchModalIsOpen(true);
+    }
+
   }
 
  
@@ -263,7 +336,7 @@ const WritePosts = () => {
             <h3 className="write-title">{type ? ('게시글 수정'):('게시글 작성')}</h3>
           </div>
           
-          <form onSubmit={handleSubmit} className="write-form">
+          <form onSubmit={type?handleModify:handleSubmit} className="write-form">
             <table className="write-table">
               <tbody>
                 <tr className="write-row">
@@ -272,8 +345,8 @@ const WritePosts = () => {
                   </td>
                   <td>
                     <div className="radio-buttons">
-                      <label className={`radio-button ${postType === 'recommendation' ? 'selected' : ''}`}>
-                        <input type="radio" value="recommendation" checked={postType === 'recommendation'} onChange={(e) => setPostType(e.target.value)}/>
+                      <label className={`radio-button ${postType === 'recommend' ? 'selected' : ''}`}>
+                        <input type="radio" value="recommend" checked={postType === 'recommend'} onChange={(e) => setPostType(e.target.value)}/>
                         추천
                       </label>
                       <label className={`radio-button ${postType === 'review' ? 'selected' : ''}`}>
@@ -408,12 +481,12 @@ const WritePosts = () => {
             <SelectCategory 
               setSelectedCategories={setSelectedCategories} 
               msg={componentMsg} 
-              cate={(type==='review'? reviewVO.review_CATEGORY : recommendVO.recommend_CATEGORY) || ''}
+              cate = {type ? (type === 'review' ? reviewVO.review_CATEGORY : recommendVO.recommend_CATEGORY) : ''}
             />    
             <SelectKeyword 
               setSelectedKeywords={setSelectedKeywords} 
               msg={componentMsg} 
-              kwd={(type==='review'? reviewVO.review_KEYWORD : recommendVO.recommend_KEYWORD) || ''}
+              kwd={type? (type==='review'? reviewVO.review_KEYWORD : recommendVO.recommend_KEYWORD) : ''}
             />
             </div>
             {type ? (<button type="submit" className="modalWrite-submitButton">수정하기</button>):(<button type="submit" style={{marginTop: '20px'}}className="modalWrite-submitButton">작성하기</button>)}
