@@ -20,6 +20,7 @@ import book.project.bookbuddy.command.RecommendVO;
 import book.project.bookbuddy.command.ReviewVO;
 import book.project.bookbuddy.file.S3FileSerivce;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -150,6 +151,12 @@ public class PostController {
     System.out.println(vo.toString());
     int n = postService.modifyReviewPost(vo);
     return n>0?true:false; 
+  }
+
+  @DeleteMapping("/deletePost")
+  public void deletePost(@RequestParam("postNo") int postNo, @RequestParam("type") String type) {
+    postService.deleteComment(postNo, type);
+    postService.deletePost(postNo, type);
   }
   
   

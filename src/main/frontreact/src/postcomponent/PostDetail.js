@@ -152,8 +152,24 @@ const PostDetail = ({}) => {
     }
     
   }
-  const deletePost = () =>{
-
+  const deletePost = async() =>{
+    if(window.confirm('게시글을 삭제하시겠습니까?\n게시글을 삭제하면 관련된 이미지 파일, 댓글이 모두 삭제됩니다.')){
+      try {
+        // for (const file of fileList) {
+        //   await axios.delete(`/book/file/postImgDelete`, {
+        //     data: {
+        //       fileNo: file.file_no,
+        //       url: file.file_url
+        //     }
+        //   });
+        // }
+        await axios.delete('/book/post/deletePost', {
+          params: { postNo: postNo,type: type}
+        });
+      } catch (error) {
+        
+      }
+    }
   }
 
   const post = recommendVO || reviewVO;

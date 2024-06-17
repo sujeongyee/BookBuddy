@@ -172,5 +172,13 @@
         WHERE REVIEW_NO = #{review_NO}
     </update>
 
+    <delete id="deleteComment">
+        DELETE FROM COMMENT WHERE ${type}_NO = #{postNo}
+    </delete>
+
+    <delete id="deletePost">
+        DELETE FROM ${type} WHERE ${type}_NO = #{postNo}
+    </delete>
+
 
 </mapper>

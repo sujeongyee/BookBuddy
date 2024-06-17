@@ -41,4 +41,6 @@ public interface PostMapper {
   public CmtVO getCmtVO();
   public int modifyRecommendPost(RecommendVO vo);
   public int modifyReviewPost(ReviewVO vo);
+  public void deleteComment(@Param("postNo")int postNo,@Param("type") String type);
+  public void deletePost(@Param("postNo")int postNo,@Param("type") String type);
 }
