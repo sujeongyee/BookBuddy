@@ -34,6 +34,7 @@ const PostDetail = ({}) => {
   const [showToast2,setShowToast2] = useState(false);
   const [modifyModal,setModifyModal] = useState(false);
   const [modifyModalIsOpen,setModifyModalIsOpen] = useState(false);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -64,7 +65,6 @@ const PostDetail = ({}) => {
         setFileList(response.data.fileList);
         if (response.data.recommendVO !== null) {
           setRecommendVO(response.data.recommendVO);
-          console.log(response.data.recommendVO);
           setWriter(response.data.recommendVO.user_NO);
         } else {
           setReviewVO(response.data.reviewVO);
