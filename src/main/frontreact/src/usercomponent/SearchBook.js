@@ -3,7 +3,7 @@ import axios from "axios";
 import Modal from "react-modal";
 import "./searchbook.css";
 
-const SearchBook = ({ isOpen, onRequestClose, bookTitle, status, bookSelect , bookCheck}) => {
+const SearchBook = ({ isOpen, onRequestClose, bookTitle, status, bookSelect, bookCheck }) => {
   const [bookList, setBookList] = useState([]);
   const [localBookSelect, setLocalBookSelect] = useState(null);
 
@@ -23,19 +23,33 @@ const SearchBook = ({ isOpen, onRequestClose, bookTitle, status, bookSelect , bo
           target: "title"
         };
         const result = await Kakao.get("/v3/search/book", { params });
+        console.log(status);
+        console.log(result.data.documents.length);
+        if (result.data.documents.length === 0) {
+          alert('책 검색 정보가 없습니다.');
+          handleComplete();
+        }
         setBookList(result.data.documents);
       } catch (error) {
         console.error("Error fetching book data:", error);
       }
     };
 
-    if (status === "on" && bookTitle) fetchBookData();
+    if (status === "on" && bookTitle) {
+      fetchBookData();
+    } else if (status === "on" && !bookTitle) {
+      alert('책 제목을 입력해주세요');
+      handleComplete();
+    }
   }, [status, bookTitle]);
 
   const handleComplete = () => {
     if (localBookSelect) {
       bookSelect(localBookSelect);
       bookCheck(true);
+      setBookList([]);
+      onRequestClose();
+    } else {
       onRequestClose();
     }
   };
@@ -65,35 +79,37 @@ const SearchBook = ({ isOpen, onRequestClose, bookTitle, status, bookSelect , bo
       overflowY: "auto"
     }
   };
-  const placeholderImage =process.env.PUBLIC_URL + '/imgs/img-notExist.png';
+  const placeholderImage = process.env.PUBLIC_URL + '/imgs/img-notExist.png';
 
   return (
     <Modal isOpen={isOpen} onRequestClose={onRequestClose} style={customModalStyles} contentLabel="모달">
-      <div className="book-list">
-        <div className="header">
-          <h3>책을 선택해주세요</h3>
-          <button onClick={handleComplete} className="complete-button">완료</button>
-        </div>
-        {bookList.map((book, index) => (
-          <div
-            className={`book-item ${localBookSelect === book ? "selected" : ""}`}
-            key={index}
-            onClick={() => setLocalBookSelect(book)}
-          >
-            <img
-              src={book.thumbnail ? book.thumbnail : placeholderImage}
-              alt={book.title}
-              className="book-thumbnail"
-              onError={(e) => { e.target.src = placeholderImage }}
-            />
-            <div className="book-info">
-              <h3 className="book-title">{book.title}</h3>
-              <p className="book-authors">{book.authors.join(", ")}</p>
-              <p className="book-contents">{book.contents}</p>
-            </div>
+      {bookList.length > 0 ? (
+        <div className="book-list">
+          <div className="header">
+            <h3>책을 선택해주세요</h3>
+            <button onClick={handleComplete} className="complete-button">완료</button>
           </div>
-        ))}
-      </div>
+          {bookList.map((book, index) => (
+            <div
+              className={`book-item ${localBookSelect === book ? "selected" : ""}`}
+              key={index}
+              onClick={() => setLocalBookSelect(book)}
+            >
+              <img
+                src={book.thumbnail ? book.thumbnail : placeholderImage}
+                alt={book.title}
+                className="book-thumbnail"
+                onError={(e) => { e.target.src = placeholderImage }}
+              />
+              <div className="book-info">
+                <h3 className="book-title">{book.title}</h3>
+                <p className="book-authors">{book.authors.join(", ")}</p>
+                <p className="book-contents">{book.contents}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : null}
     </Modal>
   );
 };
