@@ -5,6 +5,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
 import { useLoading } from "../context/LoadingContext";
+import { useNavigate } from 'react-router-dom';
 import PostGrid from "../postcomponent/PostGrid";
 import PostList from "../postcomponent/PostList";
 import FollowModal from './FollowModal';
@@ -14,6 +15,7 @@ const UserFeed = () => {
   const { userNo } = useParams();
   const {userData} = useUser();
   const {userId,userNick,profileURL} = userData;
+  const navigate = useNavigate();
   const [followerCount, setFollowerCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
   const [postCount, setPostCount] = useState(0);
@@ -33,6 +35,13 @@ const UserFeed = () => {
   const [feedNick,setFeedNick] = useState('');
   const [profileImg,setProfileImg] = useState('');
   const [followCheck,setFollowCheck] = useState(false);
+
+  useEffect(()=>{
+    if(userId===userNo){
+      navigate('/myBook');
+    }
+  },[userNo])
+
   useEffect(() => {
     const fetchData = async () => {
       try {
