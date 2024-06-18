@@ -1,5 +1,5 @@
 import './postdetail.css';
-import { useParams, useHistory} from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import Sidebar from '../main/Sidebar';
 import Header from '../main/Header';
 import axios from "axios";
@@ -11,11 +11,10 @@ import { useNavigate } from 'react-router-dom';
 import WritePost from '../usercomponent/WritePost';
 
 const PostDetail = ({}) => {
-
   const { type, postNo } = useParams();
   const { userData } = useUser();
   const { userId, userNo } = userData;
-  const {showLoading,hideLoading} = useLoading();
+  const { showLoading, hideLoading } = useLoading();
   const navigate = useNavigate();
 
   const [cmtCnt, setCmtCnt] = useState(0);
@@ -25,37 +24,29 @@ const PostDetail = ({}) => {
   const [recommendVO, setRecommendVO] = useState(null);
   const [reviewVO, setReviewVO] = useState(null);
   const [newComment, setNewComment] = useState("");
-  const [fileList,setFileList] = useState([]);
+  const [fileList, setFileList] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [likeCheck,setLikeCheck] = useState(false);
-  const [writer,setWriter] = useState('');
-  const [showToast,setShowToast] = useState(false);
-  const [showToast2,setShowToast2] = useState(false);
-  const [showToast3,setShowToast3] = useState(false);
-  const [modifyModal,setModifyModal] = useState(false);
-  const [modifyModalIsOpen,setModifyModalIsOpen] = useState(false);
+  const [likeCheck, setLikeCheck] = useState(false);
+  const [writer, setWriter] = useState('');
+  const [toastMessage, setToastMessage] = useState('');
+  const [modifyModalIsOpen, setModifyModalIsOpen] = useState(false);
   const [editMode, setEditMode] = useState({});
   const [editContent, setEditContent] = useState({});
 
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        
         const response2 = await axios.get(`/book/post/likeCheck?postNo=${postNo}&userNo=${userNo}&type=${type}`);
         setLikeCheck(response2.data);
-        
       } catch (error) {
         console.error("좋아요 여부 불러오는 도중 오류 발생", error);
       }
-      
     }
-    if(userNo){
+    if (userNo) {
       fetchData();
     }
-    
-  },[userNo])
+  }, [userNo]);
 
   useEffect(() => {
     const fetchPostDetail = async () => {
@@ -81,25 +72,23 @@ const PostDetail = ({}) => {
         console.error("글 내용 불러오는 도중 오류 발생", error);
       }
     };
-
     fetchPostDetail();
   }, [type, postNo]);
 
   const handleLike = async () => {
-    if(writer==userNo){
-      setShowToast(true);
+    if (writer == userNo) {
+      setToastMessage('myPostLike');
       setTimeout(() => {
-        setShowToast(false);
+        setToastMessage('');
       }, 2000);
       return;
     }
     try {
-      const response = await axios.post(`/book/post/doLike`, { postNo, userNo, type}); 
-      if(response.data>0) {
-        setLikeCnt(likeCnt+1);
+      const response = await axios.post(`/book/post/doLike`, { postNo, userNo, type });
+      if (response.data > 0) {
+        setLikeCnt(likeCnt + 1);
         setLikeCheck(true);
       }
-      
     } catch (error) {
       console.error("Error liking post:", error);
     }
@@ -108,8 +97,8 @@ const PostDetail = ({}) => {
   const handleUnlike = async () => {
     try {
       const response = await axios.post(`/book/post/cancelLike`, { postNo, userNo, type });
-      if(response.data>0) {
-        setLikeCnt(likeCnt-1);
+      if (response.data > 0) {
+        setLikeCnt(likeCnt - 1);
         setLikeCheck(false);
       }
     } catch (error) {
@@ -118,22 +107,21 @@ const PostDetail = ({}) => {
   };
 
   const handleCommentSubmit = async (e) => {
-    if(window.confirm("댓글을 작성하시겠습니까?")){
+    if (window.confirm("댓글을 작성하시겠습니까?")) {
       e.preventDefault();
-    try {
-      const response = await axios.post(`/book/post/comment`, { postNo, userNo, type, comment: newComment });
-      setShowToast2(true);
-      setTimeout(() => {
-        setShowToast2(false);
-      }, 2000);
-      setCmtList([...cmtList, response.data]);
-      setCmtCnt(cmtCnt + 1);
-      setNewComment("");
-    } catch (error) {
-      console.error("댓글 작성 중 오류 발생", error);
+      try {
+        const response = await axios.post(`/book/post/comment`, { postNo, userNo, type, comment: newComment });
+        setToastMessage('doComment');
+        setTimeout(() => {
+          setToastMessage('');
+        }, 2000);
+        setCmtList([...cmtList, response.data]);
+        setCmtCnt(cmtCnt + 1);
+        setNewComment("");
+      } catch (error) {
+        console.error("댓글 작성 중 오류 발생", error);
+      }
     }
-    }
-    
   };
 
   const nextImage = () => {
@@ -144,53 +132,76 @@ const PostDetail = ({}) => {
     setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? fileList.length - 1 : prevIndex - 1));
   };
 
-  const toUserFeed = (user_id) =>{
+  const toUserFeed = (user_id) => {
     navigate(`/userFeed/${user_id}`);
-  }
+  };
 
-  const modifyPost = () =>{
-    if(type==='review'){
-      navigate('/modifyPost',{ state:{reviewVO,type,fileList}});
-    }else{
-      navigate('/modifyPost', { state:{recommendVO,type,fileList}});
+  const modifyPost = () => {
+    if (type === 'review') {
+      navigate('/modifyPost', { state: { reviewVO, type, fileList } });
+    } else {
+      navigate('/modifyPost', { state: { recommendVO, type, fileList } });
     }
-    
-  }
-  const deletePost = async() =>{
-    if(window.confirm('게시글을 삭제하시겠습니까?\n게시글을 삭제하면 관련된 이미지 파일, 댓글이 모두 삭제됩니다.')){
+  };
+
+  const deletePost = async () => {
+    if (window.confirm('게시글을 삭제하시겠습니까?\n게시글을 삭제하면 관련된 이미지 파일, 댓글이 모두 삭제됩니다.')) {
       try {
-        // for (const file of fileList) {
-        //   await axios.delete(`/book/file/postImgDelete`, {
-        //     data: {
-        //       fileNo: file.file_no,
-        //       url: file.file_url
-        //     }
-        //   });
-        // }
+        for (const file of fileList) {
+          await axios.delete(`/book/file/postImgDelete`, {
+            data: {
+              fileNo: file.file_no,
+              url: file.file_url
+            }
+          });
+        }
         await axios.delete('/book/post/deletePost', {
-          params: { postNo: postNo,type: type}
+          params: { postNo: postNo, type: type }
         });
-        setShowToast3(true);
+        setToastMessage('deletePost');
         setTimeout(() => {
-          setShowToast3(false);
+          setToastMessage('');
           navigate('/myBook');
         }, 1000);
       } catch (error) {
-        
+        console.error("게시글 삭제 중 오류 발생", error);
       }
     }
-  }
-  const deleteComment = (commentNo) => {
-    console.log(commentNo);
-  }
-  const modifyComment = async(commentNo,editContent) => {
+  };
+
+  const deleteComment = async (commentNo) => {
+    if(window.confirm('댓글을 삭제하시겠습니까?')){
+      try {
+        const response = await axios.delete(`/book/post/deleteComment`, {
+          params: { commentNo: commentNo }
+        });
+        setToastMessage('deleteComment');
+        setTimeout(() => {
+        setToastMessage('');
+      }, 2000);
+        setCmtList(prevList => prevList.filter(comment => comment.comment_no !== commentNo));
+      } catch (error) {
+        console.error("댓글 삭제 중 오류 발생", error);
+      }
+    }
+    
+  };
+
+  const modifyComment = async (commentNo, editContent, index) => {
     try {
       const response = await axios.post(`/book/post/modifyComment`, { commentNo, editContent });
-      
+      setToastMessage('modifyComment');
+      setTimeout(() => {
+        setToastMessage('');
+      }, 2000);
+      setCmtList(prevList => prevList.map(comment =>
+        comment.comment_no === commentNo ? { ...comment, comment_content: editContent } : comment
+      ));
     } catch (error) {
       console.error("댓글 수정 중 오류 발생", error);
     }
-  }
+  };
+
   const handleEditClick = (comment_no, comment_content) => {
     setEditMode(prev => ({ ...prev, [comment_no]: true }));
     setEditContent(prev => ({ ...prev, [comment_no]: comment_content }));
@@ -202,10 +213,11 @@ const PostDetail = ({}) => {
   };
 
   const handleSaveEdit = (comment_no) => {
-    modifyComment(comment_no, editContent[comment_no]);
-    setEditMode(prev => ({ ...prev, [comment_no]: false }));
+    if (window.confirm('댓글을 수정하시겠습니까?')) {
+      modifyComment(comment_no, editContent[comment_no]);
+      setEditMode(prev => ({ ...prev, [comment_no]: false }));
+    }
   };
-    
 
   const post = recommendVO || reviewVO;
 
@@ -216,9 +228,8 @@ const PostDetail = ({}) => {
       </div>
       <div className="mainContent2">
         <Header />
-        {showToast && <ToastMsg prop="myPostLike" />}
-        {showToast2 && <ToastMsg prop="doComment" />}
-        {showToast3 && <ToastMsg prop="deletePost"/>}
+        {toastMessage && <ToastMsg prop={toastMessage} />}
+        
         {!loading && (
         <div className="mainSection">
           <div className="postDetailContainer">
