@@ -1,40 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import Stomp from 'stompjs';
+import React, { useEffect, useState } from 'react';
 
+const NotificationComponent = () => {
+    const [notifications, setNotifications] = useState([]);
+    const [unreadCount, setUnreadCount] = useState(0);
 
-const NotificationComponent = ({ userId }) => {
-  const [notifications, setNotifications] = useState([]);
+    useEffect(() => {
+        const socket = new WebSocket('ws://localhost:8080/ws/notifications');
 
-  useEffect(() => {
-    // WebSocket 연결
-    const socket = new WebSocket('ws://localhost:8080/ws');
-    const stompClient = Stomp.over(socket);
-    stompClient.debug = null;
+        socket.onmessage = (event) => {
+            const message = event.data;
+            setNotifications(prevNotifications => [...prevNotifications, message]);
+            setUnreadCount(prevCount => prevCount + 1);
+        };
 
-    // 연결이 성공하면 구독 시작
-    stompClient.connect({}, () => {
-      stompClient.subscribe(`/topic/notifications/${userId}`, (message) => {
-        const notification = JSON.parse(message.body);
-        setNotifications((prevNotifications) => [...prevNotifications, notification]);
-      });
-    });
+        return () => {
+            socket.close();
+        };
+    }, []);
 
-    // 컴포넌트 언마운트 시 연결 종료
-    return () => {
-      stompClient.disconnect();
+    const markAllAsRead = () => {
+        setUnreadCount(0);
     };
-  }, [userId]);
 
-  return (
-    <div>
-      <h2>알림</h2>
-      <ul>
-        {notifications.map((notification, index) => (
-          <li key={index}>{notification}</li>
-        ))}
-      </ul>
-    </div>
-  );
+    return (
+        <div>
+            <div className="header">
+                <span className="bell">
+                    🔔
+                    {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
+                </span>
+                <button onClick={markAllAsRead}>Mark all as read</button>
+            </div>
+            <div className="notifications">
+                {notifications.map((notification, index) => (
+                    <div key={index} className="notification">
+                        {notification}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
 };
+
 
 export default NotificationComponent;
