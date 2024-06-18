@@ -107,6 +107,24 @@ const WritePosts = () => {
     const formData = new FormData();
     let endpoint;
     formData.append('book_ISBN',selectBook.isbn);
+    formData.append('book_THUMBNAIL', selectBook.thumbnail);
+    // try {
+    //   const search = '책 ' + selectBook.isbn;
+    //   const API_KEY = process.env.REACT_APP_API_KEY;
+    //   const CX = process.env.REACT_APP_ENGINE_ID;
+    //   const encodedBookTitle = encodeURIComponent(search);
+    //   const searchUrl = `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${CX}&q=${encodedBookTitle}&searchType=image`;
+
+    //   const response = await axios.get(searchUrl);
+    //   const items = response.data.items || [];
+      
+    //     setBookImages(items.map(item => item.link));
+      
+    //   console.log(response);
+    // }catch(error){
+    //   console.error('책 이미지 불러오는 도중 오류 발생',error);
+    // }
+
     formData.append('book_THUMBNAIL',selectBook.thumbnail);
     if (postType === 'recommend') {
       formData.append('recommend_TITLE', postTitle);
@@ -213,11 +231,7 @@ const WritePosts = () => {
       alert('키워드를 하나 이상 선택해주세요');
       return;
     }
-    // 여기서 원래 vo 값, 이미지 값이랑 지금 값을 비교를 해서 똑같으면 '변경 사항이 없습니다' 띄워줘야 하고
-    // 변경 사항이 있다면 vo는 update
-    // 이미지는 원래 있다가 없어진 이미지는 url delete 작업
-    // 추가된 이미지는 insert 작업 해줘야해
-    // 
+
     const postNo = type=='review'? vo.review_NO : vo.recommend_NO;
 
 
@@ -580,7 +594,9 @@ const WritePosts = () => {
             />
             </div>
             {type ? (<button type="submit" className="modalWrite-submitButton">수정하기</button>):(<button type="submit" style={{marginTop: '20px'}}className="modalWrite-submitButton">작성하기</button>)}
-            
+            {/* <div>
+
+            </div> */}
           </form>               
       </div>
     </div>
