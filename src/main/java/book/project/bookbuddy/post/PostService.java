@@ -36,7 +36,8 @@ public interface PostService {
   public CmtVO geCmtVO();
   public int modifyRecommendPost(RecommendVO vo);
   public int modifyReviewPost(ReviewVO vo);
-  public void deleteComment(int postNo, String type);
+  public void deletePostComment(int postNo, String type);
   public void deletePost(int postNo, String type);
   public void modifyComment(String commentNo, String editContent);
+  public void deleteComment(int commentNo);
 }

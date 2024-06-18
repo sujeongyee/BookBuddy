@@ -100,14 +100,18 @@ public class PostServiceImpl implements PostService{
     return postMapper.modifyReviewPost(vo);
   }
 
-  public void deleteComment(int postNo, String type){
-    postMapper.deleteComment(postNo,type);
+  public void deletePostComment(int postNo, String type){
+    postMapper.deletePostComment(postNo,type);
   }
   public void deletePost(int postNo, String type){
     postMapper.deletePost(postNo, type);
   }
   public void modifyComment(String commentNo, String editContent){
     postMapper.modifyComment(commentNo, editContent);
+  }
+
+  public void deleteComment(int commentNo){
+    postMapper.deleteComment(commentNo);
   }
 
 }

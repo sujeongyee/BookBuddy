@@ -155,7 +155,7 @@ public class PostController {
 
   @DeleteMapping("/deletePost")
   public void deletePost(@RequestParam("postNo") int postNo, @RequestParam("type") String type) {
-    postService.deleteComment(postNo, type);
+    postService.deletePostComment(postNo, type);
     postService.deletePost(postNo, type);
   }
 
@@ -164,6 +164,11 @@ public class PostController {
     String commentNo = map.get("commentNo");
     String editContent = map.get("editContent");
     postService.modifyComment(commentNo, editContent);
+  }
+
+  @DeleteMapping("/deleteComment")
+  public void deleteComment(@RequestParam("commentNo") int commentNo){
+
   }
   
 
