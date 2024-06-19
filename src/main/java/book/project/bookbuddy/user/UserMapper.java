@@ -16,6 +16,7 @@ public interface UserMapper {
   public int getReviewPostCount(String userId);
   public FollowerVO getFollow(int userNO);
   public int getUserNo(String userId);
+  public String getUserNick(int userNo);
   public List<UserVO> getFollowerList(int userNo);
   public List<UserVO> getFollowingList(int userNo);
   public List<UserVO> getFollowerList2(@Param("feedNo")int feedNo,@Param("userNo")int userNo);

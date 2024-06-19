@@ -1,21 +1,26 @@
 package book.project.bookbuddy.notification;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import book.project.bookbuddy.config.NotificationHandler;
+import book.project.bookbuddy.command.NotificationVO;
 
 @Service
 public class NotificationService {
 
-    private final NotificationHandler notificationHandler;
+    private final NotificationMapper notificationMapper;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    public NotificationService(NotificationHandler notificationHandler) {
-        this.notificationHandler = notificationHandler;
+    public NotificationService(NotificationMapper notificationMapper, SimpMessagingTemplate messagingTemplate) {
+        this.notificationMapper = notificationMapper;
+        this.messagingTemplate = messagingTemplate;
     }
 
-    public void sendNotification(String message) {
-        notificationHandler.sendNotification(message);
+    public void sendFollowNotification(NotificationVO notification) {
+        notificationMapper.sendFollowMessage(notification);
+        System.out.println("Sending notification to WebSocket: " + notification);
+        messagingTemplate.convertAndSend("/topic/notifications", notification);
     }
 }

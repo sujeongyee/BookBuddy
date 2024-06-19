@@ -1,22 +1,15 @@
 package book.project.bookbuddy.notification;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.stereotype.Controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-@RestController
+import book.project.bookbuddy.command.NotificationVO;
+@Controller
 public class NotificationController {
 
-    private final NotificationService notificationService;
-
-    @Autowired
-    public NotificationController(NotificationService notificationService) {
-        this.notificationService = notificationService;
-    }
-
-    @PostMapping("/send-notification")
-    public void sendNotification(@RequestParam String message) {
-        notificationService.sendNotification(message);
+    @MessageMapping("/notify")
+    @SendTo("/topic/notifications")
+    public NotificationVO notify(NotificationVO notification) {
+        return notification;
     }
 }

@@ -28,7 +28,8 @@
     SELECT (SELECT COUNT(*) AS following FROM FOLLOWER WHERE USER_NO = #{userNo}) AS following,
     COUNT(*) AS follower FROM FOLLOWER WHERE FOLLOW_NO = #{userNo}
   </select>
-  <select id="getUserNo">SELECT USER_NO FROM USER WHERE USER_ID=#{userId}</select>    
+  <select id="getUserNo">SELECT USER_NO FROM USER WHERE USER_ID=#{userId}</select>
+  <select id="getUserNick">SELECT USER_NICK FROM USER WHERE USER_NO=#{userNo}</select>    
   <select id="getFollowerList">
     SELECT 
     U.*,
