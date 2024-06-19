@@ -37,6 +37,12 @@ public class UserController {
   public int getUserNo(@RequestParam("id") String id) {
     return userService.getUserNo(id);
   }
+
+  @GetMapping("/getUnReadNotification")
+  public String getUnReadNotification(@RequestParam("") String param) {
+      return new String();
+  }
+  
   
 
   @GetMapping("/myPage")

@@ -2,27 +2,31 @@ import React, { useEffect, useState } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import '../main/sidebar.css';
+import { useUser } from "../context/UserContext";
 
-const Notification = ({ message }) => {
+
+const Notification = ({ message, onRemove }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
-            const element = document.getElementById(message.id);
-            if (element) {
-                element.style.display = 'none';
-            }
-        }, 2000); // 2초 후에 알림 숨기기
+            onRemove(message.id); // 2초 후에 알림 제거
+        }, 2500);
 
         return () => clearTimeout(timer); // 컴포넌트가 언마운트될 때 타이머 정리
-    }, [message]);
+    }, [message, onRemove]);
 
     return (
-        <div id={message.id} className="notification">
-            {message.ntf_msg}
+        <div className="notification">
+            <span className="notification-icon">🔔</span>
+            <span className="notification-message">{message.ntf_msg}</span>
         </div>
     );
 };
 
+
 const NotificationComponent = () => {
+
+    const { userData } = useUser();
+    const { userId, userNo } = userData;
     const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
@@ -34,8 +38,10 @@ const NotificationComponent = () => {
             stompClient.subscribe('/topic/notifications', (message) => {
                 console.log('Received message: ' + message.body);
                 const notification = JSON.parse(message.body);
-                notification.id = `notification-${Date.now()}`; // 고유 ID 부여
-                setNotifications((prevNotifications) => [...prevNotifications, notification]);
+                if(notification.receive_user == userNo) {
+                    notification.id = `notification-${Date.now()}`; // 고유 ID 부여
+                    setNotifications((prevNotifications) => [...prevNotifications, notification]);
+                }        
             });
         }, (error) => {
             console.error('Error: ' + error);
@@ -48,11 +54,17 @@ const NotificationComponent = () => {
         };
     }, []);
 
+    const removeNotification = (id) => {
+        setNotifications((prevNotifications) =>
+            prevNotifications.filter((notification) => notification.id !== id)
+        );
+    };
+
     return (
         <div>
             <div className="notifications">
-                {notifications.map((notification, index) => (
-                    <Notification key={index} message={notification} />
+                {notifications.map((notification) => (
+                    <Notification key={notification.id} message={notification} onRemove={removeNotification} />
                 ))}
             </div>
         </div>

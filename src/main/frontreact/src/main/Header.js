@@ -1,7 +1,20 @@
 import NotificationComponent from '../component/NotificationComponent';
+import React, { useEffect, useState } from 'react';
 import './sidebar.css';
-function Header(){
+import { useUser } from "../context/UserContext";
+import axios from 'axios';
 
+function Header(){
+    const { userData } = useUser();
+    const { userId, userNo } = userData;
+
+    useEffect(async()=>{
+        try {
+            const response = await axios.get(`/book/user/getUnReadNotification?userNo=${userNo}`);
+        } catch (error) {
+            console.error('알림 수 가져오기 중 에러 발생',error);
+        }
+    },[userNo])
     const handleSearchAll = () => {
         console.log('검색');
     }
