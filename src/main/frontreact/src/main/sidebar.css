@@ -18,6 +18,19 @@
     font-family:Pretendard-Regular, cursive;
 } */
 
+.notification {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.notification.hide {
+    opacity: 0;
+}
 
 
 input:focus {

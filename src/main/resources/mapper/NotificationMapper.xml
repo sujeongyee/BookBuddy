@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="book.project.bookbuddy.notification.NotificationMapper">
+    
+  <insert id = "sendFollowMessage">
+    INSERT INTO NOTIFICATION (RECEIVE_USER,SEND_USER,NTF_MSG,NTF_TYPE) VALUES
+    (#{receive_user},#{send_user},#{ntf_msg},'following')
+  </insert>
+
+  <insert id = "sendLikeMessage">
+    INSERT INTO NOTIFICATION (RECEIVE_USER,SEND_USER,NTF_MSG,NTF_TYPE,POST_TYPE,POST_NO) VALUES
+    (#{receive_user},#{send_user},#{ntf_msg},'like',#{post_type},#{post_no})
+  </insert>
+
+  <insert id = "sendCommentMessage">
+    INSERT INTO NOTIFICATION (RECEIVE_USER,SEND_USER,NTF_MSG,NTF_TYPE,POST_TYPE,POST_NO) VALUES
+    (#{receive_user},#{send_user},#{ntf_msg},'comment',#{post_type},#{post_no})
+  </insert>
+
+  <update id="readNotification">
+    UPDATE NOTIFICATION SET ntf_check='true' WHERE NTF_NO = #{ntf_no}
+  </update>
+
+
+</mapper>

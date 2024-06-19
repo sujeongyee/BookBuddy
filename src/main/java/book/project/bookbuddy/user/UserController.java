@@ -85,7 +85,6 @@ public class UserController {
       
     }else{
       if(feedId!=null){
-        System.out.println("------------notnull------------------");
         int feedNo = userService.getUserNo(feedId);
         List<UserVO> list = userService.getFollowingList2(feedNo,userNo);
         return list;

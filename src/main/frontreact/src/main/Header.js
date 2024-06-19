@@ -1,3 +1,4 @@
+import NotificationComponent from '../component/NotificationComponent';
 import './sidebar.css';
 function Header(){
 
@@ -14,7 +15,7 @@ function Header(){
                     </svg>
                 </div>
             </div>
-
+            <NotificationComponent />
             <div className="headerIcon">
                 
                 <div className="bell-icon">

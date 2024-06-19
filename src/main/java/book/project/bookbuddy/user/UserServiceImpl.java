@@ -6,13 +6,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import book.project.bookbuddy.command.FollowerVO;
+import book.project.bookbuddy.command.NotificationVO;
 import book.project.bookbuddy.command.UserVO;
+import book.project.bookbuddy.notification.NotificationMapper;
+import book.project.bookbuddy.notification.NotificationService;
 
 @Service("userService")
 public class UserServiceImpl implements UserService{
 
   @Autowired
   private UserMapper userMapper;
+
+  @Autowired
+  private NotificationMapper notificationMapper;
+
+  @Autowired
+  private NotificationService notificationService;
 
   public int updateProfile(UserVO vo){
     return userMapper.updateProfile(vo);
@@ -47,6 +56,11 @@ public class UserServiceImpl implements UserService{
   }
 
   public int addFollow(int userNo, int toUserNo){
+    String userNick = userMapper.getUserNick(userNo);
+    String msg = userNick+" 버디가 당신을 팔로우 했습니다.";
+    NotificationVO vo = new NotificationVO(null, toUserNo, userNo, msg, null, false, null, null, null);
+    notificationMapper.sendFollowMessage(vo);
+    notificationService.sendFollowNotification(vo);
     return userMapper.addFollow(userNo, toUserNo);
   }
   public int cancelFollow(int userNo, int toUserNo){
