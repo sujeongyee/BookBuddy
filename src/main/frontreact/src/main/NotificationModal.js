@@ -28,7 +28,7 @@ const NotificationModal = ({ isOpen, onRequestClose, notiCnt, setNotiCnt}) =>{
     if(isOpen){
       fetchNotiData();
     }
-  },[isOpen])
+  },[isOpen,notiCnt])
 
   const handleNotificationClick = (notification) => {
     if (notification.post_type && notification.post_no) {
@@ -99,6 +99,16 @@ const NotificationModal = ({ isOpen, onRequestClose, notiCnt, setNotiCnt}) =>{
     setShowUnreadOnly(false);
   };
 
+  // 개행 문자를 <br> 태그로 변환하는 함수
+  const formatMessage = (message) => {
+    return message.split('\n').map((item, index) => (
+      <React.Fragment key={index}>
+        {item}
+        <br />
+      </React.Fragment>
+    ));
+  };
+
   return(
     <Modal isOpen={isOpen} onRequestClose={onRequestClose} style={customModalStyles} contentLabel="알림 모달">
       <div className="notification-modal">
@@ -134,7 +144,7 @@ const NotificationModal = ({ isOpen, onRequestClose, notiCnt, setNotiCnt}) =>{
                     >
                       {notification.post_title}
                     </span>
-                    게시글에 {notification.ntf_msg.split('게시글에')[1]}
+                    {" "}게시글에 {formatMessage(notification.ntf_msg.split('게시글에')[1])}
                   </p>
                   <div className="notification-modal-zone">
                     <span className="notification-time">{new Date(notification.ntf_time).toLocaleString()}</span>
