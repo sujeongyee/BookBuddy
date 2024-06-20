@@ -123,8 +123,18 @@ const NotificationModal = ({ isOpen, onRequestClose, notiCnt, setNotiCnt}) =>{
                   key={notification.ntf_no}
                   className={`notification-item ${notification.ntf_check ? 'read' : 'unread'}`}
                 >
-                  <p className="notification-message" onClick={() => handleNotificationClick(notification)}>
-                    {notification.ntf_msg}
+                  <p className="notification-message">
+                    {notification.ntf_msg.split('게시글에')[0]}
+                    <span 
+                      className="post-title-link" 
+                      onClick={() => {
+                        handleNotificationClick(notification);
+                        onRequestClose();
+                      }}
+                    >
+                      {notification.post_title}
+                    </span>
+                    게시글에 {notification.ntf_msg.split('게시글에')[1]}
                   </p>
                   <div className="notification-modal-zone">
                     <span className="notification-time">{new Date(notification.ntf_time).toLocaleString()}</span>
