@@ -22,12 +22,13 @@ public class NotificationController {
     @Qualifier("notiService")
     private NotificationService notiService;
 
+    // 실시간 메세지 보내기
     @MessageMapping("/notify")
     @SendTo("/topic/notifications")
     public NotificationVO notify(NotificationVO notification) {
         return notification;
     }
-
+    // 알림 읽기
     @PostMapping("/readNotification")
     public void readNotification(@RequestParam("ntfNo") String ntfNo) {  
         notiService.readNotification(ntfNo);

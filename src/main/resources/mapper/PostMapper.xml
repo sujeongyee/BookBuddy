@@ -188,4 +188,12 @@
         DELETE FROM COMMENT WHERE COMMENT_NO = #{commentNo}
     </delete>
 
+    <select id="getPostsUserNo">
+        SELECT USER_NO,RECOMMEND_TITLE FROM RECOMMEND WHERE RECOMMEND_NO=#{postNo}
+    </select>
+
+    <select id="getPostsUserNo2">
+        SELECT USER_NO,REVIEW_TITLE FROM REVIEW WHERE REVIEW_NO=#{postNo}
+    </select>
+
 </mapper>

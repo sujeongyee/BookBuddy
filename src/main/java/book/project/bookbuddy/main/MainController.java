@@ -72,7 +72,7 @@ public class MainController { // 로그인과 회원가입 등의 기능
         if(n==1) return true;
         else return false;
     }
-    
+    // 모든 알림 불러오기
     @GetMapping("/getNoti")
     public List<NotificationVO> getNoti(@RequestParam("userNo") String userNo) {
         return mainService.getNoti(userNo);

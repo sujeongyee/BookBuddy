@@ -41,7 +41,7 @@ const NotificationComponent = ({ notiCnt, setNotiCnt }) => {
                 if(notification.receive_user == userNo) {
                     notification.id = `notification-${Date.now()}`; // 고유 ID 부여
                     setNotifications((prevNotifications) => [...prevNotifications, notification]);
-                    setNotiCnt(prevNotiCnt => prevNotiCnt + 1); // 알림 개수 증가
+                    setNotiCnt(notiCnt+1); // 알림 개수 증가
                 }        
             });
         }, (error) => {

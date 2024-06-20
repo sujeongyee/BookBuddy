@@ -42,7 +42,7 @@ function Header(){
                     </svg>
                 </div>
             </div>
-            <NotificationComponent />
+            <NotificationComponent notiCnt={notiCnt} setNotiCnt={(e)=>{setNotiCnt(e)}}/>
             <div className="headerIcon">
             <NotificationModal isOpen={bellModal} onRequestClose={()=>{setBellModal(false)}} notiCnt={notiCnt} setNotiCnt={(e)=>{setNotiCnt(e)}}/>
                 <div className="bell-icon" onClick={()=>bellModalOpen()} style={{cursor:'pointer'}}>

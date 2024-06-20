@@ -19,7 +19,7 @@ public class NotificationServiceImpl implements NotificationService{
         this.messagingTemplate = messagingTemplate;
     }
 
-    public void sendFollowNotification(NotificationVO notification) {
+    public void sendNotification(NotificationVO notification) {
         messagingTemplate.convertAndSend("/topic/notifications", notification);
     }
 
