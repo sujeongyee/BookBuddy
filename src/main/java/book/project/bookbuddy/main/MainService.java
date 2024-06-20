@@ -5,6 +5,7 @@ import java.util.List;
 
 import book.project.bookbuddy.command.CategoryVO;
 import book.project.bookbuddy.command.KeywordVO;
+import book.project.bookbuddy.command.NotificationVO;
 import book.project.bookbuddy.command.UserVO;
 
 public interface MainService {
@@ -16,4 +17,5 @@ public interface MainService {
     public Timestamp getTimeStamp(String time);
     public int joinBuddy(UserVO vo);
     public UserVO getVO(String id);
+    public List<NotificationVO> getNoti(String userNo);
 }

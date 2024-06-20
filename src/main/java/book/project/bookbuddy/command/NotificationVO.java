@@ -18,7 +18,7 @@ public class NotificationVO {
   private Integer send_user;
   private String ntf_msg;
   private Timestamp ntf_time;
-  private String ntf_check;
+  private boolean ntf_check;
   private String ntf_type;
   private String post_type;
   private Integer post_no;

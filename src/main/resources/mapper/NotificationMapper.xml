@@ -22,7 +22,7 @@
   </insert>
 
   <update id="readNotification">
-    UPDATE NOTIFICATION SET ntf_check='true' WHERE NTF_NO = #{ntf_no}
+    UPDATE NOTIFICATION SET ntf_check=true WHERE NTF_NO = #{ntf_no}
   </update>
 
 

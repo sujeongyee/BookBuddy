@@ -3,19 +3,19 @@ import React, { useEffect, useState } from 'react';
 import './sidebar.css';
 import { useUser } from "../context/UserContext";
 import axios from 'axios';
+import NotificationModal from './NotificationModal';
 
 function Header(){
     const { userData } = useUser();
     const { userId, userNo } = userData;
     const [notiCnt,setNotiCnt] = useState(0);
-    
+    const [bellModal,setBellModal] = useState(false);
     useEffect(() => {
         const fetchNotifications = async () => {
             if (userNo) {
                 try {
                     const response = await axios.get(`/book/user/getUnReadNotification?userNo=${userNo}`);
                     setNotiCnt(response.data);
-                    console.log(response.data);
                 } catch (error) {
                     console.error('알림 수 가져오기 중 에러 발생', error);
                 }
@@ -24,8 +24,13 @@ function Header(){
 
         fetchNotifications();
     }, [userNo]);
+
     const handleSearchAll = () => {
         console.log('검색');
+    }
+
+    const bellModalOpen = () => {
+        setBellModal(true);
     }
     return(
         <div className="header-bar">
@@ -39,8 +44,8 @@ function Header(){
             </div>
             <NotificationComponent />
             <div className="headerIcon">
-                
-                <div className="bell-icon">
+            <NotificationModal isOpen={bellModal} onRequestClose={()=>{setBellModal(false)}} notiCnt={notiCnt} setNotiCnt={(e)=>{setNotiCnt(e)}}/>
+                <div className="bell-icon" onClick={()=>bellModalOpen()} style={{cursor:'pointer'}}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="27" fill="currentColor"
                          className="bi bi-bell" viewBox="0 0 16 16">
                         <path
