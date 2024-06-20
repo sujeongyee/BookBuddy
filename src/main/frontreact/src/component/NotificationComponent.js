@@ -25,50 +25,50 @@ const Notification = ({ message, onRemove }) => {
 
 const NotificationComponent = () => {
 
-    const { userData } = useUser();
-    const { userId, userNo } = userData;
-    const [notifications, setNotifications] = useState([]);
+//     const { userData } = useUser();
+//     const { userId, userNo } = userData;
+//     const [notifications, setNotifications] = useState([]);
 
-    useEffect(() => {
-        const socket = new SockJS('http://localhost:8888/ws');
-        const stompClient = Stomp.over(socket);
+//     useEffect(() => {
+//         const socket = new SockJS('http://localhost:8888/ws');
+//         const stompClient = Stomp.over(socket);
 
-        stompClient.connect({}, (frame) => {
-            console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/notifications', (message) => {
-                console.log('Received message: ' + message.body);
-                const notification = JSON.parse(message.body);
-                if(notification.receive_user == userNo) {
-                    notification.id = `notification-${Date.now()}`; // 고유 ID 부여
-                    setNotifications((prevNotifications) => [...prevNotifications, notification]);
-                }        
-            });
-        }, (error) => {
-            console.error('Error: ' + error);
-        });
+//         stompClient.connect({}, (frame) => {
+//             console.log('Connected: ' + frame);
+//             stompClient.subscribe('/topic/notifications', (message) => {
+//                 console.log('Received message: ' + message.body);
+//                 const notification = JSON.parse(message.body);
+//                 if(notification.receive_user == userNo) {
+//                     notification.id = `notification-${Date.now()}`; // 고유 ID 부여
+//                     setNotifications((prevNotifications) => [...prevNotifications, notification]);
+//                 }        
+//             });
+//         }, (error) => {
+//             console.error('Error: ' + error);
+//         });
 
-        return () => {
-            stompClient.disconnect(() => {
-                console.log('Disconnected');
-            });
-        };
-    }, []);
+//         return () => {
+//             stompClient.disconnect(() => {
+//                 console.log('Disconnected');
+//             });
+//         };
+//     }, []);
 
-    const removeNotification = (id) => {
-        setNotifications((prevNotifications) =>
-            prevNotifications.filter((notification) => notification.id !== id)
-        );
-    };
+//     const removeNotification = (id) => {
+//         setNotifications((prevNotifications) =>
+//             prevNotifications.filter((notification) => notification.id !== id)
+//         );
+//     };
 
-    return (
-        <div>
-            <div className="notifications">
-                {notifications.map((notification) => (
-                    <Notification key={notification.id} message={notification} onRemove={removeNotification} />
-                ))}
-            </div>
-        </div>
-    );
-};
+//     return (
+//         <div>
+//             <div className="notifications">
+//                 {notifications.map((notification) => (
+//                     <Notification key={notification.id} message={notification} onRemove={removeNotification} />
+//                 ))}
+//             </div>
+//         </div>
+//     );
+ };
 
-export default NotificationComponent;
+export default NotificationComponent
