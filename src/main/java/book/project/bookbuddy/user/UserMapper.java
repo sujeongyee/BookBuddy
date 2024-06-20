@@ -24,4 +24,5 @@ public interface UserMapper {
   public int addFollow(@Param("userNo") int userNo, @Param("toUserNo") int toUserNo);
   public int cancelFollow(@Param("userNo") int userNo, @Param("toUserNo") int toUserNo);
   public int checkFollow(@Param("userId")int userId,@Param("toUserNo") int toUserNo);
+  public int getUnReadNotification(String userNo);
 }

@@ -87,4 +87,8 @@
   <select id="checkFollow">
     SELECT COUNT(*) FROM FOLLOWER WHERE USER_NO=#{userId} AND FOLLOW_NO= #{toUserNo}
   </select>
+  <select id="getUnReadNotification">
+    SELECT COUNT(*) FROM NOTIFICATION WHERE RECEIVE_USER = #{userNo} AND NTF_CHECK='false'
+  </select>
+
 </mapper>

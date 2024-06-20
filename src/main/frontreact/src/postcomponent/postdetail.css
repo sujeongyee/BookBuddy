@@ -108,6 +108,9 @@
 .commentHeader {
   display: flex;
   flex-direction: row;
+  
+}
+.commentHeader img,.commentHeader p {
   cursor: pointer;
 }
 .comment-content {

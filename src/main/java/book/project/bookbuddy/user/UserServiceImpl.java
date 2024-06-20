@@ -58,8 +58,9 @@ public class UserServiceImpl implements UserService{
   public int addFollow(int userNo, int toUserNo){
     String userNick = userMapper.getUserNick(userNo);
     String msg = userNick+" 버디가 당신을 팔로우 했습니다.";
-    NotificationVO vo = new NotificationVO(null, toUserNo, userNo, msg, null, false, null, null, null);
+    NotificationVO vo = new NotificationVO(null, toUserNo, userNo, msg, null, null, null, null, null);
     notificationMapper.sendFollowMessage(vo);
+    // 실시간 알림 메세지 보내기
     notificationService.sendFollowNotification(vo);
     return userMapper.addFollow(userNo, toUserNo);
   }
@@ -68,5 +69,8 @@ public class UserServiceImpl implements UserService{
   }
   public int checkFollow(int userId,int toUserNo){
     return userMapper.checkFollow(userId, toUserNo);
+  }
+  public int getUnReadNotification(String userNo){
+    return userMapper.getUnReadNotification(userNo);
   }
 }

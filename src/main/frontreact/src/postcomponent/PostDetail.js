@@ -177,7 +177,7 @@ const PostDetail = ({}) => {
   const deleteComment = async (commentNo) => {
     if(window.confirm('댓글을 삭제하시겠습니까?')){
       try {
-        const response = await axios.delete(`/book/post/deleteComment`, {
+        const response = await axios.delete(`/book/post/deleteComment`, { 
           params: { commentNo: commentNo }
         });
         setToastMessage('deleteComment');
@@ -306,9 +306,9 @@ const PostDetail = ({}) => {
             {cmtList.map(comment => (
               <div key={comment.comment_no} className="comment">
                 <div className='commentHeader2'>
-                  <div className="commentHeader" onClick={() => toUserFeed(comment.user_id)}>
-                    {comment.profile_url && <img src={comment.profile_url} alt="Profile" className="profileImg" />}
-                    <p><strong>{comment.user_nick} {comment.user_id === userId && ('(글쓴이)')}</strong></p>
+                  <div className="commentHeader">
+                    {comment.profile_url && <img src={comment.profile_url} onClick={() => toUserFeed(comment.user_id)} alt="Profile" className="profileImg" />}
+                    <p onClick={() => toUserFeed(comment.user_id)}><strong>{comment.user_nick} {comment.user_id === userId && ('(글쓴이)')}</strong></p>
                   </div>
                   {editMode[comment.comment_no] ? (
                     <div>

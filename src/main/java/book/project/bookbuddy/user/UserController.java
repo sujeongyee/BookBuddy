@@ -39,8 +39,8 @@ public class UserController {
   }
 
   @GetMapping("/getUnReadNotification")
-  public String getUnReadNotification(@RequestParam("") String param) {
-      return new String();
+  public int getUnReadNotification(@RequestParam("userNo") String userNo) {
+    return userService.getUnReadNotification(userNo);
   }
   
   

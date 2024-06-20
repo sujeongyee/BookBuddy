@@ -149,7 +149,7 @@ const UserFeed = () => {
             </div>           
             <div className="stat">
               <span className="count followCnt" onClick={()=>{followModalOpen('follower')}}>{followerCount}</span>
-              <FollowModal isOpen={followmodalIsOpen} onRequestClose={()=>{setFollowModalIsOpen(false)}} mode={mode} userNo={userNo}/>
+              <FollowModal isOpen={followmodalIsOpen} onRequestClose={()=>{setFollowModalIsOpen(false)}} mode={mode} userNo={userNo} addfollow={(e)=>{setFollowerCount(followingCount+1)}} cancelfollow={(e)=>{setFollowingCount(followingCount-1)}}/>
               <span className="label">팔로워</span>
             </div>
             <div className="stat">
