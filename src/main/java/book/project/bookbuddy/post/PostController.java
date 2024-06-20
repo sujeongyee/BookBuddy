@@ -168,7 +168,7 @@ public class PostController {
 
   @DeleteMapping("/deleteComment")
   public void deleteComment(@RequestParam("commentNo") int commentNo){
-
+    postService.deleteComment(commentNo);
   }
   
 

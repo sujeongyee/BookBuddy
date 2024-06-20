@@ -19,8 +19,6 @@ public class NotificationService {
     }
 
     public void sendFollowNotification(NotificationVO notification) {
-        notificationMapper.sendFollowMessage(notification);
-        System.out.println("Sending notification to WebSocket: " + notification);
         messagingTemplate.convertAndSend("/topic/notifications", notification);
     }
 }

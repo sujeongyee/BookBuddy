@@ -18,4 +18,5 @@ public interface UserService {
   public int addFollow(int userNo, int toUserNo);
   public int cancelFollow(int userNo, int toUserNo);
   public int checkFollow(int userId,int toUserNo);
+  public int getUnReadNotification(String userNo);
 }

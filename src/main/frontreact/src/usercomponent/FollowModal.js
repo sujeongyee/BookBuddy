@@ -6,7 +6,7 @@ import axios from "axios";
 import "./mybook.css";
 import ToastMsg from "../main/ToastMsg";
 
-const FollowModal = ({ isOpen, onRequestClose, mode,userNo }) => {
+const FollowModal = ({ isOpen, onRequestClose, mode, userNo, addfollow, cancelfollow}) => {
   const { userData } = useUser();
   const { userId } = userData;
   const [followData, setFollowData] = useState([]);
@@ -56,6 +56,7 @@ const FollowModal = ({ isOpen, onRequestClose, mode,userNo }) => {
       try {
         const response = await axios.get(`/book/user/addFollow?id=${userId}&toUserNo=${userNo}`);
         if (response.data == 1) {
+          addfollow();
           setShowToast(true);
           setFollowData(prevFollowData =>
             prevFollowData.map(follow =>
@@ -78,6 +79,7 @@ const FollowModal = ({ isOpen, onRequestClose, mode,userNo }) => {
       try {
         const response = await axios.get(`/book/user/cancelFollow?id=${userId}&toUserNo=${userNo}`);
         if (response.data == 1) {
+          cancelfollow();
           setShowToast2(true);
           setFollowData(prevFollowData =>
             prevFollowData.map(follow =>
