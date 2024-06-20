@@ -32,14 +32,12 @@ const FollowModal = ({ isOpen, onRequestClose, mode,userNo }) => {
   const getFollow = async () => {
     try {
       if(userNo!=null){
-        console.log("다른사용자피드:"+userNo);
         const response = await axios.get(`/book/user/getFollowList?id=${userId}&mode=${mode}&userNo=${userNo}`);
         setFollowData(response.data);
       }else{
         const response = await axios.get(`/book/user/getFollowList?id=${userId}&mode=${mode}`);
         setFollowData(response.data);
       }
-      
       setLoading(false);
     } catch (error) {
       console.error('팔로워 목록 불러오는 중 오류 발생:', error);
@@ -61,7 +59,7 @@ const FollowModal = ({ isOpen, onRequestClose, mode,userNo }) => {
           setShowToast(true);
           setFollowData(prevFollowData =>
             prevFollowData.map(follow =>
-              follow.user_NO === userNo ? { ...follow, check_following: true } : follow
+              follow &&follow.user_NO === userNo ? { ...follow, check_following: true } : follow
             )
           );
         }
@@ -74,6 +72,7 @@ const FollowModal = ({ isOpen, onRequestClose, mode,userNo }) => {
   const resetFollow = async (userNo) => {
     setShowToast(false);
     setShowToast2(false);
+
     const isConfirmed = window.confirm('팔로우 취소하시겠습니까?');
     if (isConfirmed) {
       try {
@@ -82,7 +81,7 @@ const FollowModal = ({ isOpen, onRequestClose, mode,userNo }) => {
           setShowToast2(true);
           setFollowData(prevFollowData =>
             prevFollowData.map(follow =>
-              follow.user_NO === userNo ? { ...follow, check_following: false } : follow
+              follow && follow.user_NO === userNo ? { ...follow, check_following: false } : follow
             )
           );
         }
@@ -164,9 +163,9 @@ const FollowModal = ({ isOpen, onRequestClose, mode,userNo }) => {
                     ) : (
                       <button className="follow-button" onClick={() => doFollow(follow.user_NO)}>팔로우하기</button>
                     )
-                  ) : (
+                  ) :follow.check_following ? (
                     <button className="follow-button2" onClick={() => resetFollow(follow.user_NO)}>팔로우취소</button>
-                  )}
+                  ):(<button className="follow-button" onClick={() => doFollow(follow.user_NO)}>팔로우하기</button>)}
                 </div>
               </li>
             )

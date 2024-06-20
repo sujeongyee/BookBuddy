@@ -80,7 +80,6 @@ public class UserController {
     int userNo = userService.getUserNo(userId);
     if(mode.equals("follower")){
       if(feedId!=null){
-        System.out.println("------------notnull------------------");
         int feedNo = userService.getUserNo(feedId);
         List<UserVO> list = userService.getFollowerList2(feedNo,userNo);
         return list;
@@ -96,6 +95,9 @@ public class UserController {
         return list;
       }else{
         List<UserVO> list = userService.getFollowingList(userNo);
+        for(UserVO vo : list){
+          if(vo!=null)vo.setCheck_following(true);
+        }
         return list;
       }
       

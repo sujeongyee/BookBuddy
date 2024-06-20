@@ -8,9 +8,9 @@ function Header(){
     const { userData } = useUser();
     const { userId, userNo } = userData;
 
-    useEffect(async()=>{
+    useEffect(()=>{
         try {
-            const response = await axios.get(`/book/user/getUnReadNotification?userNo=${userNo}`);
+            //const response = await axios.get(`/book/user/getUnReadNotification?userNo=${userNo}`);
         } catch (error) {
             console.error('알림 수 가져오기 중 에러 발생',error);
         }
