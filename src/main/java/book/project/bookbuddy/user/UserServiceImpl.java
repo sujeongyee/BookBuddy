@@ -3,6 +3,7 @@ package book.project.bookbuddy.user;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import book.project.bookbuddy.command.FollowerVO;
@@ -21,6 +22,7 @@ public class UserServiceImpl implements UserService{
   private NotificationMapper notificationMapper;
 
   @Autowired
+  @Qualifier("notiService")
   private NotificationService notificationService;
 
   public int updateProfile(UserVO vo){
@@ -58,9 +60,10 @@ public class UserServiceImpl implements UserService{
   public int addFollow(int userNo, int toUserNo){
     String userNick = userMapper.getUserNick(userNo);
     String msg = userNick+" 버디가 당신을 팔로우 했습니다.";
-    NotificationVO vo = new NotificationVO(null, toUserNo, userNo, msg, null, null, null, null, null);
+    NotificationVO vo = new NotificationVO(null, toUserNo, userNo, msg, null, false, null, null, null);
     notificationMapper.sendFollowMessage(vo);
     // 실시간 알림 메세지 보내기
+    System.out.println("여기까지 옴 1 -----------------유저서비스임플");
     notificationService.sendFollowNotification(vo);
     return userMapper.addFollow(userNo, toUserNo);
   }

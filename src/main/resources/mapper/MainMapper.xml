@@ -30,4 +30,8 @@
             (#{user_ID}, #{user_PWD}, #{user_NICK}, #{user_PHONE}, #{user_BIRTH}, #{category_NO}, #{keyword_NO}, #{user_EMAIL},#{profile_URL});
     </insert>
 
+    <select id="getNoti">
+        SELECT * FROM NOTIFICATION WHERE RECEIVE_USER = #{userNo} ORDER BY NTF_TIME DESC
+    </select>
+
 </mapper>

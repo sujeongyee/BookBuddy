@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import book.project.bookbuddy.command.CategoryVO;
 import book.project.bookbuddy.command.KeywordVO;
+import book.project.bookbuddy.command.NotificationVO;
 
 @Mapper
 public interface MainMapper {
@@ -17,4 +18,5 @@ public interface MainMapper {
     public int checkDuplicateNick(String id);
     public int joinBuddy(UserVO vo);
     public UserVO getVO(String id);
+    public List<NotificationVO> getNoti(String userNo);
 }

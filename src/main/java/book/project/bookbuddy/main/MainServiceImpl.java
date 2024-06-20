@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import book.project.bookbuddy.command.CategoryVO;
 import book.project.bookbuddy.command.KeywordVO;
+import book.project.bookbuddy.command.NotificationVO;
 
 @Service("mainService")
 public class MainServiceImpl implements MainService{
@@ -69,5 +70,9 @@ public class MainServiceImpl implements MainService{
     }
     public UserVO getVO(String id){
         return mainMapper.getVO(id);
+    }
+
+    public List<NotificationVO> getNoti(String userNo){
+        return mainMapper.getNoti(userNo);
     }
 }

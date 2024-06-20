@@ -118,7 +118,7 @@ function MyBook() {
               <span className="label">게시글</span>
             </div>           
           </div>
-          <div className="action-buttons">
+          <div className="action-buttons"> 
             <button className="edit-profile-button" onClick={()=>{setProfileModalIsOpen(true)}}>프로필 수정</button>
             <ProfileModal isOpen={profilemodalIsOpen} onRequestClose={()=>{setProfileModalIsOpen(false)}} vo={vo} />
             <button className="write-post-button" onClick={()=>{navigate('/writePost');}}>글 작성하기</button>

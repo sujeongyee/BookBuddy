@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import book.project.bookbuddy.command.CategoryVO;
 import book.project.bookbuddy.command.KeywordVO;
+import book.project.bookbuddy.command.NotificationVO;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/book")
@@ -67,6 +71,11 @@ public class MainController { // 로그인과 회원가입 등의 기능
         int n = mainService.joinBuddy(vo);
         if(n==1) return true;
         else return false;
+    }
+    
+    @GetMapping("/getNoti")
+    public List<NotificationVO> getNoti(@RequestParam("userNo") String userNo) {
+        return mainService.getNoti(userNo);
     }
     
     
