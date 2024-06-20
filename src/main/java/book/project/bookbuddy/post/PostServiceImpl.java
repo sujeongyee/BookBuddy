@@ -93,8 +93,6 @@ public class PostServiceImpl implements PostService{
     return postMapper.likeCheck(postNo, userNo,type);
   }
   public int doLike(int postNo,int userNo,String type){
-    //postNo,userNo,type
-    //SELECT USER_NO,RECOMMEND_TITLE FROM RECOMMEND WHERE RECOMMEND_NO=40;
     String userNick = userMapper.getUserNick(userNo);
     String msg = userNick+" 버디가 당신의 게시글에 공감했습니다.";
     int user_no = 0;
@@ -107,6 +105,10 @@ public class PostServiceImpl implements PostService{
       RecommendVO vo = postMapper.getPostsUserNo(postNo);
       user_no = vo.getUser_NO();
       title = vo.getRecommend_TITLE();
+    }
+    if(title.length()>10){
+      title=title.substring(0, 9);
+      title+="...";
     }
     NotificationVO vo = new NotificationVO(null, user_no, userNo, msg, null, false, null,type, postNo,title);
     notificationMapper.sendLikeMessage(vo);
@@ -121,6 +123,33 @@ public class PostServiceImpl implements PostService{
 
   public void comment(int postNo, int userNo, String type, String comment){
     postMapper.comment(postNo, userNo, type, comment);
+    String userNick = userMapper.getUserNick(userNo);
+    String msg = userNick+" 버디가 당신의 게시글에 댓글을 남겼습니다.";
+    int user_no = 0;
+    String title = "";
+    if(type.equals("review")){
+      ReviewVO vo = postMapper.getPostsUserNo2(postNo);
+      user_no = vo.getUser_NO();
+      title = vo.getReview_TITLE();
+    }else{
+      RecommendVO vo = postMapper.getPostsUserNo(postNo);
+      user_no = vo.getUser_NO();
+      title = vo.getRecommend_TITLE();
+    }
+    if(title.length()>10){
+      title=title.substring(0, 9);
+      title+="...";
+    }
+    NotificationVO vo = new NotificationVO(null, user_no, userNo, msg, null, false, null,type, postNo,title);
+    notificationService.sendNotification(vo);
+    if(comment.length()>15){
+      comment = comment.substring(0, 14);
+      comment+="...";
+    }
+    vo.setNtf_msg(vo.getNtf_msg()+"\n : "+comment);
+    notificationMapper.sendCommentMessage(vo);
+    
+    
   }
 
   public CmtVO geCmtVO(){
