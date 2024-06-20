@@ -12,8 +12,8 @@
   </insert>
 
   <insert id = "sendLikeMessage">
-    INSERT INTO NOTIFICATION (RECEIVE_USER,SEND_USER,NTF_MSG,NTF_TYPE,POST_TYPE,POST_NO) VALUES
-    (#{receive_user},#{send_user},#{ntf_msg},'like',#{post_type},#{post_no})
+    INSERT INTO NOTIFICATION (RECEIVE_USER,SEND_USER,NTF_MSG,NTF_TYPE,POST_TYPE,POST_NO,POST_TITLE) VALUES
+    (#{receive_user},#{send_user},#{ntf_msg},'like',#{post_type},#{post_no},#{post_title})
   </insert>
 
   <insert id = "sendCommentMessage">
