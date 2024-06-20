@@ -22,4 +22,5 @@ public class NotificationVO {
   private String ntf_type;
   private String post_type;
   private Integer post_no;
+  private String post_title;
 }

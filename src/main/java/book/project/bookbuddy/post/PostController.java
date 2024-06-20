@@ -99,7 +99,7 @@ public class PostController {
     }
     
   }
-
+  // 특정 게시글 조회
   @GetMapping("/postDetail")
   public PostVO postDetail(@RequestParam("type") String type, @RequestParam("postNo") int postNo) {
     // 해당 포스트의 vo , 댓글 리스트, 댓글 수 , 좋아요 리스트, 좋아요 수
@@ -116,56 +116,57 @@ public class PostController {
     System.out.println(vo.toString());
     return vo;
   }
-
+  // 내가 이 게시글을 공감 했는지 여부 조회
   @GetMapping("/likeCheck")
   public boolean likeCheck(@RequestParam("postNo") int postNo, @RequestParam("userNo") int userNo, @RequestParam("type") String type) {
     int n = postService.likeCheck(postNo, userNo, type);
     return n>0?true:false; 
   }
-
+  // 게시글 공감하기
   @PostMapping("/doLike")
   public int doLike(@RequestBody Map<String,String> map) {
     return postService.doLike(Integer.parseInt(map.get("postNo")) , Integer.parseInt(map.get("userNo")) , map.get("type"));
   }
+  // 게시글 공감취소하기
   @PostMapping("/cancelLike")
   public int cancelLike(@RequestBody Map<String,String> map) {
     return postService.cancelLike(Integer.parseInt(map.get("postNo")) , Integer.parseInt(map.get("userNo")) , map.get("type"));
   }
-
+  // 댓글 달기
   @PostMapping("/comment")
   public CmtVO comment(@RequestBody Map<String,String> map) {
     postService.comment(Integer.parseInt(map.get("postNo")), Integer.parseInt(map.get("userNo")), map.get("type"), map.get("comment"));
     CmtVO vo = postService.geCmtVO();
     return vo;
   }
-
+  // 추천 게시글 수정하기
   @PostMapping("/modifyRecommendPost")
   public boolean modifyRecommendPost(@RequestBody RecommendVO vo) {
     System.out.println(vo.toString());
     int n = postService.modifyRecommendPost(vo);
     return n>0?true:false; 
   }
-
+  // 리뷰 게시글 수정하기
   @PostMapping("/modifyReviewPost")
   public boolean modifyReviewPost(@RequestBody ReviewVO vo) {
     System.out.println(vo.toString());
     int n = postService.modifyReviewPost(vo);
     return n>0?true:false; 
   }
-
+  // 게시글 삭제하기
   @DeleteMapping("/deletePost")
   public void deletePost(@RequestParam("postNo") int postNo, @RequestParam("type") String type) {
     postService.deletePostComment(postNo, type);
     postService.deletePost(postNo, type);
   }
-
+  // 댓글 수정하기
   @PostMapping("/modifyComment")
   public void modifyComment(@RequestBody Map<String,String> map) {
     String commentNo = map.get("commentNo");
     String editContent = map.get("editContent");
     postService.modifyComment(commentNo, editContent);
   }
-
+  // 댓글 삭제하기
   @DeleteMapping("/deleteComment")
   public void deleteComment(@RequestParam("commentNo") int commentNo){
     postService.deleteComment(commentNo);

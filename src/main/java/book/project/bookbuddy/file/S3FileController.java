@@ -28,10 +28,10 @@ public class S3FileController {
   @Qualifier("s3Service")
   private S3Service s3Service;
 
+  // 프로필 이미지 업로드
   @PostMapping("/profile")
   public ResponseEntity<String> uploadProfileImage(@RequestParam("profileImage") MultipartFile file) {
       try {
-          System.out.println("프로필 업로드 들립니다!");
           String profileImage = s3Service.upload(file);
           return ResponseEntity.ok(profileImage); // 업로드된 파일의 경로나 정보를 반환
       } catch (Exception e) {
@@ -42,7 +42,6 @@ public class S3FileController {
   // 프로필 이미지 삭제
   @DeleteMapping("/profileDelete")
   public ResponseEntity<String> profileDelete(@RequestParam("profileURL") String profileURL) {
-      System.out.println("Profile URL: " + profileURL);
       s3Service.deleteImageFromS3(profileURL);
       return ResponseEntity.ok("프로필 이미지 삭제 성공");
   }

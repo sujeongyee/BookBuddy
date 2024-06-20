@@ -33,18 +33,17 @@ public class UserController {
   @Qualifier("mainService")
   private MainService mainService;
 
+  // 아이디로 userNo 조회하기
   @GetMapping("/getUserNo")
   public int getUserNo(@RequestParam("id") String id) {
     return userService.getUserNo(id);
   }
-
+  // 안 읽은 알람 수 조회
   @GetMapping("/getUnReadNotification")
   public int getUnReadNotification(@RequestParam("userNo") String userNo) {
     return userService.getUnReadNotification(userNo);
   }
-  
-  
-
+  // myPage 조회
   @GetMapping("/myPage")
   public Map<String,Object> getMyPage(@RequestParam("id") String id) {
       UserVO vo =  mainService.getVO(id);
@@ -56,14 +55,14 @@ public class UserController {
       map.put("following",fvo.getFollowing());
       return map;
   }
-
+  // 개인 프로필 수정하기
   @PostMapping("/updateProfile")
   public Object updateProfile(@RequestBody UserVO userVo) {
       int n = userService.updateProfile(userVo);
       UserVO vo = mainService.getVO(userVo.getUser_ID());
       return n==1?vo:false;
   }
-  
+  // 특정 아이디에 해당 되는 게시글 조회 
   @GetMapping("/getPosts")
   public Map<String,Integer> getPosts(@RequestParam("id") String userId) {
     Map<String,Integer> map = new HashMap<>();
@@ -74,7 +73,7 @@ public class UserController {
     map.put("reviewPostCount", reviewPostCount);
     return map;
   }
-
+  // 팔로우, 팔로워 리스트 조회
   @GetMapping("/getFollowList") 
   public List<UserVO> getFollowList(@RequestParam("id") String userId , @RequestParam("mode") String mode , @RequestParam(value = "userNo", required = false) String feedId) {
     int userNo = userService.getUserNo(userId);
@@ -103,18 +102,19 @@ public class UserController {
       
     }
   }
-
+  // 팔로우 하기
   @GetMapping("/addFollow")
   public int addFollow(@RequestParam("id") String userId , @RequestParam("toUserNo") int toUserNo) {
     int userNo = userService.getUserNo(userId);
     return userService.addFollow(userNo, toUserNo);
   }
+  // 팔로우 취소하기
   @GetMapping("/cancelFollow")
   public int cancelFollow(@RequestParam("id") String userId , @RequestParam("toUserNo") int toUserNo) {
     int userNo = userService.getUserNo(userId);
     return userService.cancelFollow(userNo, toUserNo);
   }
-
+  // 팔로우 여부 체크
   @GetMapping("/checkFollow")
   public boolean checkFollow(@RequestParam("id") String userId , @RequestParam("toUserNo") String toUserNo) {
     int userNo = userService.getUserNo(userId);
