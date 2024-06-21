@@ -33,6 +33,13 @@ public class NotificationController {
     public void readNotification(@RequestParam("ntfNo") String ntfNo) {  
         notiService.readNotification(ntfNo);
     }
+
+    // 모든 알림 일기
+    @PostMapping("/readAllNotification")
+    public void readAllNotification(@RequestParam("userNo") String userNo) {
+        notiService.readAllNotification(userNo);
+    }
+    
     
     
 }

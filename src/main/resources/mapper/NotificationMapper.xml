@@ -25,5 +25,8 @@
     UPDATE NOTIFICATION SET ntf_check=true WHERE NTF_NO = #{ntf_no}
   </update>
 
+  <update id="readAllNotification">
+    UPDATE NOTIFICATION SET ntf_check=true WHERE RECEIVE_USER = #{userNo}
+  </update>
 
 </mapper>

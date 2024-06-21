@@ -11,4 +11,5 @@ public interface NotificationMapper {
   public int sendLikeMessage(NotificationVO vo);
   public int sendCommentMessage(NotificationVO vo);
   public int readNotification(String ntf_no);
+  public void readAllNotification(String userNo);
 }

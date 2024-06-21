@@ -81,19 +81,24 @@
 }
 
 .loading-container {
+  
   position: fixed;
-  top: 50%;
+  top: 44%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.loading-container img {
+  width: 100px;
 }
 
 .notification-modal-header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   margin-bottom: 10px;
 }
 
 .mark-all-read-button {
+  margin-bottom: 5px;
   background-color: #a5b8cd;
   color: #fff;
   border: none;
@@ -149,6 +154,12 @@
   font-size: 13px;
   margin-bottom: 10px;
 }
+.noti-modal-p{
+  font-size: 14px;
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
 
 .notification-time {
   display: block;
@@ -189,4 +200,17 @@
 
 .show-unread-button.active, .show-all-button.active {
   background-color: #c3d6f7;
+}
+
+.notification-modal {
+  position:relative ;
+}
+.exitBtn {
+  position: absolute;
+  top: -5px;
+  right: -15px;
+}
+
+.exitBtn {
+  cursor: pointer;
 }

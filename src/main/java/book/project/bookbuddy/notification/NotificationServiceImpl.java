@@ -26,4 +26,8 @@ public class NotificationServiceImpl implements NotificationService{
     public void readNotification(String notiNo){
         notificationMapper.readNotification(notiNo);
     }
+
+    public void readAllNotification(String userNo){
+        notificationMapper.readAllNotification(userNo);
+    }
 }
