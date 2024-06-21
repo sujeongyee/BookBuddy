@@ -20,7 +20,7 @@ export const LoadingProvider = ({ children }) => {
       {loading && (
         <div className="loading-container">
           
-          <img src={process.env.PUBLIC_URL + '/imgs/loading3.gif'} alt="loading" />
+          <img src={process.env.PUBLIC_URL + '/imgs/loading4.gif'} alt="loading" />
         </div>
       )}
     </LoadingContext.Provider>

@@ -137,7 +137,7 @@ const FollowModal = ({ isOpen, onRequestClose, mode, userNo, addfollow, cancelfo
       {loading && (
         <div className="loading-container">
           
-          <img src={process.env.PUBLIC_URL + '/imgs/loading3.gif'} alt="loading" />
+          <img src={process.env.PUBLIC_URL + '/imgs/loading4.gif'} alt="loading" />
         </div>
       )}
       {showToast && <ToastMsg prop="addFollowSuccess" />}
