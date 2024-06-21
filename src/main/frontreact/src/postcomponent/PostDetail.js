@@ -175,21 +175,18 @@ const PostDetail = ({}) => {
   };
 
   const deleteComment = async (commentNo) => {
-    if(window.confirm('댓글을 삭제하시겠습니까?')){
+    if (window.confirm('댓글을 삭제하시겠습니까?')) {
       try {
-        const response = await axios.delete(`/book/post/deleteComment`, { 
-          params: { commentNo: commentNo }
-        });
+        await axios.delete(`/book/post/deleteComment?commentNo=${commentNo}`);
         setToastMessage('deleteComment');
         setTimeout(() => {
-        setToastMessage('');
-      }, 2000);
+          setToastMessage('');
+        }, 2000);
         setCmtList(prevList => prevList.filter(comment => comment.comment_no !== commentNo));
       } catch (error) {
         console.error("댓글 삭제 중 오류 발생", error);
       }
     }
-    
   };
 
   const modifyComment = async (commentNo, editContent, index) => {

@@ -20,7 +20,7 @@ const WritePosts = () => {
   const { userId ,userNo} = userData;
   
   const [postTitle, setPostTitle] = useState(""); 
-  const [postType, setPostType] = useState(""); 
+  const [postType, setPostType] = useState("recommend"); 
   const [bookTitle, setBookTitle] = useState(""); 
   const [bookTitleCheck,setBookTitleCheck] = useState(false);
   const [postContent, setPostContent] = useState(""); 
@@ -125,7 +125,6 @@ const WritePosts = () => {
     //   console.error('책 이미지 불러오는 도중 오류 발생',error);
     // }
 
-    formData.append('book_THUMBNAIL',selectBook.thumbnail);
     if (postType === 'recommend') {
       formData.append('recommend_TITLE', postTitle);
       formData.append('recommend_BOOKTITLE', bookTitle);
@@ -149,9 +148,9 @@ const WritePosts = () => {
       // 게시글 등록 요청
       const response = await axios.post(endpoint, formData, {
         headers: {
-          'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
         }
-      });
+        });
   
       if (response.data >= 0) {
         // 이미지 업로드

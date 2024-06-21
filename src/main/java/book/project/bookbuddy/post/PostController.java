@@ -169,6 +169,7 @@ public class PostController {
   // 댓글 삭제하기
   @DeleteMapping("/deleteComment")
   public void deleteComment(@RequestParam("commentNo") int commentNo){
+    System.out.println(commentNo);
     postService.deleteComment(commentNo);
   }
   
