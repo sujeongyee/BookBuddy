@@ -10,6 +10,7 @@ import PostDetail from "./postcomponent/PostDetail";
 import ModifyPostForm from "./postcomponent/ModifyPostForm ";
 import WritePosts from "./usercomponent/WritePosts";
 import { NotificationProvider } from "./context/NotificationContext.js";
+import TestApi from "./main/TestApi.js";
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
                 <NotificationProvider>
                     <Routes>
                         <Route path="/" element={<Main/>} />
+                        <Route path="/testApi" element={<TestApi/>} />
                         <Route path="/login" element={<Main loginPage/>} />
                         <Route path="/regist" element={<Main registPage/>} />
                         <Route path="/myBook" element={<MyBook/>}/>
