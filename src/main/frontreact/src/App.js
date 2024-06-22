@@ -9,6 +9,7 @@ import UserFeed from "./usercomponent/UserFeed";
 import PostDetail from "./postcomponent/PostDetail";
 import ModifyPostForm from "./postcomponent/ModifyPostForm ";
 import WritePosts from "./usercomponent/WritePosts";
+import { NotificationProvider } from "./context/NotificationContext.js";
 
 function App() {
 
@@ -16,17 +17,19 @@ function App() {
     return (
         <UserProvider>
             <LoadingProvider>
-                <Routes>
-                    <Route path="/" element={<Main/>} />
-                    <Route path="/login" element={<Main loginPage/>} />
-                    <Route path="/regist" element={<Main registPage/>} />
-                    <Route path="/myBook" element={<MyBook/>}/>
-                    <Route path="/userFeed/:userNo" element={<UserFeed/>} />
-                    <Route path="/post/:type/:postNo" element={<PostDetail/>} />
-                    <Route path="/userFeed/post/:type/:postNo" element={<PostDetail/>}/>
-                    <Route path="/modifyPost" element={<WritePosts/>}/>
-                    <Route path="/writePost" element={<WritePosts/>}/>
-                </Routes>
+                <NotificationProvider>
+                    <Routes>
+                        <Route path="/" element={<Main/>} />
+                        <Route path="/login" element={<Main loginPage/>} />
+                        <Route path="/regist" element={<Main registPage/>} />
+                        <Route path="/myBook" element={<MyBook/>}/>
+                        <Route path="/userFeed/:userNo" element={<UserFeed/>} />
+                        <Route path="/post/:type/:postNo" element={<PostDetail/>} />
+                        <Route path="/userFeed/post/:type/:postNo" element={<PostDetail/>}/>
+                        <Route path="/modifyPost" element={<WritePosts/>}/>
+                        <Route path="/writePost" element={<WritePosts/>}/>
+                    </Routes>
+                </NotificationProvider>
             </LoadingProvider>
         </UserProvider>
 

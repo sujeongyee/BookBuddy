@@ -27,13 +27,13 @@ public class SecurityConfig{
         return (web) -> web.ignoring().requestMatchers("/**"); // /book으로 들어오는 요청 허용
         //return (web) -> web.ignoring().requestMatchers("/book/**"); // /book으로 들어오는 요청 허용
     }
-    
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/book").allowedOrigins("http://localhost:3000").allowedMethods("*");
+                registry.addMapping("/**").allowedOrigins("http://localhost:3000").allowedMethods("*");
             }
         };
     }
