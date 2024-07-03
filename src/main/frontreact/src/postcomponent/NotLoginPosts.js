@@ -19,6 +19,7 @@ function NotLoginPosts() {
         const response = await axios.get(
           `/book/post/getNotLogin?reviewPage=${reviewPage}&recommendPage=${recommendPage}`
         );
+        console.log(response.data)
         if(showRecommend && reviewPosts.length==0 && recommendPosts.length==0 && reviewPage==0){
           setRecommendPosts(prevPosts => [...prevPosts, ...response.data.recommendList]);
           setReviewPosts(prevPosts => [...prevPosts, ...response.data.reviewList]);
@@ -36,30 +37,30 @@ function NotLoginPosts() {
     fetchData();
   }, [reviewPage, recommendPage]);
 
-  const handleScroll = () => {
-    const scrollTop =
-      (document.documentElement && document.documentElement.scrollTop) ||
-      document.body.scrollTop;
-    const scrollHeight =
-      (document.documentElement && document.documentElement.scrollHeight) ||
-      document.body.scrollHeight;
-    const clientHeight =
-      document.documentElement.clientHeight || window.innerHeight;
-    if (scrollTop + clientHeight >= scrollHeight - 20 ) {  
-      if (showRecommend) {
-        setRecommendPage(prevPage => prevPage + 1);
-      } else {
-        setReviewPage(prevPage => prevPage + 1);
-      }
-    }
-}
+//   const handleScroll = () => {
+//     const scrollTop =
+//       (document.documentElement && document.documentElement.scrollTop) ||
+//       document.body.scrollTop;
+//     const scrollHeight =
+//       (document.documentElement && document.documentElement.scrollHeight) ||
+//       document.body.scrollHeight;
+//     const clientHeight =
+//       document.documentElement.clientHeight || window.innerHeight;
+//     if (scrollTop + clientHeight >= scrollHeight - 20 ) {  
+//       if (showRecommend) {
+//         setRecommendPage(prevPage => prevPage + 1);
+//       } else {
+//         setReviewPage(prevPage => prevPage + 1);
+//       }
+//     }
+// }
 
-useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-}, [showRecommend]);
+// useEffect(() => {
+//     window.addEventListener("scroll", handleScroll);
+//     return () => {
+//       window.removeEventListener("scroll", handleScroll);
+//     };
+// }, [showRecommend]);
 
   return (
     
@@ -72,7 +73,7 @@ useEffect(() => {
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div></div>
-          <p style={{ fontSize: '13px',color:'red' }}>* 비로그인 상태에서는 인기글을 표시합니다.</p>
+          <p style={{ fontSize: '13px',color:'red' }}>* 비로그인 상태에서는 인기글 10개를 표시합니다.</p>
         </div>
         <div className="post-zone">
           {showRecommend ? (
@@ -83,6 +84,7 @@ useEffect(() => {
                     <div key={post.recommend_NO} className="post-card">
                       <h3 className="post-title">{post.recommend_TITLE}</h3>
                       <div className="post-details">
+                        <div></div>
                         <p className="post-user">작성자: {post.user_NO}</p>
                         <p className="post-content">{post.recommend_CONTENT}</p>
                         <p className="post-time">게시 시간: {post.recommend_TIME}</p>
