@@ -37,6 +37,14 @@ function NotLoginPosts() {
     fetchData();
   }, [reviewPage, recommendPage]);
 
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
 //   const handleScroll = () => {
 //     const scrollTop =
 //       (document.documentElement && document.documentElement.scrollTop) ||
@@ -81,13 +89,24 @@ function NotLoginPosts() {
               {recommendPosts.length > 0 ? (
                 <div>
                   {recommendPosts.map((post) => (
-                    <div key={post.recommend_NO} className="post-card">
+                    <div key={`recommend-${post['recommend_NO']}`} className="post-card">
                       <h3 className="post-title">{post.recommend_TITLE}</h3>
                       <div className="post-details">
-                        <div></div>
-                        <p className="post-user">작성자: {post.user_NO}</p>
+                        <div className="noLogin-header">
+                          <img src={post.profile_URL} alt="프로필 이미지" className="notLogin-profile-image" />
+                          <p className="post-user">{post.user_NICK}</p>
+                        </div>
+                        <div className="noLogin-imgZone">
+                          {post.fileUrl?(
+                            <img src={post.fileUrl} alt="썸네일" className="notLogin-post-thumbnail" />
+                          ):(
+                            <img src={post.book_THUMBNAIL} alt="썸네일" className="notLogin-post-thumbnail" />
+                          )}
+                        </div>
+                        
+                        <h3 className="notLogin-post-title">{post.recommend_TITLE}</h3>
                         <p className="post-content">{post.recommend_CONTENT}</p>
-                        <p className="post-time">게시 시간: {post.recommend_TIME}</p>
+                        <p className="post-time">{formatDate(post['recommend_TIME'])}</p>
                         <p className="post-like">좋아요: {post.recommend_LIKE}</p>
                         <p className="post-category">카테고리: {post.recommend_CATEGORY}</p>
                         <p className="post-keyword">키워드: {post.recommend_KEYWORD}</p>

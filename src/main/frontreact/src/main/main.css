@@ -24,7 +24,7 @@
 }
 
 .post-zone {
-  padding: 11px 63px 8px 51px;
+  padding: 11px 100px 8px 100px;
 }
 .post-card {
   background-color: #fff;
@@ -67,13 +67,13 @@
   color: #888;
 }
 
-.post-time::before,
+/* .post-time::before,
 .post-like::before,
 .post-category::before,
 .post-keyword::before {
   content: "• ";
   margin-right: 5px;
-}
+} */
 
 .post-time,
 .post-like {
@@ -215,106 +215,24 @@
   cursor: pointer;
 }
 
-/* main.css */
-/* main.css */
 
-.notLogin-main-content {
-  padding: 20px;
+.noLogin-header {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
-
-.notLogin-main-toggle {
+.noLogin-header img {
+  width: 50px;
+  border-radius: 50px;
+}
+.noLogin-header p {
+  margin: 15px 0;
+}
+.notLogin-post-thumbnail {
+  margin: 10px 0;
+  width: 200px;
+}
+.noLogin-imgZone {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
-}
-
-.notLogin-toggle-btn {
-  padding: 10px 20px;
-  margin: 0 10px;
-  border: none;
-  background-color: #f0f0f0;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.notLogin-toggle-btn.notLogin-toggle-active {
-  background-color: #007bff;
-  color: white;
-}
-
-.notLogin-post-zone {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.notLogin-post-card {
-  display: flex;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  background-color: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.notLogin-profile-image {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin: 10px;
-}
-
-.notLogin-post-thumbnail {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-}
-
-.notLogin-post-content-container {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  flex: 1;
-}
-
-.notLogin-post-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.notLogin-post-details {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.notLogin-post-user,
-.notLogin-post-content,
-.notLogin-post-time,
-.notLogin-post-like,
-.notLogin-post-category,
-.notLogin-post-keyword,
-.notLogin-post-comments {
-  margin: 5px 0;
-}
-
-.notLogin-post-content {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.notLogin-post-time {
-  font-size: 12px;
-  color: gray;
-}
-
-.notLogin-post-like {
-  color: #ff6347;
-}
-
-.notLogin-post-category,
-.notLogin-post-keyword {
-  font-style: italic;
-  color: #007bff;
 }
