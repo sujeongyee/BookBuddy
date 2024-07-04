@@ -3,6 +3,7 @@ import axios from "axios";
 import '../main/main.css';
 import Loading from "../main/Loading";
 import { useLoading } from "../context/LoadingContext";
+import { useNavigate } from 'react-router-dom';
 function NotLoginPosts() {
   const [showRecommend, setShowRecommend] = useState(true);
   const [reviewPosts, setReviewPosts] = useState([]);
@@ -10,7 +11,7 @@ function NotLoginPosts() {
   const [reviewPage, setReviewPage] = useState(0);
   const [recommendPage, setRecommendPage] = useState(0);
   const {showLoading,hideLoading} = useLoading();
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,6 +44,11 @@ function NotLoginPosts() {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  const clickPost = () => {
+    alert('게시물은 로그인 하셔야 볼 수 있습니다.');
+    navigate('/login');
   }
 
 //   const handleScroll = () => {
@@ -89,7 +95,7 @@ function NotLoginPosts() {
               {recommendPosts.length > 0 ? (
                 <div>
                   {recommendPosts.map((post) => (
-                    <div key={`recommend-${post['recommend_NO']}`} className="post-card">
+                    <div key={`recommend-${post['recommend_NO']}`} className="post-card" onClick={()=>clickPost()}>
                       <h3 className="post-title">{post.recommend_TITLE}</h3>
                       <div className="post-details">
                         <div className="noLogin-header">
@@ -103,13 +109,37 @@ function NotLoginPosts() {
                             <img src={post.book_THUMBNAIL} alt="썸네일" className="notLogin-post-thumbnail" />
                           )}
                         </div>
-                        
-                        <h3 className="notLogin-post-title">{post.recommend_TITLE}</h3>
-                        <p className="post-content">{post.recommend_CONTENT}</p>
-                        <p className="post-time">{formatDate(post['recommend_TIME'])}</p>
-                        <p className="post-like">좋아요: {post.recommend_LIKE}</p>
-                        <p className="post-category">카테고리: {post.recommend_CATEGORY}</p>
-                        <p className="post-keyword">키워드: {post.recommend_KEYWORD}</p>
+                        <div className="notLogin-postDetail">
+                          <h3 className="notLogin-post-title">{post.recommend_TITLE}</h3>
+                          <p className="post-content">{post.recommend_CONTENT}</p>
+                          <p className="post-time">{formatDate(post['recommend_TIME'])}</p>
+                          <span>
+                            {post ? 
+                              post.recommend_CATEGORY2.split(',')
+                                .map((category, index) => (
+                                  <span key={index} className="PostcategoryTag">{category.trim()}</span>
+                                )) 
+                            : ''}
+                            {post ? 
+                              post.recommend_KEYWORD2.split(',')
+                                .map((keyword, index) => (
+                                  <span key={index} className="PostKeywordTag">{keyword.trim()}</span>
+                                )) 
+                            : ''}
+                          </span>
+                          <div className="iconZone">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ff9797" className="bi bi-heart-fill" viewBox="0 0 16 16">
+                              <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                            </svg>
+                            <span className="post-list-likes">{post.likeCnt}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ff9797" className="bi bi-chat-fill" viewBox="0 0 16 16">
+                              <path d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9 9 0 0 0 8 15"/>
+                            </svg>
+                            <span className="post-list-comments"><i className="fas fa-comment"></i> {post.cmtCnt}</span>
+                          </div>
+                        </div>
+                        {/* <p className="post-category">카테고리: {post.recommend_CATEGORY}</p>
+                        <p className="post-keyword">키워드: {post.recommend_KEYWORD}</p> */}
                       </div>
                     </div>
                   ))}

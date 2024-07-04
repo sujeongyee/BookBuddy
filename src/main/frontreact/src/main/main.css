@@ -236,3 +236,11 @@
   display: flex;
   justify-content: center;
 }
+.notLogin-postDetail {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+}
