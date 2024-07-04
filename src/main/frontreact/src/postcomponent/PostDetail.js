@@ -223,6 +223,8 @@ const PostDetail = ({}) => {
 
   const post = recommendVO || reviewVO;
 
+  
+
   return (
     <div className="mainContainer">
       <div className="side">
@@ -277,9 +279,20 @@ const PostDetail = ({}) => {
             <div className='postDetailContentWrapper'>
               <p className='postDetailContent'>{post ? post.recommend_CONTENT || post.review_CONTENT : ''}</p>
             </div>
+            {/* 별점 생성해줘  */}
+            {/* {reviewVO && <p><strong>Rating:</strong> {reviewVO.review_RATING}</p>} */}
+            {type === 'review' && (
+                  <div>
+                    <div className="mb-2">
+                      <StarRating rating={reviewVO.review_RATING}  />
+                    </div>
+                  </div>
+                )}
             
-            {reviewVO && <p><strong>Rating:</strong> {reviewVO.review_RATING}</p>}
-            
+            {/* <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill={starValue <= rating ? "currentColor" : "none"} stroke="currentColor" className="bi bi-star star-rating" viewBox="0 0 22 23" onClick={() => handleRating(starValue)} style={{ cursor: 'pointer' }}>
+              <path fillRule="evenodd" d="M7.515.284a1 1 0 0 1 1.97 0l1.21 4.65a.5.5 0 0 0 .494.35h4.582a1 1 0 0 1 .773 1.654l-3.5 2.548a.5.5 0 0 0-.154.494l1.21 4.65a1 1 0 0 1-1.516 1.053L8 12.697l-3.395 2.287a1 1 0 0 1-1.516-1.054l1.21-4.65a.5.5 0 0 0-.154-.494l-3.5-2.548a1 1 0 0 1 .773-1.654h4.582a.5.5 0 0 0 .494-.35L7.515.284z"/>
+            </svg> */}
+                         
             <div className="postStats">
               <span onClick={likeCheck?handleUnlike:handleLike}>
                 이 게시글에 공감해요 
@@ -347,4 +360,35 @@ const PostDetail = ({}) => {
     </div>
   )
 }
+
+// 별점 표시를 위한 컴포넌트
+const StarRating = ({ rating, handleRating }) => {
+  const totalStars = 5; // 전체 별 개수
+
+  // 1부터 5까지의 숫자 배열 생성
+  const stars = Array.from({ length: totalStars }, (_, index) => index + 1);
+
+  return (
+    <div className='detail-ratingzone'>
+      {stars.map((starValue) => (
+        <svg
+          key={starValue}
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          fill={starValue <= rating ? "currentColor" : "none"}
+          stroke="currentColor"
+          className="bi bi-star star-rating"
+          viewBox="0 0 22 23"
+          // style={{ cursor: 'pointer' }}
+        >
+          <path
+            fillRule="evenodd"
+            d="M7.515.284a1 1 0 0 1 1.97 0l1.21 4.65a.5.5 0 0 0 .494.35h4.582a1 1 0 0 1 .773 1.654l-3.5 2.548a.5.5 0 0 0-.154.494l1.21 4.65a1 1 0 0 1-1.516 1.053L8 12.697l-3.395 2.287a1 1 0 0 1-1.516-1.054l1.21-4.65a.5.5 0 0 0-.154-.494l-3.5-2.548a1 1 0 0 1 .773-1.654h4.582a.5.5 0 0 0 .494-.35L7.515.284z"
+          />
+        </svg>
+      ))}
+    </div>
+  );
+};
 export default PostDetail;
