@@ -11,6 +11,8 @@ import ModifyPostForm from "./postcomponent/ModifyPostForm ";
 import WritePosts from "./usercomponent/WritePosts";
 import { NotificationProvider } from "./context/NotificationContext.js";
 import TestApi from "./main/TestApi.js";
+import CategorySearch from "./search/CategorySearch.js";
+import KeywordSearch from "./search/KeywordSearch.js";
 
 function App() {
 
@@ -30,6 +32,8 @@ function App() {
                         <Route path="/userFeed/post/:type/:postNo" element={<PostDetail/>}/>
                         <Route path="/modifyPost" element={<WritePosts/>}/>
                         <Route path="/writePost" element={<WritePosts/>}/>
+                        <Route path="/cateSearch/:cateNo" element={<CategorySearch/>}/>
+                        <Route path="/kwdSearch/:kwdNo" element={<KeywordSearch/>}/>
                     </Routes>
                 </NotificationProvider>
             </LoadingProvider>

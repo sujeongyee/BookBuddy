@@ -176,6 +176,9 @@ body, html {
     font-size: 13px;
     cursor: pointer;
 }
+.cateoryA {
+    text-decoration-line: none;
+}
 
 .menu .cateoryLi:hover .cateoryA {
     background-color: #e5ecfc;

@@ -14,7 +14,15 @@ function Sidebar(){
     const {id,setId} = useState('');
     const {nick,setNick} = useState('');
     const [profileImg,setProfileImg] = useState('');
+    const [cateList,setCateList] = useState([]);
+    const [kwdList,setKwdList] = useState([]);
 
+    useEffect(()=>{
+        const fetchData = async()=> {
+            const response = await axios.get('/book/getMenu');
+        }
+        fetchData();
+    },[])
 
     const logout = () => {
         localStorage.removeItem("remeberId");
@@ -51,7 +59,7 @@ function Sidebar(){
             <ul>
                     <li className="cateoryLi" onMouseEnter={() => setShowMenuCategory(true)}
                         onMouseLeave={() => setShowMenuCategory(false)}>
-                        <a className="cateoryA">카테고리 별 추천/리뷰</a>
+                        <Link to="/cateSearch/all" className="cateoryA">카테고리 별 추천/리뷰</Link>
                         {showMenuCategory && (
                             <ul className="menuCategory2">
                                 <li><a>소설</a><a>시/에세이</a><a>인문</a></li>
@@ -65,7 +73,7 @@ function Sidebar(){
                     </li>
                     <li className="cateoryLi2" onMouseEnter={() => setShowMenuCategory2(true)}
                         onMouseLeave={() => setShowMenuCategory2(false)}>
-                        <a className="cateoryA2">키워드 별 추천/리뷰</a>
+                        <Link to="/kwdSearch/all" className="cateoryA">키워드 별 추천/리뷰</Link>
                         {showMenuCategory2 && (
                             <ul className="menuCategory2">
                                 <li><a>#힐링되는</a><a>#흥미진진</a><a>#스릴있는</a></li>
