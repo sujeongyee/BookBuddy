@@ -75,4 +75,6 @@ public class MainServiceImpl implements MainService{
     public List<NotificationVO> getNoti(String userNo){
         return mainMapper.getNoti(userNo);
     }
+
+   
 }

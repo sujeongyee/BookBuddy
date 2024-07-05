@@ -82,7 +82,6 @@ function NotLoginPosts() {
                     return (
                       <div key={`recommend-${post['recommend_NO']}-${index}`} className="post-card">
                         <div onClick={() => clickPost()}>
-                          <h3 className="post-title">{post.recommend_TITLE}</h3>
                           <div className="post-details">
                             <div className="noLogin-header">
                               {post.profile_URL ? (
@@ -96,7 +95,7 @@ function NotLoginPosts() {
                               <img src={thumbnailUrl} alt="썸네일" className="notLogin-post-thumbnail" />
                             </div>
                             <div className="notLogin-postDetail">
-                              <h3 className="notLogin-post-title">{post.recommend_TITLE}</h3>
+                              <h3 className="notLogin-post-title2">{post.recommend_TITLE}</h3>
                               <p className="post-content">{post.recommend_CONTENT}</p>
                               <p className="post-time">{formatDate(post['recommend_TIME'])}</p>
                               <span>
@@ -146,7 +145,6 @@ function NotLoginPosts() {
                     return (
                       <div key={`review-${post['review_NO']}-${index}`} className="post-card">
                         <div onClick={() => clickPost()}>
-                          <h3 className="post-title">{post.review_TITLE}</h3>
                           <div className="post-details">
                             <div className="noLogin-header">
                               {post.profile_URL ? (

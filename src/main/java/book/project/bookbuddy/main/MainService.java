@@ -18,4 +18,5 @@ public interface MainService {
     public int joinBuddy(UserVO vo);
     public UserVO getVO(String id);
     public List<NotificationVO> getNoti(String userNo);
+
 }

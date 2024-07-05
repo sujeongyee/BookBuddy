@@ -6,6 +6,8 @@ import book.project.bookbuddy.command.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -77,6 +79,15 @@ public class MainController { // 로그인과 회원가입 등의 기능
     public List<NotificationVO> getNoti(@RequestParam("userNo") String userNo) {
         return mainService.getNoti(userNo);
     }
+
+    @GetMapping("/getMenu")
+    public Map<String,Object> getMenu() {
+        Map<String,Object> map = new HashMap<>();
+        map.put("category", mainService.getAllCategories());
+        map.put("keyword", mainService.getAllKeywords());
+        return map;
+    }
+    
     
     
 }
