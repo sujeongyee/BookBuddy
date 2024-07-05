@@ -21,7 +21,6 @@ function NotLoginPosts() {
         const response = await axios.get(
           `/book/post/getNotLogin?reviewPage=${reviewPage}&recommendPage=${recommendPage}`
         );
-        console.log(response.data)
         if (showRecommend && reviewPosts.length === 0 && recommendPosts.length === 0 && reviewPage === 0) {
           setRecommendPosts(prevPosts => [...prevPosts, ...response.data.recommendList]);
           setReviewPosts(prevPosts => [...prevPosts, ...response.data.reviewList]);

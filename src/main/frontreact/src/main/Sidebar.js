@@ -34,6 +34,12 @@ function Sidebar(){
         navigate('/');
     }
 
+    const clickCate = (cateNo) => {
+        navigate(`/cateSearch/${cateNo}`);
+    }
+    const clickKwd = (kwdNo) => {
+        navigate(`/kwdSearch/${kwdNo}`);
+    }
 
     
     return(
@@ -71,9 +77,9 @@ function Sidebar(){
                             {cateList && cateList.map((cate, index) => (
                                 index % 3 === 0 && index + 2 < cateList.length && (
                                     <li key={cate.category_NO}>
-                                        <a>{cateList[index].category_NAME}</a>
-                                        <a>{cateList[index + 1].category_NAME}</a>
-                                        <a>{cateList[index + 2].category_NAME}</a>
+                                        <a onClick={()=>clickCate(cateList[index].category_NO)}>{cateList[index].category_NAME}</a>
+                                        <a onClick={()=>clickCate(cateList[index+1].category_NO)}>{cateList[index + 1].category_NAME}</a>
+                                        <a onClick={()=>clickCate(cateList[index+2].category_NO)}>{cateList[index + 2].category_NAME}</a>
                                     </li>
                                 )
                             ))}
@@ -92,9 +98,9 @@ function Sidebar(){
                             {kwdList && kwdList.map((kwd, index) => (
                                 index % 3 === 0 && index + 2 < kwdList.length && (
                                     <li key={kwd.keyword_NO}>
-                                        <a>{kwdList[index].keyword_NAME}</a>
-                                        <a>{kwdList[index + 1].keyword_NAME}</a>
-                                        <a>{kwdList[index + 2].keyword_NAME}</a>
+                                        <a onClick={()=>clickKwd(kwdList[index].keyword_NO)}>{kwdList[index].keyword_NAME}</a>
+                                        <a onClick={()=>clickKwd(kwdList[index+1].keyword_NO)}>{kwdList[index + 1].keyword_NAME}</a>
+                                        <a onClick={()=>clickKwd(kwdList[index+2].keyword_NO)}>{kwdList[index + 2].keyword_NAME}</a>
                                     </li>
                                 )
                             ))}
