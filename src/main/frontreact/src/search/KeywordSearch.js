@@ -16,7 +16,7 @@ const KeywordSearch = () => {
   return (
     <div className="mainContainer">
       <div className="side">
-        <Sidebar />
+        <Sidebar onCate={'kwd'} onCateList={kwdNo}/>
       </div>
       <div className="mainContent2">
         <Header />        

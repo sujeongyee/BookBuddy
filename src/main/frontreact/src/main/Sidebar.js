@@ -4,7 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import { useUser } from '../context/UserContext';
 import axios from 'axios';
 
-function Sidebar(){
+function Sidebar({onCate,onCateList}){
 
     const [showMenuCategory, setShowMenuCategory] = useState(false); // 카테고리 메뉴 전시 여부
     const [showMenuCategory2, setShowMenuCategory2] = useState(false); // 키워드 메뉴 전시 여부
@@ -26,6 +26,14 @@ function Sidebar(){
         fetchData();
     },[])
 
+    useEffect(()=>{
+        if(onCate==='cate'){
+            setShowMenuCategory(true);
+        } else if(onCate==='kwd'){
+            setShowMenuCategory2(true);
+        }
+    },[onCate,onCateList])
+
     const logout = () => {
         localStorage.removeItem("remeberId");
         localStorage.removeItem("userVO");
@@ -35,10 +43,13 @@ function Sidebar(){
     }
 
     const clickCate = (cateNo) => {
-        navigate(`/cateSearch/${cateNo}`);
+        if(cateNo=='-1') navigate('/cateSearch/all');
+        else navigate(`/cateSearch/${cateNo}`);
     }
     const clickKwd = (kwdNo) => {
-        navigate(`/kwdSearch/${kwdNo}`);
+        if(kwdNo=='-1') navigate('/kwdSearch/all');
+        else navigate(`/kwdSearch/${kwdNo}`);
+        
     }
 
     
@@ -68,18 +79,18 @@ function Sidebar(){
                 <li 
                     className="cateoryLi" 
                     onMouseEnter={() => setShowMenuCategory(true)}
-                    onMouseLeave={() => setShowMenuCategory(false)}
+                    onMouseLeave={() => onCate !== 'cate' ? setShowMenuCategory(false) : null}
                     >
-                    <a className="cateoryA">카테고리 별 추천/리뷰</a>
+                    <a className="cateoryA" onClick={()=>clickCate(-1)} style={{ backgroundColor: onCate === 'cate' ? '#e5ecfc' : null }}>카테고리 별 추천/리뷰</a>
                     
                     {showMenuCategory && (
                         <ul className="menuCategory2" onMouseEnter={() => setShowMenuCategory(true)}>
                             {cateList && cateList.map((cate, index) => (
                                 index % 3 === 0 && index + 2 < cateList.length && (
                                     <li key={cate.category_NO}>
-                                        <a onClick={()=>clickCate(cateList[index].category_NO)}>{cateList[index].category_NAME}</a>
-                                        <a onClick={()=>clickCate(cateList[index+1].category_NO)}>{cateList[index + 1].category_NAME}</a>
-                                        <a onClick={()=>clickCate(cateList[index+2].category_NO)}>{cateList[index + 2].category_NAME}</a>
+                                        <a style={{ backgroundColor: onCateList === cateList[index].category_NO ? '#e5ecfc' : null }} onClick={()=>clickCate(cateList[index].category_NO)}>{cateList[index].category_NAME}</a>
+                                        <a style={{ backgroundColor: onCateList === cateList[index+1].category_NO ? '#e5ecfc' : null }} onClick={()=>clickCate(cateList[index+1].category_NO)}>{cateList[index + 1].category_NAME}</a>
+                                        <a style={{ backgroundColor: onCateList === cateList[index+2].category_NO ? '#e5ecfc' : null }} onClick={()=>clickCate(cateList[index+2].category_NO)}>{cateList[index + 2].category_NAME}</a>
                                     </li>
                                 )
                             ))}
@@ -90,17 +101,17 @@ function Sidebar(){
                     <li 
                     className="cateoryLi" 
                     onMouseEnter={() => setShowMenuCategory2(true)}
-                    onMouseLeave={() => setShowMenuCategory2(false)}
+                    onMouseLeave={() => onCate !== 'kwd' ? setShowMenuCategory(false) : null}
                     >
-                    <a className="cateoryA">키워드 별 추천/리뷰</a>
+                    <a className="cateoryA" onClick={()=>clickKwd(-1)}  style={{ backgroundColor: onCate === 'kwd' ? '#e5ecfc' : null }}>키워드 별 추천/리뷰</a>
                     {showMenuCategory2 && (
                         <ul className="menuCategory2" onMouseEnter={() => setShowMenuCategory2(true)}>
                             {kwdList && kwdList.map((kwd, index) => (
                                 index % 3 === 0 && index + 2 < kwdList.length && (
                                     <li key={kwd.keyword_NO}>
-                                        <a onClick={()=>clickKwd(kwdList[index].keyword_NO)}>{kwdList[index].keyword_NAME}</a>
-                                        <a onClick={()=>clickKwd(kwdList[index+1].keyword_NO)}>{kwdList[index + 1].keyword_NAME}</a>
-                                        <a onClick={()=>clickKwd(kwdList[index+2].keyword_NO)}>{kwdList[index + 2].keyword_NAME}</a>
+                                        <a style={{ backgroundColor: onCateList === kwdList[index].keyword_NO ? '#e5ecfc' : null }} onClick={()=>clickKwd(kwdList[index].keyword_NO)}>{kwdList[index].keyword_NAME}</a>
+                                        <a style={{ backgroundColor: onCateList === kwdList[index+1].keyword_NO? '#e5ecfc' : null }} onClick={()=>clickKwd(kwdList[index+1].keyword_NO)}>{kwdList[index + 1].keyword_NAME}</a>
+                                        <a style={{ backgroundColor: onCateList === kwdList[index+2].keyword_NO ? '#e5ecfc' : null }} onClick={()=>clickKwd(kwdList[index+2].keyword_NO)}>{kwdList[index + 2].keyword_NAME}</a>
                                     </li>
                                 )
                             ))}
