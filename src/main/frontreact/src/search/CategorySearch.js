@@ -15,7 +15,7 @@ const CategorySearch = () => {
   return (
     <div className="mainContainer">
       <div className="side">
-        <Sidebar />
+        <Sidebar onCate={'cate'} onCateList={cateNo} />
       </div>
       <div className="mainContent2">
         <Header />        
