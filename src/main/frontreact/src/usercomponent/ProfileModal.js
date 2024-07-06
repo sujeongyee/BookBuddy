@@ -44,6 +44,7 @@ const ProfileModal = ({ isOpen, onRequestClose, vo }) => {
   },[]);
 
   useEffect(() => {
+    console.log(vo);
     if(vo){
       setUpdatedVo(vo);
       setStartDate(vo.user_BIRTH);
