@@ -5,15 +5,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="book.project.bookbuddy.main.MainMapper">
-    <select id="getVO">
+    <select id="getVO"> 
         SELECT * FROM USER WHERE USER_ID = #{id}
     </select>
     <select id="getAllCategories">
-        SELECT * FROM CATEGORY;
+        SELECT * FROM CATEGORY
     </select>
 
     <select id="getAllKeywords">
-        SELECT * FROM KEYWORD;
+        SELECT * FROM KEYWORD
     </select>
 
     <select id="checkDuplicateId">
