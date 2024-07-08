@@ -19,7 +19,7 @@ const CategorySearch = () => {
       </div>
       <div className="mainContent2">
         <Header />        
-        <div className="mainSection">
+        <div className="mainSection2">
         </div>
       </div>  
     </div>

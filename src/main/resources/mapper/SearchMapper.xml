@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="book.project.bookbuddy.search.SearchMapper">
+
+  <select id="getByKeywords">
+       SELECT * FROM RECOMMEND WHERE RECOMMEND_KEYWORD REGEXP REPLACE(#{kwds}, ',', '|');    
+  </select>
+
+  <select id="getByKeywords2">
+        SELECT * FROM REVIEW WHERE REVIEW_KEYWORD REGEXP REPLACE(#{kwds}, ',', '|');    
+  </select>
+
+</mapper>
