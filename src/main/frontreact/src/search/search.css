@@ -1,0 +1,71 @@
+.mainSection3 {
+  padding: 50px 50px;
+}
+
+.keywordList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.keyword {
+  padding: 10px 20px;
+  background-color: #fcfeff;
+  border: 1px solid #d1d9e0;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+  font-size: 14px;
+  color: #555;
+}
+
+.keyword:hover {
+  background-color: #e1e7ec;
+}
+
+.keyword.selected {
+  background-color: #de9d96;
+  border: 1px solid #de9d96;
+  color: white;
+}
+
+.kwdSearchPostList {
+  border-top:1px solid #e8e8e8;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.kwdSearchPost {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.kwdSearchTabContainer {
+  border-bottom: 1px solid #e4e4e4;
+    margin-bottom: 20px;
+}
+.kwdSearchTabs {
+  
+  display: flex;
+  flex-direction: row;
+}
+
+.kwdSearchTab{
+  width: 48%;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px; 
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.kwdSearchTab.active {
+  background-color: #e4efff;
+  color: #7e92c4;
+}
