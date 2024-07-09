@@ -69,3 +69,11 @@
   background-color: #e4efff;
   color: #7e92c4;
 }
+.containsCheck {
+  display: flex;
+  width: 100%;
+  font-size: 13px;
+  flex-direction: row;
+  gap: 5px;
+  justify-content: flex-end;
+}
