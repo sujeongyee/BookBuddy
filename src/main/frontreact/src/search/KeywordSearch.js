@@ -22,7 +22,8 @@ const KeywordSearch = () => {
   const [loading, setLoading] = useState(true);
   const [allChecked, setAllChecked] = useState(true);
   const [sortBy, setSortBy] = useState('R.RECOMMEND_TIME DESC');
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postCnt,setPostCnt] = useState(0);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -48,7 +49,7 @@ const KeywordSearch = () => {
       try {
         if (selectedKwd.size > 0) {
           showLoading();
-          const response = await axios.post('/book/search/getByKeywords', { keywords: Array.from(selectedKwd), allChecked, sortBy });
+          const response = await axios.post('/book/search/getByKeywords', { keywords: Array.from(selectedKwd), allChecked, sortBy, currentPage });
           setRcmPosts(response.data.recommend);
           setRvPosts(response.data.review);
           setLoading(false);
@@ -63,7 +64,27 @@ const KeywordSearch = () => {
     };
 
     fetchPosts();
+  }, [selectedKwd, allChecked,sortBy,currentPage]);
+
+  useEffect(() => {
+    const fetchCnt = async () => {
+      try {
+        if (selectedKwd.size > 0) {
+          setLoading(true);
+          const type= showReviews ? 'review':'recommend';
+          const response = await axios.post('/book/search/getByKeywordsCnt', { keywords: Array.from(selectedKwd), allChecked, type });
+          setPostCnt(response.data);
+          setLoading(false);
+        } else {
+        }
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
+
+    fetchCnt();
   }, [selectedKwd, allChecked,sortBy]);
+
 
   const handleCheckClick = () => {
     setAllChecked(prevChecked => !prevChecked);
@@ -125,11 +146,11 @@ const KeywordSearch = () => {
             {!loading ? (
               showReviews ? (
                 <div>
-                  <ListType type='review' posts={rvPosts} />
+                  <ListType type='review' posts={rvPosts} currentPage={currentPage} setCurrentPage={(e)=>setCurrentPage(e)} postCnt={postCnt}/>
                 </div>
               ) : (
                 <div>
-                  <ListType type='recommend' posts={rcmPosts} />
+                  <ListType type='recommend' posts={rcmPosts} currentPage={currentPage} setCurrentPage={(e)=>setCurrentPage(e)} postCnt={postCnt}/>
                 </div>
               )
             ) : null}
@@ -140,4 +161,4 @@ const KeywordSearch = () => {
   );
 };
 
-export default KeywordSearch;
+export default KeywordSearch

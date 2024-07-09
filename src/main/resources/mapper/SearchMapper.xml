@@ -43,13 +43,11 @@
     WHERE 
       <choose>
         <when test="isChecked">
-          <!-- 모든 키워드를 포함하는 게시글 조회 -->
           <foreach collection="kwdList" item="keyword" separator=" AND " open="(" close=")">
             R.RECOMMEND_KEYWORD LIKE CONCAT('%', #{keyword}, '%')
           </foreach>
         </when>
         <otherwise>
-          <!-- 하나 이상의 키워드를 포함하는 게시글 조회 -->
           <foreach collection="kwdList" item="keyword" separator=" OR " open="(" close=")">
             R.RECOMMEND_KEYWORD LIKE CONCAT('%', #{keyword}, '%')
           </foreach>
@@ -57,9 +55,9 @@
       </choose>
     GROUP BY R.RECOMMEND_NO
     ORDER BY ${sortBy}
+    LIMIT ${page},5
   </select>
 
-<!-- ReviewVO 매퍼 -->
   <select id="getByKeywords2">
       SELECT R.*, 
            COUNT(C.COMMENT_NO) AS cmtCnt,
@@ -95,13 +93,11 @@
     WHERE 
       <choose>
         <when test="isChecked">
-          <!-- 모든 키워드를 포함하는 게시글 조회 -->
           <foreach collection="kwdList" item="keyword" separator=" AND " open="(" close=")">
             R.REVIEW_KEYWORD LIKE CONCAT('%', #{keyword}, '%')
           </foreach>
         </when>
         <otherwise>
-          <!-- 하나 이상의 키워드를 포함하는 게시글 조회 -->
           <foreach collection="kwdList" item="keyword" separator=" OR " open="(" close=")">
             R.REVIEW_KEYWORD LIKE CONCAT('%', #{keyword}, '%')
           </foreach>
@@ -109,6 +105,108 @@
       </choose>
     GROUP BY R.REVIEW_NO
     ORDER BY ${sortBy}
+    LIMIT ${page},5
   </select>
+
+  <select id="getByKeywordsRcmCnt">
+    SELECT COUNT(*) FROM (
+        SELECT R.*, 
+           COUNT(C.COMMENT_NO) AS cmtCnt,
+           (SELECT GROUP_CONCAT(C.CATEGORY_NAME) 
+              FROM CATEGORY C 
+              WHERE EXISTS (SELECT 1 
+                            FROM RECOMMEND 
+                            WHERE RECOMMEND_NO = R.RECOMMEND_NO 
+                            AND INSTR(RECOMMEND_CATEGORY, C.CATEGORY_NO) > 0)) AS RECOMMEND_CATEGORY2,
+           (SELECT GROUP_CONCAT(K.KEYWORD_NAME) 
+              FROM KEYWORD K 
+              WHERE EXISTS (SELECT 1 
+                            FROM RECOMMEND 
+                            WHERE RECOMMEND_NO = R.RECOMMEND_NO 
+                            AND INSTR(RECOMMEND_KEYWORD, K.KEYWORD_NO) > 0)) AS RECOMMEND_KEYWORD2,
+           (SELECT COUNT(LIKE_NO) 
+              FROM likes 
+              WHERE likes.LIKE_POSTNO = R.RECOMMEND_NO 
+                AND LIKE_TYPE = 'recommend') AS likeCnt,
+           (SELECT FILE_URL 
+              FROM file 
+              WHERE file.RECOMMEND_NO = R.RECOMMEND_NO 
+              ORDER BY FILE_DATE 
+              LIMIT 1) AS fileUrl,
+           (SELECT U.USER_NICK 
+              FROM USER U 
+              WHERE U.USER_NO = R.USER_NO) AS USER_NICK,
+           (SELECT U.PROFILE_URL 
+              FROM USER U 
+              WHERE U.USER_NO = R.USER_NO) AS PROFILE_URL
+    FROM RECOMMEND R
+    LEFT JOIN COMMENT C ON R.RECOMMEND_NO = C.RECOMMEND_NO
+    WHERE 
+      <choose>
+        <when test="isChecked">
+          <foreach collection="kwdList" item="keyword" separator=" AND " open="(" close=")">
+            R.RECOMMEND_KEYWORD LIKE CONCAT('%', #{keyword}, '%')
+          </foreach>
+        </when>
+        <otherwise>
+          <foreach collection="kwdList" item="keyword" separator=" OR " open="(" close=")">
+            R.RECOMMEND_KEYWORD LIKE CONCAT('%', #{keyword}, '%')
+          </foreach>
+        </otherwise>
+      </choose>
+    GROUP BY R.RECOMMEND_NO) AS SUB
+  </select>
+
+
+  <select id="getByKeywordsRvCnt">
+    SELECT COUNT(*) FROM (
+      SELECT R.*, 
+           COUNT(C.COMMENT_NO) AS cmtCnt,
+           (SELECT GROUP_CONCAT(C.CATEGORY_NAME) 
+              FROM CATEGORY C 
+              WHERE EXISTS (SELECT 1 
+                            FROM REVIEW 
+                            WHERE REVIEW_NO = R.REVIEW_NO 
+                            AND INSTR(REVIEW_CATEGORY, C.CATEGORY_NO) > 0)) AS REVIEW_CATEGORY2,
+           (SELECT GROUP_CONCAT(K.KEYWORD_NAME) 
+              FROM KEYWORD K 
+              WHERE EXISTS (SELECT 1 
+                            FROM REVIEW
+                            WHERE REVIEW_NO = R.REVIEW_NO 
+                            AND INSTR(REVIEW_KEYWORD, K.KEYWORD_NO) > 0)) AS REVIEW_KEYWORD2,
+           (SELECT COUNT(LIKE_NO) 
+              FROM likes 
+              WHERE likes.LIKE_POSTNO = R.REVIEW_NO 
+                AND LIKE_TYPE = 'review') AS likeCnt,
+           (SELECT FILE_URL 
+              FROM file 
+              WHERE file.REVIEW_NO = R.REVIEW_NO 
+              ORDER BY FILE_DATE 
+              LIMIT 1) AS fileUrl,
+           (SELECT U.USER_NICK 
+              FROM USER U 
+              WHERE U.USER_NO = R.USER_NO) AS USER_NICK,
+           (SELECT U.PROFILE_URL 
+              FROM USER U 
+              WHERE U.USER_NO = R.USER_NO) AS PROFILE_URL
+    FROM REVIEW R
+    LEFT JOIN COMMENT C ON R.REVIEW_NO = C.REVIEW_NO
+    WHERE 
+      <choose>
+        <when test="isChecked">
+          <foreach collection="kwdList" item="keyword" separator=" AND " open="(" close=")">
+            R.REVIEW_KEYWORD LIKE CONCAT('%', #{keyword}, '%')
+          </foreach>
+        </when>
+        <otherwise>
+          <foreach collection="kwdList" item="keyword" separator=" OR " open="(" close=")">
+            R.REVIEW_KEYWORD LIKE CONCAT('%', #{keyword}, '%')
+          </foreach>
+        </otherwise>
+      </choose>
+    GROUP BY R.REVIEW_NO ) AS SUB
+    
+  </select>
+
 
 </mapper>

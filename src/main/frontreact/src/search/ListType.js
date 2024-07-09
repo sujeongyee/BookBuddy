@@ -2,14 +2,16 @@ import React, { useState, useEffect } from "react";
 import '../main/main.css';
 import { useLoading } from "../context/LoadingContext";
 import { useNavigate } from 'react-router-dom';
+import Pagination from "react-js-pagination";
 
-const ListType = ({ type, posts }) => {
+const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt }) => {
   const [showRecommend, setShowRecommend] = useState(true);
   const [recommendPosts, setRecommendPosts] = useState([]);
   const [reviewPosts, setReviewPosts] = useState([]);
   const { showLoading, hideLoading } = useLoading();
   const navigate = useNavigate();
-
+  const itemsPerPage = 5;
+ 
   useEffect(() => {
     if (type == 'review') {
       setShowRecommend(false);
@@ -31,8 +33,11 @@ const ListType = ({ type, posts }) => {
   const clickPost = (postNo) => {
     if(type=='review') navigate(`/post/review/${postNo}`);
     else navigate(`/post/recommend/${postNo}`);
-    
   }
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="post-zone">
@@ -94,10 +99,22 @@ const ListType = ({ type, posts }) => {
                   </div>
                 );
               })}
+              <div className="searchPaging">
+                <Pagination
+                  activePage={currentPage}
+                  itemsCountPerPage={5}
+                  totalItemsCount={postCnt}
+                  pageRangeDisplayed={10}
+                  prevPageText={"prev"}
+                  nextPageText={"next"}
+                  onChange={handlePageChange}
+                />
+              </div>
             </div>
           ) : (
             <div style={{textAlign:'center'}}>조건에 해당되는 추천글이 없습니다.</div>
           )}
+          
         </div>
       ) : (
         <div>
@@ -156,6 +173,17 @@ const ListType = ({ type, posts }) => {
                   </div>
                 );
               })}
+              <div className="searchPaging">
+                <Pagination
+                    activePage={currentPage}
+                    itemsCountPerPage={5}
+                    totalItemsCount={postCnt}
+                    pageRangeDisplayed={10}
+                    prevPageText={"prev"}
+                    nextPageText={"next"}
+                    onChange={handlePageChange}
+                  />
+              </div>
             </div>
           ) : (
             <div style={{textAlign:'center'}}>조건에 해당되는 리뷰글이 없습니다.</div>
