@@ -7,6 +7,6 @@ import book.project.bookbuddy.command.RecommendVO;
 import book.project.bookbuddy.command.ReviewVO;
 
 public interface SearchService {
-  List<RecommendVO> getByKeywords(String[] kwdList, boolean isChecked);
-  List<ReviewVO> getByKeywords2(String[] kwdList, boolean isChecked);
+  List<RecommendVO> getByKeywords(String[] kwdList, boolean isChecked, String sortBy);
+  List<ReviewVO> getByKeywords2(String[] kwdList, boolean isChecked,String sortBy);
 }

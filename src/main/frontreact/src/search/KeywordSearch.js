@@ -11,17 +11,17 @@ import { useLoading } from "../context/LoadingContext";
 import ListType from './ListType';
 
 const KeywordSearch = () => {
-
   const { kwdNo } = useParams();
   const navigate = useNavigate();
   const [kwdList, setKwdList] = useState([]);
   const [selectedKwd, setSelectedKwd] = useState(new Set());
   const [rcmPosts, setRcmPosts] = useState([]);
   const [rvPosts, setRvPosts] = useState([]);
-  const [showReviews,setShowReviews] = useState(false);
+  const [showReviews, setShowReviews] = useState(false);
   const { showLoading, hideLoading } = useLoading();
-  const [loading,setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [allChecked, setAllChecked] = useState(true);
+  const [sortBy, setSortBy] = useState('R.RECOMMEND_TIME DESC');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,6 +39,7 @@ const KeywordSearch = () => {
         console.error('Error fetching keywords:', error);
       }
     };
+
     fetchData();
   }, [kwdNo]);
 
@@ -47,12 +48,11 @@ const KeywordSearch = () => {
       try {
         if (selectedKwd.size > 0) {
           showLoading();
-          const response = await axios.post('/book/search/getByKeywords', { keywords: Array.from(selectedKwd) , allChecked:allChecked});
+          const response = await axios.post('/book/search/getByKeywords', { keywords: Array.from(selectedKwd), allChecked, sortBy });
           setRcmPosts(response.data.recommend);
           setRvPosts(response.data.review);
           setLoading(false);
           hideLoading();
-          //console.log(response.data);
         } else {
           setRcmPosts([]);
           setRvPosts([]);
@@ -61,8 +61,9 @@ const KeywordSearch = () => {
         console.error('Error fetching posts:', error);
       }
     };
+
     fetchPosts();
-  }, [selectedKwd,allChecked]);
+  }, [selectedKwd, allChecked,sortBy]);
 
   const handleCheckClick = () => {
     setAllChecked(prevChecked => !prevChecked);
@@ -78,6 +79,10 @@ const KeywordSearch = () => {
     setSelectedKwd(updatedSelectedKwd);
   };
 
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+  };
+
   return (
     <div className="mainContainer">
       <div className="side">
@@ -87,17 +92,17 @@ const KeywordSearch = () => {
         <Header />
         <div className="mainSection3">
           <div className="kwdSearchTabContainer">
-              <div className="kwdSearchTabs">
-                <button className={`kwdSearchTab ${!showReviews ? "active" : ""}`} onClick={() => setShowReviews(false)}>
-                  추천글 보기
-                </button>
-                <button className={`kwdSearchTab ${showReviews ? "active" : ""}`} onClick={() => setShowReviews(true)} >
-                  리뷰글 보기                
-                </button>
-              </div>
+            <div className="kwdSearchTabs">
+              <button className={`kwdSearchTab ${!showReviews ? "active" : ""}`} onClick={() => setShowReviews(false)}>
+                추천글 보기
+              </button>
+              <button className={`kwdSearchTab ${showReviews ? "active" : ""}`} onClick={() => setShowReviews(true)}>
+                리뷰글 보기
+              </button>
+            </div>
           </div>
           <div className='keywordList'>
-            <span className='containsCheck'><input type='checkbox'checked={allChecked} onChange={handleCheckClick}/>해당 키워드가 모두 포함된 결과만 보기</span>
+            <span className='containsCheck'><input type='checkbox' checked={allChecked} onChange={handleCheckClick} />해당 키워드가 모두 포함된 결과만 보기</span>
             {kwdList && kwdList.map((kwd) => (
               <span
                 key={kwd.keyword_NO}
@@ -107,19 +112,16 @@ const KeywordSearch = () => {
                 {kwd.keyword_NAME}
               </span>
             ))}
-            
           </div>
-          <div className='kwdSearchPostList'> 
-          <select className="languages" id="lang">
-            <option value="javascript">JavaScript</option>
-            <option value="php">PHP</option>
-            <option value="java">Java</option>
-            <option value="golang">Golang</option>
-            <option value="python">Python</option>
-            <option value="c#">C#</option>
-            <option value="C++">C++</option>
-            <option value="erlang">Erlang</option>
-          </select>
+          <div className='kwdSearchPostList'>
+            <div className='kwdSearchSelectZone'>
+            <select className="kwdSearchOrder" id="kwdSearchOrder" value={sortBy} onChange={handleSortChange}>
+              <option value={`R.${showReviews ? 'REVIEW' : 'RECOMMEND'}_TIME DESC`}>등록최근순</option>
+              <option value={`R.${showReviews ? 'REVIEW' : 'RECOMMEND'}_TIME ASC`}>등록오래된순</option>
+              <option value='likeCnt DESC'>좋아요순</option>
+              <option value="cmtCnt DESC">댓글순</option>
+            </select>
+            </div>
             {!loading ? (
               showReviews ? (
                 <div>
@@ -130,13 +132,12 @@ const KeywordSearch = () => {
                   <ListType type='recommend' posts={rcmPosts} />
                 </div>
               )
-            ) : null}        
-            
+            ) : null}
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default KeywordSearch;

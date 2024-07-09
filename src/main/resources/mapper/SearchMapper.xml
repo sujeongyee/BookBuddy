@@ -56,6 +56,7 @@
         </otherwise>
       </choose>
     GROUP BY R.RECOMMEND_NO
+    ORDER BY ${sortBy}
   </select>
 
 <!-- ReviewVO 매퍼 -->
@@ -107,6 +108,7 @@
         </otherwise>
       </choose>
     GROUP BY R.REVIEW_NO
+    ORDER BY ${sortBy}
   </select>
 
 </mapper>

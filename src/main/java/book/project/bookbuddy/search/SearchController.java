@@ -32,10 +32,12 @@ public class SearchController {
     String kwds = String.valueOf(map.get("keywords"));
     boolean isChecked = Boolean.parseBoolean( String.valueOf(map.get("allChecked")));
     String[] kwdList = kwds.substring(1, kwds.length()-1).replace(" ","").split(",");
-
+    String sortBy = String.valueOf(map.get("sortBy"));
     Map<String,Object> resultMap = new HashMap<>();
-    resultMap.put("recommend", searchService.getByKeywords(kwdList, isChecked));
-    resultMap.put("review", searchService.getByKeywords2(kwdList, isChecked));
+    resultMap.put("recommend", searchService.getByKeywords(kwdList, isChecked,sortBy.replace("REVIEW", "RECOMMEND")));
+    resultMap.put("review", searchService.getByKeywords2(kwdList, isChecked,sortBy.replace("RECOMMEND", "REVIEW")));
+    
+    
     return resultMap; 
   }
   

@@ -77,3 +77,16 @@
   gap: 5px;
   justify-content: flex-end;
 }
+.kwdSearchOrder {  
+  width: 15%;
+  padding: 7px;
+  outline: none;
+  border-radius: 5px;
+}
+.kwdSearchSelectZone {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+
+}
