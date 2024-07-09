@@ -12,6 +12,6 @@ import book.project.bookbuddy.command.ReviewVO;
 @Mapper
 public interface SearchMapper {
 
-  public List<RecommendVO> getByKeywords(@Param("kwdList") String[] kwdList, @Param("isChecked") boolean isChecked);
-  public List<ReviewVO> getByKeywords2(@Param("kwdList") String[] kwdList, @Param("isChecked") boolean isChecked);
+  public List<RecommendVO> getByKeywords(@Param("kwdList") String[] kwdList, @Param("isChecked") boolean isChecked, @Param("sortBy") String sortBy);
+  public List<ReviewVO> getByKeywords2(@Param("kwdList") String[] kwdList, @Param("isChecked") boolean isChecked, @Param("sortBy") String sortBy);
 }

@@ -16,10 +16,10 @@ public class SearchServiceImpl implements SearchService{
   private SearchMapper searchMapper;
 
 
-  public List<RecommendVO> getByKeywords(String[] kwdList, boolean isChecked){
-    return searchMapper.getByKeywords(kwdList,isChecked);
+  public List<RecommendVO> getByKeywords(String[] kwdList, boolean isChecked, String sortBy){
+    return searchMapper.getByKeywords(kwdList,isChecked,sortBy);
   }
-  public List<ReviewVO> getByKeywords2(String[] kwdList, boolean isChecked){
-    return searchMapper.getByKeywords2(kwdList,isChecked);
+  public List<ReviewVO> getByKeywords2(String[] kwdList, boolean isChecked,String sortBy){
+    return searchMapper.getByKeywords2(kwdList,isChecked,sortBy);
   }
 }
