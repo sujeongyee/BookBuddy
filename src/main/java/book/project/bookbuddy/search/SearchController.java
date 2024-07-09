@@ -1,5 +1,6 @@
 package book.project.bookbuddy.search;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,10 +30,13 @@ public class SearchController {
   @PostMapping("/getByKeywords")
   public Map<String,Object> getByKeywords(@RequestBody Map<String,Object> map) {
     String kwds = String.valueOf(map.get("keywords"));
-    Map<String,Object> map2 = new HashMap<>();
-    map2.put("recommend", searchService.getByKeywords(kwds));
-    map2.put("review",searchService.getByKeywords2(kwds));
-    return map2;
+    boolean isChecked = Boolean.parseBoolean( String.valueOf(map.get("allChecked")));
+    String[] kwdList = kwds.substring(1, kwds.length()-1).replace(" ","").split(",");
+
+    Map<String,Object> resultMap = new HashMap<>();
+    resultMap.put("recommend", searchService.getByKeywords(kwdList, isChecked));
+    resultMap.put("review", searchService.getByKeywords2(kwdList, isChecked));
+    return resultMap; 
   }
   
   

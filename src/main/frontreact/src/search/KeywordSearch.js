@@ -6,15 +6,23 @@ import React, { useState, useEffect } from "react";
 import ToastMsg from '../main/ToastMsg';
 import { useNavigate } from 'react-router-dom';
 import './search.css';
+import NotLoginPosts from '../postcomponent/NotLoginPosts';
+import { useLoading } from "../context/LoadingContext";
+import ListType from './ListType';
 
 const KeywordSearch = () => {
+
   const { kwdNo } = useParams();
   const navigate = useNavigate();
   const [kwdList, setKwdList] = useState([]);
   const [selectedKwd, setSelectedKwd] = useState(new Set());
   const [rcmPosts, setRcmPosts] = useState([]);
-  const [rvosts, setRvPosts] = useState([]);
+  const [rvPosts, setRvPosts] = useState([]);
   const [showReviews,setShowReviews] = useState(false);
+  const { showLoading, hideLoading } = useLoading();
+  const [loading,setLoading] = useState(true);
+  const [allChecked, setAllChecked] = useState(true);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -38,18 +46,27 @@ const KeywordSearch = () => {
     const fetchPosts = async () => {
       try {
         if (selectedKwd.size > 0) {
-          const response = await axios.post('/book/search/getByKeywords', { keywords: Array.from(selectedKwd) });
+          showLoading();
+          const response = await axios.post('/book/search/getByKeywords', { keywords: Array.from(selectedKwd) , allChecked:allChecked});
           setRcmPosts(response.data.recommend);
           setRvPosts(response.data.review);
-          console.log(response.data);
+          setLoading(false);
+          hideLoading();
+          //console.log(response.data);
         } else {
+          setRcmPosts([]);
+          setRvPosts([]);
         }
       } catch (error) {
         console.error('Error fetching posts:', error);
       }
     };
     fetchPosts();
-  }, [selectedKwd]);
+  }, [selectedKwd,allChecked]);
+
+  const handleCheckClick = () => {
+    setAllChecked(prevChecked => !prevChecked);
+  };
 
   const handleKeywordClick = (keyword) => {
     const updatedSelectedKwd = new Set(selectedKwd);
@@ -80,6 +97,7 @@ const KeywordSearch = () => {
               </div>
           </div>
           <div className='keywordList'>
+            <span className='containsCheck'><input type='checkbox'checked={allChecked} onChange={handleCheckClick}/>해당 키워드가 모두 포함된 결과만 보기</span>
             {kwdList && kwdList.map((kwd) => (
               <span
                 key={kwd.keyword_NO}
@@ -89,9 +107,31 @@ const KeywordSearch = () => {
                 {kwd.keyword_NAME}
               </span>
             ))}
+            
           </div>
-          <div className='kwdSearchPostList'>            
-            {showReviews?(<div></div>):(<div></div>)}
+          <div className='kwdSearchPostList'> 
+          <select className="languages" id="lang">
+            <option value="javascript">JavaScript</option>
+            <option value="php">PHP</option>
+            <option value="java">Java</option>
+            <option value="golang">Golang</option>
+            <option value="python">Python</option>
+            <option value="c#">C#</option>
+            <option value="C++">C++</option>
+            <option value="erlang">Erlang</option>
+          </select>
+            {!loading ? (
+              showReviews ? (
+                <div>
+                  <ListType type='review' posts={rvPosts} />
+                </div>
+              ) : (
+                <div>
+                  <ListType type='recommend' posts={rcmPosts} />
+                </div>
+              )
+            ) : null}        
+            
           </div>
         </div>
       </div>
