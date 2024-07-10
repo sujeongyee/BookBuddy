@@ -49,17 +49,34 @@ public class SearchController {
     boolean isChecked = Boolean.parseBoolean( String.valueOf(map.get("allChecked")));
     String type = String.valueOf(map.get("type"));
     String[] kwdList = kwds.substring(1, kwds.length()-1).replace(" ","").split(",");
-    System.out.println(type);
-    System.out.println("----------------------------------------------");
-    System.out.println("----------------------------------------------");
-    System.out.println("----------------------------------------------");
-    System.out.println("----------------------------------------------");
-    System.out.println("----------------------------------------------");
-    System.out.println("----------------------------------------------");
-    System.out.println("----------------------------------------------");
-    System.out.println("----------------------------------------------");
 
     return searchService.getByKeywordsCnt(kwdList, isChecked, type);
+  }
+
+  @PostMapping("/getByCategories")
+  public Map<String,Object> getByCategories(@RequestBody Map<String,Object> map) {
+    String cate = String.valueOf(map.get("categories"));
+    boolean isChecked = Boolean.parseBoolean( String.valueOf(map.get("allChecked")));
+    String[] cateList = cate.substring(1, cate.length()-1).replace(" ","").split(",");
+    String sortBy = String.valueOf(map.get("sortBy"));
+    String page = String.valueOf(map.get("currentPage"));
+    Map<String,Object> resultMap = new HashMap<>();
+    resultMap.put("recommend", searchService.getByCategories(cateList, isChecked,sortBy.replace("REVIEW", "RECOMMEND"),page));
+    resultMap.put("review", searchService.getByCategories2(cateList, isChecked,sortBy.replace("RECOMMEND", "REVIEW"),page));
+    
+    
+    return resultMap; 
+  }
+
+  @PostMapping("/getByCategoriesCnt")
+  public int getByCategoriesCnt(@RequestBody Map<String,Object> map) {
+
+    String cate = String.valueOf(map.get("categories"));
+    boolean isChecked = Boolean.parseBoolean( String.valueOf(map.get("allChecked")));
+    String type = String.valueOf(map.get("type"));
+    String[] cateList = cate.substring(1, cate.length()-1).replace(" ","").split(",");
+
+    return searchService.getByCategoriesCnt(cateList, isChecked, type);
   }
   
   

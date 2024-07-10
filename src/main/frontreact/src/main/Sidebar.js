@@ -101,7 +101,7 @@ function Sidebar({onCate,onCateList}){
                     <li 
                     className="cateoryLi" 
                     onMouseEnter={() => setShowMenuCategory2(true)}
-                    onMouseLeave={() => onCate !== 'kwd' ? setShowMenuCategory(false) : null}
+                    onMouseLeave={() => onCate !== 'kwd' ? setShowMenuCategory2(false) : null}
                     >
                     <a className="cateoryA" onClick={()=>clickKwd(-1)}  style={{ backgroundColor: onCate === 'kwd' ? '#e5ecfc' : null }}>키워드 별 추천/리뷰</a>
                     {showMenuCategory2 && (
