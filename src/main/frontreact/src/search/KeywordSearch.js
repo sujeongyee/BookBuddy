@@ -24,6 +24,7 @@ const KeywordSearch = () => {
   const [sortBy, setSortBy] = useState('R.RECOMMEND_TIME DESC');
   const [currentPage, setCurrentPage] = useState(1);
   const [postCnt,setPostCnt] = useState(0);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -144,6 +145,8 @@ const KeywordSearch = () => {
                 <option value={`R.${showReviews ? 'REVIEW' : 'RECOMMEND'}_TIME ASC`}>등록오래된순</option>
                 <option value='likeCnt DESC'>좋아요순</option>
                 <option value="cmtCnt DESC">댓글순</option>
+                {showReviews && (<option value="R.REVIEW_RATING DESC">별점높은순</option>)}
+                {showReviews && (<option value="R.REVIEW_RATING ASC">별점낮은순</option>)}
               </select>
               </div>
               {!loading ? (
