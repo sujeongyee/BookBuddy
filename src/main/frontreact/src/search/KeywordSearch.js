@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation, useHistory  } from 'react-router-dom';
 import Sidebar from '../main/Sidebar';
 import Header from '../main/Header';
 import axios from "axios";
@@ -9,10 +9,13 @@ import './search.css';
 import NotLoginPosts from '../postcomponent/NotLoginPosts';
 import { useLoading } from "../context/LoadingContext";
 import ListType from './ListType';
+import queryString from 'query-string';
 
 const KeywordSearch = () => {
   const { kwdNo } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  
   const [kwdList, setKwdList] = useState([]);
   const [selectedKwd, setSelectedKwd] = useState(new Set());
   const [rcmPosts, setRcmPosts] = useState([]);
@@ -24,24 +27,46 @@ const KeywordSearch = () => {
   const [sortBy, setSortBy] = useState('R.RECOMMEND_TIME DESC');
   const [currentPage, setCurrentPage] = useState(1);
   const [postCnt,setPostCnt] = useState(0);
+  const queryParams = queryString.parse(location.search);
+  
+  
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('/book/getAllKeywords');
-        setKwdList(response.data);
-
-        if (kwdNo === "all") {
+        setKwdList(response.data);        
+        const { selectedKwd, allChecked, sortBy, showReviews, currentPage } = queryParams;
+        if(selectedKwd){
+          if (selectedKwd) {
+            setSelectedKwd(new Set(selectedKwd.split(',')));
+          }
+          if (allChecked) {
+            setAllChecked(allChecked === 'true');
+          }
+          if (sortBy) {
+            setSortBy(sortBy);
+          }
+          if (showReviews) {
+            setShowReviews(showReviews === 'true');
+          }
+          if (currentPage) {
+            setCurrentPage(parseInt(currentPage, 10));
+          }
+        }else if (kwdNo === "all") {
+          setCurrentPage(1);
           const allKeywords = response.data.map(kwd => kwd.keyword_NO);
           setSelectedKwd(new Set(allKeywords));
         } else {
+          setCurrentPage(1);
           setSelectedKwd(new Set([kwdNo]));
-        }
+        }      
+        
       } catch (error) {
         console.error('Error fetching keywords:', error);
       }
     };
-    setCurrentPage(1);
+    
     fetchData();
   }, [kwdNo]);
 
@@ -65,6 +90,7 @@ const KeywordSearch = () => {
     };
 
     fetchPosts();
+    
   }, [selectedKwd, allChecked,sortBy,currentPage]);
 
   useEffect(() => {
@@ -82,16 +108,17 @@ const KeywordSearch = () => {
         console.error('Error fetching posts:', error);
       }
     };
-    setCurrentPage(1);
     fetchCnt();
   }, [selectedKwd, allChecked,sortBy]);
 
 
   const handleCheckClick = () => {
+    setCurrentPage(1);
     setAllChecked(prevChecked => !prevChecked);
   };
 
   const handleKeywordClick = (keyword) => {
+    setCurrentPage(1);
     const updatedSelectedKwd = new Set(selectedKwd);
     if (updatedSelectedKwd.has(keyword.keyword_NO)) {
       updatedSelectedKwd.delete(keyword.keyword_NO);
@@ -102,25 +129,61 @@ const KeywordSearch = () => {
   };
 
   const handleSortChange = (e) => {
+    setCurrentPage(1);
     setSortBy(e.target.value);
   };
+
+  const handleTypeChange = (e) => {
+    setShowReviews(e);
+    setCurrentPage(1);
+  }
+
+
+  
+  // 쿼리스트링 업데이트 함수
+  const updateQueryString = () => {
+    const { selectedKwd, allChecked, sortBy, showReviews, currentPage } = queryParams;
+    if(selectedKwd){
+      console.log('???????????');
+      const queryParams = {
+        selectedKwd: Array.from(selectedKwd).join(','),
+        allChecked: allChecked.toString(),
+        sortBy: sortBy,
+        showReviews: showReviews.toString(),
+        currentPage: currentPage.toString(),
+      };
+  
+      // navigate 함수로 쿼리스트링 업데이트
+      navigate({
+        pathname: location.pathname,
+        search: queryString.stringify(queryParams),
+      });
+    }
+    
+  };
+
+  // 페이지 로드 후 한 번 쿼리스트링 업데이트
+  useEffect(() => {
+    updateQueryString();
+  }, [selectedKwd, allChecked, sortBy, showReviews, currentPage]);
+  
 
   return (
     <div className="mainContainer">
       <div className="side">
-        <Sidebar onCate={'kwd'} onCateList={kwdNo} />
+        <Sidebar onCate={'kwd'} onCateList={kwdNo} selectedKwd={selectedKwd}/>
       </div>
       <div className="mainContent2">
         <Header />
-        {!loading ? (
-          <div className="mainSection3">
+        
+          <div className="mainSection3" style={{width:'90%'}}>
         
             <div className="kwdSearchTabContainer">
               <div className="kwdSearchTabs">
-                <button className={`kwdSearchTab ${!showReviews ? "active" : ""}`} onClick={() => setShowReviews(false)}>
+                <button className={`kwdSearchTab ${!showReviews ? "active" : ""}`} onClick={() => handleTypeChange(false)}>
                   추천글 보기
                 </button>
-                <button className={`kwdSearchTab ${showReviews ? "active" : ""}`} onClick={() => setShowReviews(true)}>
+                <button className={`kwdSearchTab ${showReviews ? "active" : ""}`} onClick={() => handleTypeChange(true)}>
                   리뷰글 보기
                 </button>
               </div>
@@ -156,12 +219,12 @@ const KeywordSearch = () => {
                   </div>
                 ) : (
                   <div>
-                    <ListType type='recommend' posts={rcmPosts} currentPage={currentPage} setCurrentPage={(e)=>setCurrentPage(e)} postCnt={postCnt}/>
+                    <ListType type='recommend' posts={rcmPosts} currentPage={currentPage} setCurrentPage={(e)=>setCurrentPage(e)} postCnt={postCnt} />
                   </div>
                 )
               ) : null}
             </div>
-          </div>): null}
+          </div>
         
       </div>
     </div>

@@ -4,7 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import { useUser } from '../context/UserContext';
 import axios from 'axios';
 
-function Sidebar({onCate,onCateList}){
+function Sidebar({onCate,onCateList,selectedKwd}){
 
     const [showMenuCategory, setShowMenuCategory] = useState(false); // 카테고리 메뉴 전시 여부
     const [showMenuCategory2, setShowMenuCategory2] = useState(false); // 키워드 메뉴 전시 여부
@@ -38,6 +38,7 @@ function Sidebar({onCate,onCateList}){
         localStorage.removeItem("remeberId");
         localStorage.removeItem("userVO");
         sessionStorage.removeItem("userVO");
+
         setUserData({});
         navigate('/');
     }
@@ -109,9 +110,9 @@ function Sidebar({onCate,onCateList}){
                             {kwdList && kwdList.map((kwd, index) => (
                                 index % 3 === 0 && index + 2 < kwdList.length && (
                                     <li key={kwd.keyword_NO}>
-                                        <a style={{ backgroundColor: onCateList === kwdList[index].keyword_NO ? '#e5ecfc' : null }} onClick={()=>clickKwd(kwdList[index].keyword_NO)}>{kwdList[index].keyword_NAME}</a>
-                                        <a style={{ backgroundColor: onCateList === kwdList[index+1].keyword_NO? '#e5ecfc' : null }} onClick={()=>clickKwd(kwdList[index+1].keyword_NO)}>{kwdList[index + 1].keyword_NAME}</a>
-                                        <a style={{ backgroundColor: onCateList === kwdList[index+2].keyword_NO ? '#e5ecfc' : null }} onClick={()=>clickKwd(kwdList[index+2].keyword_NO)}>{kwdList[index + 2].keyword_NAME}</a>
+                                        <a style={{ backgroundColor: selectedKwd && selectedKwd.has(kwdList[index].keyword_NO)  ? '#e5ecfc' : null }} onClick={()=>clickKwd(kwdList[index].keyword_NO)}>{kwdList[index].keyword_NAME}</a>
+                                        <a style={{ backgroundColor: selectedKwd && selectedKwd.has(kwdList[index+1].keyword_NO) ? '#e5ecfc' : null }} onClick={()=>clickKwd(kwdList[index+1].keyword_NO)}>{kwdList[index + 1].keyword_NAME}</a>
+                                        <a style={{ backgroundColor: selectedKwd && selectedKwd.has(kwdList[index+2].keyword_NO) ? '#e5ecfc' : null }} onClick={()=>clickKwd(kwdList[index+2].keyword_NO)}>{kwdList[index + 2].keyword_NAME}</a>
                                     </li>
                                 )
                             ))}
