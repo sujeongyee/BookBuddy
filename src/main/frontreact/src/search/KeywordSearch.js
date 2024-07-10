@@ -40,7 +40,7 @@ const KeywordSearch = () => {
         console.error('Error fetching keywords:', error);
       }
     };
-
+    setCurrentPage(1);
     fetchData();
   }, [kwdNo]);
 
@@ -81,7 +81,7 @@ const KeywordSearch = () => {
         console.error('Error fetching posts:', error);
       }
     };
-
+    setCurrentPage(1);
     fetchCnt();
   }, [selectedKwd, allChecked,sortBy]);
 
@@ -111,51 +111,55 @@ const KeywordSearch = () => {
       </div>
       <div className="mainContent2">
         <Header />
-        <div className="mainSection3">
-          <div className="kwdSearchTabContainer">
-            <div className="kwdSearchTabs">
-              <button className={`kwdSearchTab ${!showReviews ? "active" : ""}`} onClick={() => setShowReviews(false)}>
-                추천글 보기
-              </button>
-              <button className={`kwdSearchTab ${showReviews ? "active" : ""}`} onClick={() => setShowReviews(true)}>
-                리뷰글 보기
-              </button>
+        {!loading ? (
+          <div className="mainSection3">
+        
+            <div className="kwdSearchTabContainer">
+              <div className="kwdSearchTabs">
+                <button className={`kwdSearchTab ${!showReviews ? "active" : ""}`} onClick={() => setShowReviews(false)}>
+                  추천글 보기
+                </button>
+                <button className={`kwdSearchTab ${showReviews ? "active" : ""}`} onClick={() => setShowReviews(true)}>
+                  리뷰글 보기
+                </button>
+              </div>
             </div>
-          </div>
-          <div className='keywordList'>
-            <span className='containsCheck'><input type='checkbox' checked={allChecked} onChange={handleCheckClick} />해당 키워드가 모두 포함된 결과만 보기</span>
-            {kwdList && kwdList.map((kwd) => (
-              <span
-                key={kwd.keyword_NO}
-                className={`keyword ${selectedKwd.has(kwd.keyword_NO) ? 'selected' : ''}`}
-                onClick={() => handleKeywordClick(kwd)}
-              >
-                {kwd.keyword_NAME}
-              </span>
-            ))}
-          </div>
-          <div className='kwdSearchPostList'>
-            <div className='kwdSearchSelectZone'>
-            <select className="kwdSearchOrder" id="kwdSearchOrder" value={sortBy} onChange={handleSortChange}>
-              <option value={`R.${showReviews ? 'REVIEW' : 'RECOMMEND'}_TIME DESC`}>등록최근순</option>
-              <option value={`R.${showReviews ? 'REVIEW' : 'RECOMMEND'}_TIME ASC`}>등록오래된순</option>
-              <option value='likeCnt DESC'>좋아요순</option>
-              <option value="cmtCnt DESC">댓글순</option>
-            </select>
+            
+            <div className='keywordList'>
+              <span className='containsCheck'><input type='checkbox' checked={allChecked} onChange={handleCheckClick} />해당 키워드가 모두 포함된 결과만 보기</span>
+              {kwdList && kwdList.map((kwd) => (
+                <span
+                  key={kwd.keyword_NO}
+                  className={`keyword ${selectedKwd.has(kwd.keyword_NO) ? 'selected' : ''}`}
+                  onClick={() => handleKeywordClick(kwd)}
+                >
+                  {kwd.keyword_NAME}
+                </span>
+              ))}
             </div>
-            {!loading ? (
-              showReviews ? (
-                <div>
-                  <ListType type='review' posts={rvPosts} currentPage={currentPage} setCurrentPage={(e)=>setCurrentPage(e)} postCnt={postCnt}/>
-                </div>
-              ) : (
-                <div>
-                  <ListType type='recommend' posts={rcmPosts} currentPage={currentPage} setCurrentPage={(e)=>setCurrentPage(e)} postCnt={postCnt}/>
-                </div>
-              )
-            ) : null}
-          </div>
-        </div>
+            <div className='kwdSearchPostList'>
+              <div className='kwdSearchSelectZone'>
+              <select className="kwdSearchOrder" id="kwdSearchOrder" value={sortBy} onChange={handleSortChange}>
+                <option value={`R.${showReviews ? 'REVIEW' : 'RECOMMEND'}_TIME DESC`}>등록최근순</option>
+                <option value={`R.${showReviews ? 'REVIEW' : 'RECOMMEND'}_TIME ASC`}>등록오래된순</option>
+                <option value='likeCnt DESC'>좋아요순</option>
+                <option value="cmtCnt DESC">댓글순</option>
+              </select>
+              </div>
+              {!loading ? (
+                showReviews ? (
+                  <div>
+                    <ListType type='review' posts={rvPosts} currentPage={currentPage} setCurrentPage={(e)=>setCurrentPage(e)} postCnt={postCnt}/>
+                  </div>
+                ) : (
+                  <div>
+                    <ListType type='recommend' posts={rcmPosts} currentPage={currentPage} setCurrentPage={(e)=>setCurrentPage(e)} postCnt={postCnt}/>
+                  </div>
+                )
+              ) : null}
+            </div>
+          </div>): null}
+        
       </div>
     </div>
   );
