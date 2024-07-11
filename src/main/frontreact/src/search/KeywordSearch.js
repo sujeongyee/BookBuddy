@@ -23,41 +23,56 @@ const KeywordSearch = () => {
   const [showReviews, setShowReviews] = useState(false);
   const { showLoading, hideLoading } = useLoading();
   const [loading, setLoading] = useState(true);
-  const [allChecked, setAllChecked] = useState(true);
+  const [allChecked, setAllChecked] = useState(true); // 해당 키워드가 모두 포함된 결과만 보기 or 하나라도 포함된 결과 보기
   const [sortBy, setSortBy] = useState('R.RECOMMEND_TIME DESC');
   const [currentPage, setCurrentPage] = useState(1);
   const [postCnt,setPostCnt] = useState(0);
   const queryParams = queryString.parse(location.search);
-  
-  
+  const { kwds, viewAll, sort, showReview, page, click ,move} = queryParams;
+
+  useEffect(()=>{
+    console.log('ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ클릭');
+  },[click])
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('/book/getAllKeywords');
-        setKwdList(response.data);        
-        const { selectedKwd, allChecked, sortBy, showReviews, currentPage } = queryParams;
-        if(selectedKwd){
-          if (selectedKwd) {
-            setSelectedKwd(new Set(selectedKwd.split(',')));
+        setKwdList(response.data);
+        if(kwds && !click){
+          if (kwds) {
+            setSelectedKwd(new Set(kwds.split(',')));
           }
-          if (allChecked) {
-            setAllChecked(allChecked === 'true');
+          if (viewAll) {
+            setAllChecked(viewAll === 'true');
           }
-          if (sortBy) {
-            setSortBy(sortBy);
+          if (sort) {
+            setSortBy(sort);
           }
-          if (showReviews) {
-            setShowReviews(showReviews === 'true');
+          if (showReview) {
+            setShowReviews(showReview === 'true');
           }
-          if (currentPage) {
-            setCurrentPage(parseInt(currentPage, 10));
+          if (page) {
+            setCurrentPage(parseInt(page, 10));
           }
+          
         }else if (kwdNo === "all") {
           setCurrentPage(1);
           const allKeywords = response.data.map(kwd => kwd.keyword_NO);
           setSelectedKwd(new Set(allKeywords));
         } else {
+          const updateQueryParams2 = {
+            kwds: kwdNo,
+            viewAll: allChecked,
+            sort: sortBy,
+            showReview: showReviews,
+            page: currentPage,
+          };
+          navigate({
+            pathname: location.pathname,
+            search: queryString.stringify(updateQueryParams2),
+          });
           setCurrentPage(1);
           setSelectedKwd(new Set([kwdNo]));
         }      
@@ -93,6 +108,30 @@ const KeywordSearch = () => {
     
   }, [selectedKwd, allChecked,sortBy,currentPage]);
 
+
+  // 쿼리스트링 업데이트 함수
+  const updateQueryString = () => {
+    if(!click){
+      const updateQueryParams3 = {
+        kwds: Array.from(selectedKwd).join(','),
+        viewAll: allChecked.toString(),
+        sort: sortBy,
+        showReview: showReviews.toString(),
+        page: currentPage.toString(),
+      };
+  
+      navigate({
+        pathname: location.pathname,
+        search: queryString.stringify(updateQueryParams3),
+      });
+    }
+    
+  };
+
+  useEffect(() => {
+    updateQueryString();
+  }, [selectedKwd, allChecked, sortBy, showReviews, currentPage]);
+
   useEffect(() => {
     const fetchCnt = async () => {
       try {
@@ -109,7 +148,8 @@ const KeywordSearch = () => {
       }
     };
     fetchCnt();
-  }, [selectedKwd, allChecked,sortBy]);
+  }, [selectedKwd, allChecked,showReviews]);
+
 
 
   const handleCheckClick = () => {
@@ -138,34 +178,6 @@ const KeywordSearch = () => {
     setCurrentPage(1);
   }
 
-
-  
-  // 쿼리스트링 업데이트 함수
-  const updateQueryString = () => {
-    const { selectedKwd, allChecked, sortBy, showReviews, currentPage } = queryParams;
-    if(selectedKwd){
-      console.log('???????????');
-      const queryParams = {
-        selectedKwd: Array.from(selectedKwd).join(','),
-        allChecked: allChecked.toString(),
-        sortBy: sortBy,
-        showReviews: showReviews.toString(),
-        currentPage: currentPage.toString(),
-      };
-  
-      // navigate 함수로 쿼리스트링 업데이트
-      navigate({
-        pathname: location.pathname,
-        search: queryString.stringify(queryParams),
-      });
-    }
-    
-  };
-
-  // 페이지 로드 후 한 번 쿼리스트링 업데이트
-  useEffect(() => {
-    updateQueryString();
-  }, [selectedKwd, allChecked, sortBy, showReviews, currentPage]);
   
 
   return (
@@ -215,11 +227,11 @@ const KeywordSearch = () => {
               {!loading ? (
                 showReviews ? (
                   <div>
-                    <ListType type='review' posts={rvPosts} currentPage={currentPage} setCurrentPage={(e)=>setCurrentPage(e)} postCnt={postCnt}/>
+                    <ListType type='review' posts={rvPosts} currentPage={currentPage} setCurrentPage={(e)=>setCurrentPage(e)} postCnt={postCnt} queryParams={queryParams}/>
                   </div>
                 ) : (
                   <div>
-                    <ListType type='recommend' posts={rcmPosts} currentPage={currentPage} setCurrentPage={(e)=>setCurrentPage(e)} postCnt={postCnt} />
+                    <ListType type='recommend' posts={rcmPosts} currentPage={currentPage} setCurrentPage={(e)=>setCurrentPage(e)} postCnt={postCnt} queryParams={queryParams} />
                   </div>
                 )
               ) : null}

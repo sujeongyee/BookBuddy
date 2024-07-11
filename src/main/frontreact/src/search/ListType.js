@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import '../main/main.css';
 import { useLoading } from "../context/LoadingContext";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Pagination from "react-js-pagination";
+import queryString from 'query-string';
 
-const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt }) => {
+const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt,queryParams }) => {
   const [showRecommend, setShowRecommend] = useState(true);
   const [recommendPosts, setRecommendPosts] = useState([]);
   const [reviewPosts, setReviewPosts] = useState([]);
   const { showLoading, hideLoading } = useLoading();
   const navigate = useNavigate();
   const itemsPerPage = 5;
- 
+  const location = useLocation();
+  const { kwds, viewAll, sort, showReview, page } = queryParams;
+
   useEffect(() => {
     if (type == 'review') {
       setShowRecommend(false);
@@ -29,8 +32,7 @@ const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt }) => {
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
-
-  const clickPost = (postNo) => {
+  const clickPost = (postNo) => { 
     if(type=='review') navigate(`/post/review/${postNo}`);
     else navigate(`/post/recommend/${postNo}`);
   }
