@@ -44,12 +44,12 @@ function Sidebar({onCate,onCateList,selectedKwd}){
     }
 
     const clickCate = (cateNo) => {
-        if(cateNo=='-1') navigate('/cateSearch/all');
-        else navigate(`/cateSearch/${cateNo}`);
+        if(cateNo=='-1') navigate('/cateSearch/all?click=true');
+        else navigate(`/cateSearch/${cateNo}?click=true`);
     }
     const clickKwd = (kwdNo) => {
-        if(kwdNo=='-1') navigate('/kwdSearch/all');
-        else navigate(`/kwdSearch/${kwdNo}`);
+        if(kwdNo=='-1') navigate('/kwdSearch/all?click=true');
+        else navigate(`/kwdSearch/${kwdNo}?click=true`);
         
     }
 
