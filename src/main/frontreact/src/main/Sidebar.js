@@ -48,8 +48,9 @@ function Sidebar({onCate,onCateList,selectedKwd}){
         else navigate(`/cateSearch/${cateNo}?click=true`);
     }
     const clickKwd = (kwdNo) => {
+        console.log('클릭 url로');
         if(kwdNo=='-1') navigate('/kwdSearch/all?click=true');
-        else navigate(`/kwdSearch/${kwdNo}?click=true`);
+        else navigate(`/kwdSearch/${kwdNo}?kwds=${kwdNo}&page=1&showReview=false&sort=R.RECOMMEND_TIME%20DESC&viewAll=true`);
         
     }
 
