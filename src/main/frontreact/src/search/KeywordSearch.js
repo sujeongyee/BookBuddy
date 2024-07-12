@@ -30,10 +30,6 @@ const KeywordSearch = () => {
   const queryParams = queryString.parse(location.search);
   const { kwds, viewAll, sort, showReview, page, click ,move} = queryParams;
 
-  useEffect(()=>{
-    console.log('ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ클릭');
-  },[click])
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,8 +78,8 @@ const KeywordSearch = () => {
       }
     };
     
-    fetchData();
-  }, [kwdNo]);
+    if(!click) fetchData();
+  }, [kwdNo,click]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -104,13 +100,14 @@ const KeywordSearch = () => {
       }
     };
 
-    fetchPosts();
+    if(!click) fetchPosts();
     
   }, [selectedKwd, allChecked,sortBy,currentPage]);
 
 
   // 쿼리스트링 업데이트 함수
   const updateQueryString = () => {
+    
     if(!click){
       const updateQueryParams3 = {
         kwds: Array.from(selectedKwd).join(','),
@@ -129,7 +126,7 @@ const KeywordSearch = () => {
   };
 
   useEffect(() => {
-    updateQueryString();
+    if(!click) updateQueryString();
   }, [selectedKwd, allChecked, sortBy, showReviews, currentPage]);
 
   useEffect(() => {
@@ -147,7 +144,7 @@ const KeywordSearch = () => {
         console.error('Error fetching posts:', error);
       }
     };
-    fetchCnt();
+    if(!click)fetchCnt();
   }, [selectedKwd, allChecked,showReviews]);
 
 
