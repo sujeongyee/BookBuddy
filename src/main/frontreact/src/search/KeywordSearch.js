@@ -1,4 +1,4 @@
-import { useParams, useLocation, useHistory  } from 'react-router-dom';
+import { useParams, useLocation  } from 'react-router-dom';
 import Sidebar from '../main/Sidebar';
 import Header from '../main/Header';
 import axios from "axios";

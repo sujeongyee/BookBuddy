@@ -1,4 +1,4 @@
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import Sidebar from '../main/Sidebar';
 import Header from '../main/Header';
 import axios from "axios";
@@ -8,10 +8,12 @@ import { useLoading } from "../context/LoadingContext";
 import ToastMsg from '../main/ToastMsg';
 import { useNavigate } from 'react-router-dom';
 import ListType from './ListType';
+import queryString from 'query-string';
 
 const CategorySearch = () => {
 
   const {cateNo} = useParams();
+  const location = useLocation();
   const { showLoading, hideLoading } = useLoading();
   const navigate = useNavigate();
   const [cateList, setCateList] = useState([]);
@@ -24,25 +26,55 @@ const CategorySearch = () => {
   const [sortBy, setSortBy] = useState('R.RECOMMEND_TIME DESC');
   const [currentPage, setCurrentPage] = useState(1);
   const [postCnt,setPostCnt] = useState(0);
+  const queryParams = queryString.parse(location.search);
+  const { cate, viewAll, sort, showReview, page, click ,move} = queryParams;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('/book/getAllCategories');
         setCateList(response.data);
-
-        if (cateNo === "all") {
+        if(cate && !click){
+          if (cate) {
+            setSelectedCate(new Set(cate.split(',')));
+          }
+          if (viewAll) {
+            setAllChecked(viewAll === 'true');
+          }
+          if (sort) {
+            setSortBy(sort);
+          }
+          if (showReview) {
+            setShowReviews(showReview === 'true');
+          }
+          if (page) {
+            setCurrentPage(parseInt(page, 10));
+          }
+          
+        }else if (cateNo === "all") {
+          setCurrentPage(1);
           const allCategories= response.data.map(cate => cate.category_NO);
           setSelectedCate(new Set(allCategories));
         } else {
+          const updateQueryParams2 = {
+            cate: cateNo,
+            viewAll: allChecked,
+            sort: sortBy,
+            showReview: showReviews,
+            page: currentPage,
+          };
+          navigate({
+            pathname: location.pathname,
+            search: queryString.stringify(updateQueryParams2),
+          });
+          setCurrentPage(1);
           setSelectedCate(new Set([cateNo]));
         }
       } catch (error) {
         console.error('Error fetching keywords:', error);
       }
     };
-    setCurrentPage(1);
-    fetchData();
+    if(!click) fetchData();
   }, [cateNo]);
 
   useEffect(() => {
@@ -64,8 +96,32 @@ const CategorySearch = () => {
       }
     };
 
-    fetchPosts();
+    if(!click) fetchPosts();
   }, [selectedCate, allChecked,sortBy,currentPage]);
+
+  // 쿼리스트링 업데이트 함수
+  const updateQueryString = () => {
+    
+    if(!click){
+      const updateQueryParams3 = {
+        cate: Array.from(selectedCate).join(','),
+        viewAll: allChecked.toString(),
+        sort: sortBy,
+        showReview: showReviews.toString(),
+        page: currentPage.toString(),
+      };
+  
+      navigate({
+        pathname: location.pathname,
+        search: queryString.stringify(updateQueryParams3),
+      });
+    }
+    
+  };
+
+  useEffect(() => {
+    if(!click) updateQueryString();
+  }, [selectedCate, allChecked, sortBy, showReviews, currentPage]);
 
   useEffect(() => {
     const fetchCnt = async () => {
@@ -82,15 +138,16 @@ const CategorySearch = () => {
         console.error('Error fetching posts:', error);
       }
     };
-    setCurrentPage(1);
-    fetchCnt();
+    if(!click)fetchCnt();
   }, [selectedCate, allChecked,sortBy]);
 
   const handleCheckClick = () => {
+    setCurrentPage(1);
     setAllChecked(prevChecked => !prevChecked);
   };
 
   const handleCategoryClick = (category) => {
+    setCurrentPage(1);
     const updatedSelectedCate = new Set(selectedCate);
     if (updatedSelectedCate.has(category.category_NO)) {
       updatedSelectedCate.delete(category.category_NO);
@@ -101,14 +158,20 @@ const CategorySearch = () => {
   };
 
   const handleSortChange = (e) => {
+    setCurrentPage(1);
     setSortBy(e.target.value);
   };
+
+  const handleTypeChange = (e) => {
+    setShowReviews(e);
+    setCurrentPage(1);
+  }
 
 
   return (
     <div className="mainContainer">
       <div className="side">
-        <Sidebar onCate={'cate'} onCateList={cateNo} />
+        <Sidebar onCate={'cate'} onCateList={cateNo} selectedCate={selectedCate}/>
       </div>
       <div className="mainContent2">
         <Header />        
@@ -117,10 +180,10 @@ const CategorySearch = () => {
         
             <div className="kwdSearchTabContainer">
               <div className="kwdSearchTabs">
-                <button className={`kwdSearchTab ${!showReviews ? "active" : ""}`} onClick={() => setShowReviews(false)}>
+                <button className={`kwdSearchTab ${!showReviews ? "active" : ""}`} onClick={() => handleTypeChange(false)}>
                   추천글 보기
                 </button>
-                <button className={`kwdSearchTab ${showReviews ? "active" : ""}`} onClick={() => setShowReviews(true)}>
+                <button className={`kwdSearchTab ${showReviews ? "active" : ""}`} onClick={() => handleTypeChange(true)}>
                   리뷰글 보기
                 </button>
               </div>

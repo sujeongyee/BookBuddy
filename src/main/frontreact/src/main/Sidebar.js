@@ -4,7 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import { useUser } from '../context/UserContext';
 import axios from 'axios';
 
-function Sidebar({onCate,onCateList,selectedKwd}){
+function Sidebar({onCate,onCateList,selectedKwd,selectedCate}){
 
     const [showMenuCategory, setShowMenuCategory] = useState(false); // 카테고리 메뉴 전시 여부
     const [showMenuCategory2, setShowMenuCategory2] = useState(false); // 키워드 메뉴 전시 여부
@@ -45,10 +45,9 @@ function Sidebar({onCate,onCateList,selectedKwd}){
 
     const clickCate = (cateNo) => {
         if(cateNo=='-1') navigate('/cateSearch/all?click=true');
-        else navigate(`/cateSearch/${cateNo}?click=true`);
+        else navigate(`/cateSearch/${cateNo}?cate=${cateNo}&page=1&showReview=false&sort=R.RECOMMEND_TIME%20DESC&viewAll=true`);
     }
     const clickKwd = (kwdNo) => {
-        console.log('클릭 url로');
         if(kwdNo=='-1') navigate('/kwdSearch/all?click=true');
         else navigate(`/kwdSearch/${kwdNo}?kwds=${kwdNo}&page=1&showReview=false&sort=R.RECOMMEND_TIME%20DESC&viewAll=true`);
         
@@ -90,9 +89,9 @@ function Sidebar({onCate,onCateList,selectedKwd}){
                             {cateList && cateList.map((cate, index) => (
                                 index % 3 === 0 && index + 2 < cateList.length && (
                                     <li key={cate.category_NO}>
-                                        <a style={{ backgroundColor: onCateList === cateList[index].category_NO ? '#e5ecfc' : null }} onClick={()=>clickCate(cateList[index].category_NO)}>{cateList[index].category_NAME}</a>
-                                        <a style={{ backgroundColor: onCateList === cateList[index+1].category_NO ? '#e5ecfc' : null }} onClick={()=>clickCate(cateList[index+1].category_NO)}>{cateList[index + 1].category_NAME}</a>
-                                        <a style={{ backgroundColor: onCateList === cateList[index+2].category_NO ? '#e5ecfc' : null }} onClick={()=>clickCate(cateList[index+2].category_NO)}>{cateList[index + 2].category_NAME}</a>
+                                        <a style={{ backgroundColor: selectedCate && selectedCate.has(cateList[index].category_NO) ? '#e5ecfc' : null }} onClick={()=>clickCate(cateList[index].category_NO)}>{cateList[index].category_NAME}</a>
+                                        <a style={{ backgroundColor: selectedCate && selectedCate.has(cateList[index+1].category_NO) ? '#e5ecfc' : null }} onClick={()=>clickCate(cateList[index+1].category_NO)}>{cateList[index + 1].category_NAME}</a>
+                                        <a style={{ backgroundColor: selectedCate && selectedCate.has(cateList[index+2].category_NO) ? '#e5ecfc' : null }} onClick={()=>clickCate(cateList[index+2].category_NO)}>{cateList[index + 2].category_NAME}</a>
                                     </li>
                                 )
                             ))}
