@@ -190,7 +190,7 @@ const CategorySearch = () => {
             </div>
             
             <div className='keywordList'>
-              <span className='containsCheck'><input type='checkbox' checked={allChecked} onChange={handleCheckClick} />해당 키워드가 모두 포함된 결과만 보기</span>
+              <span className='containsCheck'><input type='checkbox' checked={allChecked} onChange={handleCheckClick} />해당 카테고리가 모두 포함된 결과만 보기</span>
               {cateList && cateList.map((cate) => (
                 <span
                   key={cate.category_NO}

@@ -40,4 +40,6 @@ public interface PostService {
   public void deletePost(int postNo, String type);
   public void modifyComment(String commentNo, String editContent);
   public void deleteComment(int commentNo);
+  public List<RecommendVO> getLoginRecommend(String userNo);
+  public List<ReviewVO> getLoginReview(String userNo);
 }

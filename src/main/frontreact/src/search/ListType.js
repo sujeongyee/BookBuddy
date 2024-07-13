@@ -100,17 +100,20 @@ const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt,queryParams 
                   </div>
                 );
               })}
-              <div className="searchPaging">
-                <Pagination
-                  activePage={currentPage}
-                  itemsCountPerPage={5}
-                  totalItemsCount={postCnt}
-                  pageRangeDisplayed={10}
-                  prevPageText={"prev"}
-                  nextPageText={"next"}
-                  onChange={handlePageChange}
-                />
-              </div>
+              {postCnt && (
+                <div className="searchPaging">
+                  <Pagination
+                    activePage={currentPage}
+                    itemsCountPerPage={5}
+                    totalItemsCount={postCnt}
+                    pageRangeDisplayed={10}
+                    prevPageText={"prev"}
+                    nextPageText={"next"}
+                    onChange={handlePageChange}
+                  />
+                </div>
+              )}
+              
             </div>
           ) : (
             <div style={{textAlign:'center'}}>조건에 해당되는 추천글이 없습니다.</div>
@@ -174,8 +177,9 @@ const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt,queryParams 
                   </div>
                 );
               })}
-              <div className="searchPaging">
-                <Pagination
+              {postCnt && (
+                <div className="searchPaging">
+                  <Pagination
                     activePage={currentPage}
                     itemsCountPerPage={5}
                     totalItemsCount={postCnt}
@@ -184,7 +188,8 @@ const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt,queryParams 
                     nextPageText={"next"}
                     onChange={handlePageChange}
                   />
-              </div>
+                </div>
+              )}
             </div>
           ) : (
             <div style={{textAlign:'center'}}>조건에 해당되는 리뷰글이 없습니다.</div>

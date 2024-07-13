@@ -50,6 +50,24 @@ public class PostController {
     map.put("reviewList", list2);
     return map;
   }
+
+  // 로그인 유저의 메인페이지 게시글 불러오기
+  @GetMapping("/getLoginFeed")
+  public Map<String,Object> getLoginFeed(@RequestParam("userNo") String userNo) {
+    System.out.println("--------------------------------------------------------");
+    System.out.println("--------------------------------------------------------");
+    System.out.println("--------------------------------------------------------");
+    System.out.println("--------------------------------------------------------");
+    System.out.println("--------------------------------------------------------");
+    System.out.println("--------------------------------------------------------");
+    System.out.println("--------------------------------------------------------");
+    System.out.println(userNo);
+    Map<String,Object> map = new HashMap<>();
+    map.put("recommendList", postService.getLoginRecommend(userNo));
+    map.put("reviewList",  postService.getLoginReview(userNo));
+    return map;
+  }
+  
   // 추천 게시글 작성
   @PostMapping("/writeRecommendPost")
   public ResponseEntity<Integer> writeRecommendPost(@RequestBody RecommendVO vo) {
