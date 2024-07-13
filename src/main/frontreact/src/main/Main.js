@@ -9,6 +9,8 @@ import UserRegist from '../component/UserRegist';
 import { useUser } from '../context/UserContext';
 import NotLoginPosts from '../postcomponent/NotLoginPosts';
 import ToastMsg from "./ToastMsg";
+import LoginPosts from '../postcomponent/LoginPosts';
+import ListType from '../search/ListType';
 
 
 function Main({ loginPage, registPage }) {
@@ -54,18 +56,7 @@ function Main({ loginPage, registPage }) {
                 if (!loginPage && !registPage) {
                     if (userId === '') {
                         const response = await axios.get('/book/post/getNotLogin');
-                        // 처리
-                    } else {
-                        // const response = await axios.get('/book/post/followerCount');
-                        // const follows = response.data;
-                        // if (follows.length === 0) {
-                        //     const response = await axios.get('/book/post/getLoginNotFollow');
-                        //     // 처리
-                        // } else {
-                        //     const response = await axios.get('/book/post/getFollowsBoard');
-                        //     // 처리
-                        // }
-                    }
+                    } 
                 }
             } catch (error) {
                 console.error('데이터 가져오기 에러:', error);
@@ -89,9 +80,11 @@ function Main({ loginPage, registPage }) {
             <div className="mainContent">
                 <Header />
                 {!loginPage && !registPage && !userId &&
-                <NotLoginPosts/>    
+                    <NotLoginPosts/>    
                 }
-                
+                {!loginPage && !registPage && userId &&
+                    <LoginPosts/>    
+                }               
                 {showToast && <ToastMsg prop="loginSuccess" />}
                 {loginPage &&
                     <div className="loginContent">

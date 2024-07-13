@@ -218,4 +218,68 @@
         SELECT USER_NO,REVIEW_TITLE FROM REVIEW WHERE REVIEW_NO=#{postNo}
     </select>
 
+    <select id="getLoginRecommend">
+        SELECT R.*, U.USER_NICK AS USER_NICK, U.PROFILE_URL AS PORIFLE_URL,
+           (SELECT COUNT(*) FROM COMMENT C WHERE R.RECOMMEND_NO = C.RECOMMEND_NO) AS cmtCnt,
+           (SELECT GROUP_CONCAT(C.CATEGORY_NAME) 
+              FROM CATEGORY C 
+              WHERE EXISTS (SELECT 1 
+                            FROM RECOMMEND 
+                            WHERE RECOMMEND_NO = R.RECOMMEND_NO 
+                            AND INSTR(RECOMMEND_CATEGORY, C.CATEGORY_NO) > 0)) AS RECOMMEND_CATEGORY2,
+           (SELECT GROUP_CONCAT(K.KEYWORD_NAME) 
+              FROM KEYWORD K 
+              WHERE EXISTS (SELECT 1 
+                            FROM RECOMMEND 
+                            WHERE RECOMMEND_NO = R.RECOMMEND_NO 
+                            AND INSTR(RECOMMEND_KEYWORD, K.KEYWORD_NO) > 0)) AS RECOMMEND_KEYWORD2,
+           (SELECT COUNT(LIKE_NO) 
+              FROM likes 
+              WHERE likes.LIKE_POSTNO = R.RECOMMEND_NO 
+                AND LIKE_TYPE = 'recommend') AS likeCnt,
+           (SELECT FILE_URL 
+              FROM file 
+              WHERE file.RECOMMEND_NO = R.RECOMMEND_NO 
+              ORDER BY FILE_DATE 
+              LIMIT 1) AS fileUrl
+        FROM RECOMMEND R
+        LEFT JOIN USER U ON R.USER_NO = U.USER_NO
+        WHERE R.USER_NO IN (SELECT FOLLOW_NO FROM FOLLOWER WHERE USER_NO = #{userNo}) 
+        ORDER BY R.RECOMMEND_TIME DESC
+    </select>
+
+    <select id="getLoginReview">
+        SELECT R.*, 
+        U.USER_NICK AS USER_NICK, 
+        U.PROFILE_URL AS PROFILE_URL,
+        (SELECT COUNT(*) 
+            FROM COMMENT C 
+            WHERE R.REVIEW_NO = C.REVIEW_NO) AS cmtCnt,
+        (SELECT GROUP_CONCAT(C.CATEGORY_NAME) 
+            FROM CATEGORY C 
+            WHERE EXISTS (SELECT 1 
+                        FROM REVIEW 
+                        WHERE REVIEW_NO = R.REVIEW_NO 
+                        AND INSTR(REVIEW_CATEGORY, C.CATEGORY_NO) > 0)) AS REVIEW_CATEGORY2,
+        (SELECT GROUP_CONCAT(K.KEYWORD_NAME) 
+            FROM KEYWORD K 
+            WHERE EXISTS (SELECT 1 
+                        FROM REVIEW 
+                        WHERE REVIEW_NO = R.REVIEW_NO 
+                        AND INSTR(REVIEW_KEYWORD, K.KEYWORD_NO) > 0)) AS REVIEW_KEYWORD2,
+        (SELECT COUNT(LIKE_NO) 
+            FROM likes 
+            WHERE likes.LIKE_POSTNO = R.REVIEW_NO 
+            AND LIKE_TYPE = 'review') AS likeCnt,
+        (SELECT FILE_URL 
+            FROM file 
+            WHERE file.REVIEW_NO = R.REVIEW_NO 
+            ORDER BY FILE_DATE 
+            LIMIT 1) AS fileUrl
+        FROM REVIEW R
+        LEFT JOIN USER U ON R.USER_NO = U.USER_NO
+        WHERE R.USER_NO IN (SELECT FOLLOW_NO FROM FOLLOWER WHERE USER_NO = #{userNo}) 
+        ORDER BY R.REVIEW_TIME DESC
+    </select>
+
 </mapper>

@@ -176,4 +176,11 @@ public class PostServiceImpl implements PostService{
     postMapper.deleteComment(commentNo);
   }
 
+  public List<RecommendVO> getLoginRecommend(String userNo) {
+    return postMapper.getLoginRecommend(userNo);
+  }
+  public List<ReviewVO> getLoginReview(String userNo){
+    return postMapper.getLoginReview(userNo);
+  }
+
 }
