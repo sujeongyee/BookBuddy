@@ -13,7 +13,6 @@ const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt,queryParams 
   const navigate = useNavigate();
   const itemsPerPage = 5;
   const location = useLocation();
-  const { kwds, viewAll, sort, showReview, page } = queryParams;
 
   useEffect(() => {
     if (type == 'review') {
