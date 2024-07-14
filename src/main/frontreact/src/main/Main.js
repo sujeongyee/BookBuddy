@@ -40,7 +40,6 @@ function Main({ loginPage, registPage }) {
                     localStorage.setItem("remeberId",response.data.user_ID);
                 }
                 setShowToast(true);
-                //alert("로그인 성공");
                 navigate('/');
             } else {
                 alert("로그인 실패! 다시 시도해주세요");
