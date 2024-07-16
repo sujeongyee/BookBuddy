@@ -45,7 +45,7 @@ const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt,queryParams 
       
       {showRecommend ? (
         <div>
-          {recommendPosts.length > 0 ? (
+          {recommendPosts && recommendPosts.length > 0 ? (
             <div>
               {recommendPosts.map((post, index) => {
                 let thumbnailUrl;
@@ -122,7 +122,7 @@ const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt,queryParams 
         </div>
       ) : (
         <div>
-          {reviewPosts.length > 0 ? (
+          {reviewPosts && reviewPosts.length > 0 ? (
             <div>
               {reviewPosts.map((post, index) => {
                 let thumbnailUrl;

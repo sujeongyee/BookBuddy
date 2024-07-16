@@ -22,6 +22,7 @@ function Main({ loginPage, registPage }) {
     const [rememberId,setRemeberId] = useState(localStorage.getItem("remeberId"));
     const [loginChecked,setLoginChecked] = useState(false);
     const [showToast, setShowToast] = useState(false);
+    
 
     const handleLogin = async (e) => {
         e.preventDefault();

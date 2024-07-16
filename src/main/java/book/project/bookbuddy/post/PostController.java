@@ -53,18 +53,15 @@ public class PostController {
 
   // 로그인 유저의 메인페이지 게시글 불러오기
   @GetMapping("/getLoginFeed")
-  public Map<String,Object> getLoginFeed(@RequestParam("userNo") String userNo) {
-    System.out.println("--------------------------------------------------------");
-    System.out.println("--------------------------------------------------------");
-    System.out.println("--------------------------------------------------------");
-    System.out.println("--------------------------------------------------------");
-    System.out.println("--------------------------------------------------------");
-    System.out.println("--------------------------------------------------------");
-    System.out.println("--------------------------------------------------------");
-    System.out.println(userNo);
+  public Map<String,Object> getLoginFeed(@RequestParam("userNo") String userNo, @RequestParam("page") String page, @RequestParam("type") String type) {
     Map<String,Object> map = new HashMap<>();
-    map.put("recommendList", postService.getLoginRecommend(userNo));
-    map.put("reviewList",  postService.getLoginReview(userNo));
+    int pages = Integer.parseInt(page)*5;
+    if(type.equals("recommend")) {
+      map.put("recommendList", postService.getLoginRecommend(userNo,String.valueOf(pages)));
+    } else{
+      map.put("reviewList",  postService.getLoginReview(userNo,String.valueOf(pages)));
+    }
+   
     return map;
   }
   
