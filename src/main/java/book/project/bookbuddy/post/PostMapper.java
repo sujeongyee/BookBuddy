@@ -47,6 +47,6 @@ public interface PostMapper {
   public void deleteComment(int commentNo);
   public RecommendVO getPostsUserNo(int postNo);
   public ReviewVO getPostsUserNo2(int postNo);
-  public List<RecommendVO> getLoginRecommend(String userNo);
-  public List<ReviewVO> getLoginReview(String userNo);
+  public List<RecommendVO> getLoginRecommend(@Param("userNo") String userNo, @Param("page") String page);
+  public List<ReviewVO> getLoginReview(@Param("userNo") String userNo, @Param("page") String page);
 }

@@ -246,6 +246,7 @@
         LEFT JOIN USER U ON R.USER_NO = U.USER_NO
         WHERE R.USER_NO IN (SELECT FOLLOW_NO FROM FOLLOWER WHERE USER_NO = #{userNo}) 
         ORDER BY R.RECOMMEND_TIME DESC
+        LIMIT ${page},5
     </select>
 
     <select id="getLoginReview">
@@ -280,6 +281,7 @@
         LEFT JOIN USER U ON R.USER_NO = U.USER_NO
         WHERE R.USER_NO IN (SELECT FOLLOW_NO FROM FOLLOWER WHERE USER_NO = #{userNo}) 
         ORDER BY R.REVIEW_TIME DESC
+        LIMIT ${page},5
     </select>
 
 </mapper>
