@@ -48,8 +48,8 @@ public class UserController {
   public Map<String,Object> getMyPage(@RequestParam("id") String id) {
       UserVO vo =  mainService.getVO(id);
       Map<String,Object> map = new HashMap<>();
-      int userNo = userService.getUserNo(id);
-      FollowerVO fvo = userService.getFollow(userNo);
+      // int userNo = userService.getUserNo(id);
+      FollowerVO fvo = userService.getFollow(vo.getUser_NO());
       map.put("vo", vo);
       map.put("follower",fvo.getFollower());
       map.put("following",fvo.getFollowing());

@@ -49,9 +49,8 @@ const LoginPosts = () => {
         showLoading();
         setLoading(true);
         const page2 = page==-1?0:page;
-        console.log('fetchPost : '+ page);
         const response = await axios.get(`/book/post/getLoginFeed?userNo=${userNo}&page=${page2}&type=${type}`);
-
+        console.log(response.data);
         if (type === 'review') {
           if (response.data.reviewList.length === 0) {
             setRvPostEnd(true);

@@ -219,7 +219,7 @@
     </select>
 
     <select id="getLoginRecommend">
-        SELECT R.*, U.USER_NICK AS USER_NICK, U.PROFILE_URL AS PORIFLE_URL,
+        SELECT R.*, U.USER_NICK AS USER_NICK, U.PROFILE_URL AS profile_URL,
            (SELECT COUNT(*) FROM COMMENT C WHERE R.RECOMMEND_NO = C.RECOMMEND_NO) AS cmtCnt,
            (SELECT GROUP_CONCAT(C.CATEGORY_NAME) 
               FROM CATEGORY C 
@@ -252,7 +252,7 @@
     <select id="getLoginReview">
         SELECT R.*, 
         U.USER_NICK AS USER_NICK, 
-        U.PROFILE_URL AS PROFILE_URL,
+        U.PROFILE_URL AS profile_URL,
         (SELECT COUNT(*) 
             FROM COMMENT C 
             WHERE R.REVIEW_NO = C.REVIEW_NO) AS cmtCnt,

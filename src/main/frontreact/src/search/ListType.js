@@ -33,9 +33,7 @@ const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt,queryParams,
   }
   const clickPost = (postNo) => { 
     if(type=='review') {
-      console.log('gggg');
       if(rvPage){
-        console.log('gggg2');
         const updateQueryParams2 = { review: true, page: rvPage===-1 ? 0 : rvPage };
         navigate({
           pathname: location.pathname,
@@ -43,6 +41,11 @@ const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt,queryParams,
         });
         navigate(`/post/review/${postNo}`);
       }else{
+        const updateQueryParams2 = { review: true, page:0};
+        navigate({
+          pathname: location.pathname,
+          search: queryString.stringify(updateQueryParams2),
+        });
         navigate(`/post/review/${postNo}`);
       }
       
@@ -53,6 +56,10 @@ const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt,queryParams,
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+  
+  const clickUser = (userNo) =>{
+    navigate(`/userFeed/${userNo}`);
+  }
 
   return (
     <div className="post-zone">
@@ -73,42 +80,45 @@ const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt,queryParams,
 
                 return (
                   <div key={`recommend-${post['recommend_NO']}-${index}`} className="post-card">
-                    <div onClick={() => clickPost(post.recommend_NO)}>
+                    <div >
                       <div className="post-details">
                         <div className="noLogin-header">
                           {post.profile_URL ? (
-                            <img src={post.profile_URL} alt="프로필 이미지" className="notLogin-profile-image" />
+                            <img onClick={()=> clickUser(post.user_NO)} src={post.profile_URL} alt="프로필 이미지" className="notLogin-profile-image" />
                           ) : (
-                            <img src={process.env.PUBLIC_URL + '/imgs/no-profile.jpg'} alt="프로필 이미지" className="notLogin-profile-image" />
+                            <img onClick={()=> clickUser(post.user_NO)} src={process.env.PUBLIC_URL + '/imgs/no-profile.jpg'} alt="프로필 이미지" className="notLogin-profile-image" />
                           )}
                           <p className="post-user">{post.user_NICK}</p>
                         </div>
-                        <div className="noLogin-imgZone">
-                          <img src={thumbnailUrl} alt="썸네일" className="notLogin-post-thumbnail" />
-                        </div>
-                        <div className="notLogin-postDetail">
-                          <h3 className="notLogin-post-title2">{post.recommend_TITLE}</h3>
-                          <p className="post-content">{post.recommend_CONTENT}</p>
-                          <p className="post-time">{formatDate(post['recommend_TIME'])}</p>
-                          <span>
-                            {post.recommend_CATEGORY2.split(',').map((category, index) => (
-                              <span key={index} className="PostcategoryTag">{category.trim()}</span>
-                            ))}
-                            {post.recommend_KEYWORD2.split(',').map((keyword, index) => (
-                              <span key={index} className="PostKeywordTag">{keyword.trim()}</span>
-                            ))}
-                          </span>
-                          <div className="iconZone">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ff9797" className="bi bi-heart-fill" viewBox="0 0 16 16">
-                              <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
-                            </svg>
-                            <span className="post-list-likes">{post.likeCnt}</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ff9797" className="bi bi-chat-fill" viewBox="0 0 16 16">
-                              <path d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9 9 0 0 0 8 15" />
-                            </svg>
-                            <span className="post-list-comments"><i className="fas fa-comment"></i> {post.cmtCnt}</span>
+                        <div onClick={() => clickPost(post.recommend_NO)}>
+                          <div className="noLogin-imgZone">
+                            <img src={thumbnailUrl} alt="썸네일" className="notLogin-post-thumbnail" />
+                          </div>
+                          <div className="notLogin-postDetail">
+                            <h3 className="notLogin-post-title2">{post.recommend_TITLE}</h3>
+                            <p className="post-content">{post.recommend_CONTENT}</p>
+                            <p className="post-time">{formatDate(post['recommend_TIME'])}</p>
+                            <span>
+                              {post.recommend_CATEGORY2.split(',').map((category, index) => (
+                                <span key={index} className="PostcategoryTag">{category.trim()}</span>
+                              ))}
+                              {post.recommend_KEYWORD2.split(',').map((keyword, index) => (
+                                <span key={index} className="PostKeywordTag">{keyword.trim()}</span>
+                              ))}
+                            </span>
+                            <div className="iconZone">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ff9797" className="bi bi-heart-fill" viewBox="0 0 16 16">
+                                <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+                              </svg>
+                              <span className="post-list-likes">{post.likeCnt}</span>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ff9797" className="bi bi-chat-fill" viewBox="0 0 16 16">
+                                <path d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9 9 0 0 0 8 15" />
+                              </svg>
+                              <span className="post-list-comments"><i className="fas fa-comment"></i> {post.cmtCnt}</span>
+                            </div>
                           </div>
                         </div>
+                        
                       </div>
                     </div>
                   </div>
@@ -150,42 +160,45 @@ const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt,queryParams,
 
                 return (
                   <div key={`review-${post['review_NO']}-${index}`} className="post-card">
-                    <div onClick={() => clickPost(post.review_NO)}>
+                    <div >
                       <div className="post-details">
                         <div className="noLogin-header">
                           {post.profile_URL ? (
-                            <img src={post.profile_URL} alt="프로필 이미지" className="notLogin-profile-image" />
+                            <img onClick={()=> clickUser(post.user_NO)} src={post.profile_URL} alt="프로필 이미지" className="notLogin-profile-image" />
                           ) : (
-                            <img src={process.env.PUBLIC_URL + '/imgs/no-profile.jpg'} alt="프로필 이미지" className="notLogin-profile-image" />
+                            <img  onClick={()=> clickUser(post.user_NO)}src={process.env.PUBLIC_URL + '/imgs/no-profile.jpg'} alt="프로필 이미지" className="notLogin-profile-image" />
                           )}
                           <p className="post-user">{post.user_NICK}</p>
                         </div>
-                        <div className="noLogin-imgZone">
-                          <img src={thumbnailUrl} alt="썸네일" className="notLogin-post-thumbnail" />
-                        </div>
-                        <div className="notLogin-postDetail">
-                          <h3 className="notLogin-post-title">{post.review_TITLE}</h3>
-                          <p className="post-content">{post.review_CONTENT}</p>
-                          <p className="post-time">{formatDate(post['review_TIME'])}</p>
-                          <span>
-                            {post.review_CATEGORY2.split(',').map((category, index) => (
-                              <span key={index} className="PostcategoryTag">{category.trim()}</span>
-                            ))}
-                            {post.review_KEYWORD2.split(',').map((keyword, index) => (
-                              <span key={index} className="PostKeywordTag">{keyword.trim()}</span>
-                            ))}
-                          </span>
-                          <div className="iconZone">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ff9797" className="bi bi-heart-fill" viewBox="0 0 16 16">
-                              <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
-                            </svg>
-                            <span className="post-list-likes">{post.likeCnt}</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ff9797" className="bi bi-chat-fill" viewBox="0 0 16 16">
-                              <path d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9 9 0 0 0 8 15" />
-                            </svg>
-                            <span className="post-list-comments"><i className="fas fa-comment"></i> {post.cmtCnt}</span>
+                        <div onClick={() => clickPost(post.review_NO)}>
+                          <div className="noLogin-imgZone">
+                            <img src={thumbnailUrl} alt="썸네일" className="notLogin-post-thumbnail" />
+                          </div>
+                          <div className="notLogin-postDetail">
+                            <h3 className="notLogin-post-title">{post.review_TITLE}</h3>
+                            <p className="post-content">{post.review_CONTENT}</p>
+                            <p className="post-time">{formatDate(post['review_TIME'])}</p>
+                            <span>
+                              {post.review_CATEGORY2.split(',').map((category, index) => (
+                                <span key={index} className="PostcategoryTag">{category.trim()}</span>
+                              ))}
+                              {post.review_KEYWORD2.split(',').map((keyword, index) => (
+                                <span key={index} className="PostKeywordTag">{keyword.trim()}</span>
+                              ))}
+                            </span>
+                            <div className="iconZone">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ff9797" className="bi bi-heart-fill" viewBox="0 0 16 16">
+                                <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+                              </svg>
+                              <span className="post-list-likes">{post.likeCnt}</span>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ff9797" className="bi bi-chat-fill" viewBox="0 0 16 16">
+                                <path d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9 9 0 0 0 8 15" />
+                              </svg>
+                              <span className="post-list-comments"><i className="fas fa-comment"></i> {post.cmtCnt}</span>
+                            </div>
                           </div>
                         </div>
+                        
                       </div>
                     </div>
                   </div>
