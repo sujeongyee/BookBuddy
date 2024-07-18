@@ -3,67 +3,97 @@ import axios from "axios";
 import { useUser } from '../context/UserContext';
 import ListType from "../search/ListType";
 import { useLoading } from "../context/LoadingContext";
+import queryString from 'query-string';
+import { useParams, useLocation,useNavigate } from 'react-router-dom';
+
 const LoginPosts = () => {
+  
   const {userData} = useUser();
   const {userId, userNo} = userData;
-
+  const location = useLocation();
+  const navigate = useNavigate();
   const [showReviews, setShowReviews] = useState(false);
   const [rcmPosts, setRcmPosts] = useState([]);
   const [rvPosts, setRvPosts] = useState([]);
-  const [rcmPage, setRcmPage] = useState(1);
-  const [rvPage, setRvPage] = useState(0);
+  const [rcmPage, setRcmPage] = useState(0);
+  const [rcmCurrentPage,setRcmCurrentPage] = useState(0);
+  const [rvPage, setRvPage] = useState(-1);
+  const [rvCurrentPage,setRvCurrentPage] = useState(0);
   const [rcmPostEnd,setRcmPostEnd] = useState(false);
   const [rvPostEnd,setRvPostEnd] = useState(false);
   const [loading, setLoading] = useState(false);
   const { showLoading, hideLoading } = useLoading();
+  const queryParams = queryString.parse(location.search);
+  const {review,page} = queryParams;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (userNo !== '' && userNo) {
-          showLoading();
-          setLoading(true);
-          let type = showReviews ? 'review':'recommend';
-          let page = showReviews ? rvPage : rcmPage;
-          const response = await axios.get(`/book/post/getLoginFeed?userNo=${userNo}&page=${page}&type=${type}`);
-          if(type==='review'){
-            if(response.data.reviewList.length==0) {
-              setRvPostEnd(true);
-              return;
-            }
-            setRvPosts(prevPosts => [...prevPosts, ...response.data.reviewList]);
-          }else{
-            if(response.data.recommendList.length==0) {
-              setRcmPostEnd(true);
-              return;
-            }
-            setRcmPosts(prevPosts => [...prevPosts, ...response.data.recommendList]);
-          }        
-          setLoading(false);
-          hideLoading();
+    const initializePages = async () => {
+      if (review) {
+        setShowReviews(true);
+        const targetPage = parseInt(page, 10); 
+        if(userNo !== '' && userNo){
+          for (let i = 0; i < targetPage; i++) {
+            await fetchPosts('review', i);
+          }       
         }
-      } catch (error) {
-        console.error('데이터 가져오기 에러:', error);
-        setLoading(false);
+        setRvPage(targetPage);
       }
     };
 
-    fetchData();
+    initializePages();
+  }, [userNo]);
 
-  }, [userId, userNo, rcmPage,rvPage]);
+  const fetchPosts = async (type, page) => {
+    try {
+      if (userNo !== '' && userNo) {
+        showLoading();
+        setLoading(true);
+        const page2 = page==-1?0:page;
+        console.log('fetchPost : '+ page);
+        const response = await axios.get(`/book/post/getLoginFeed?userNo=${userNo}&page=${page2}&type=${type}`);
 
- 
+        if (type === 'review') {
+          if (response.data.reviewList.length === 0) {
+            setRvPostEnd(true);
+          } else {
+            setRvPosts(prevPosts => {
+              const newPosts = response.data.reviewList.filter(post => !prevPosts.some(prevPost => prevPost.review_NO === post.review_NO ));
+              return [...prevPosts, ...newPosts];
+            });
+          }
+        } else {
+          if (response.data.recommendList.length === 0) {
+            setRcmPostEnd(true);
+          } else {
+            setRcmPosts(prevPosts => [...prevPosts, ...response.data.recommendList]);
+          }
+        }
+        setLoading(false);
+        hideLoading();
+      }
+    } catch (error) {
+      console.error('데이터 가져오기 에러:', error);
+      setLoading(false);
+      hideLoading();
+    }
+  };
+
+  useEffect(() => {
+    if (userId && userNo) {
+      fetchPosts(showReviews ? 'review' : 'recommend', showReviews ? rvPage : rcmPage);
+    }
+  }, [userId, userNo, rcmPage, rvPage]);
 
   const handleTypeChange = (e) => {
-    if(e && rvPage==0) setRcmPage(prevPage => prevPage + 1);
+    if(e && rvPage==-1) setRvPage(prevPage => prevPage + 1);
     setShowReviews(e);
   };
 
   const handleScroll = () => {
-    if(!rvPosts && !rcmPosts) return; 
+    if (!rvPosts && !rcmPosts) return;
     if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.scrollHeight - 10 && !loading) {
-      if(showReviews) setRvPage(prevPage => prevPage + 1);
-      else setRcmPage(prevPage => prevPage + 1);
+      if (showReviews && !rvPostEnd) setRvPage(prevPage => prevPage + 1);
+      else if (!showReviews && !rcmPostEnd) setRcmPage(prevPage => prevPage + 1);
     }
   };
 
@@ -94,7 +124,7 @@ const LoginPosts = () => {
           <div>
             {rvPosts.length > 0 ? (
                 <div>
-                  <ListType type='review' posts={rvPosts} />
+                  <ListType type='review' posts={rvPosts} rvPage={rvPage}/>
                 </div>
         
             ) : (
