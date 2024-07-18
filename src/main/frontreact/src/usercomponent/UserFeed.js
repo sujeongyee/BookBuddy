@@ -43,10 +43,10 @@ const UserFeed = () => {
   },[userNo])
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async () => { 
       try {
         showLoading();
-        const response = await axios.get(`/book/user/myPage?id=${userNo}`);
+        const response = await axios.get(`/book/user/myPage?id=${userId}`);
         const response2 = await axios.get(`/book/user/checkFollow?id=${userId}&toUserNo=${userNo}`);
         if(response2.data){
           setFollowCheck(true);
