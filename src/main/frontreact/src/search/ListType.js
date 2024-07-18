@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Pagination from "react-js-pagination";
 import queryString from 'query-string';
 
-const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt,queryParams }) => {
+const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt,queryParams,rvPage }) => {
   const [showRecommend, setShowRecommend] = useState(true);
   const [recommendPosts, setRecommendPosts] = useState([]);
   const [reviewPosts, setReviewPosts] = useState([]);
@@ -32,7 +32,21 @@ const ListType = ({ type, posts, currentPage,setCurrentPage,postCnt,queryParams 
     return `${year}-${month}-${day}`;
   }
   const clickPost = (postNo) => { 
-    if(type=='review') navigate(`/post/review/${postNo}`);
+    if(type=='review') {
+      console.log('gggg');
+      if(rvPage){
+        console.log('gggg2');
+        const updateQueryParams2 = { review: true, page: rvPage===-1 ? 0 : rvPage };
+        navigate({
+          pathname: location.pathname,
+          search: queryString.stringify(updateQueryParams2),
+        });
+        navigate(`/post/review/${postNo}`);
+      }else{
+        navigate(`/post/review/${postNo}`);
+      }
+      
+    }
     else navigate(`/post/recommend/${postNo}`);
   }
 
